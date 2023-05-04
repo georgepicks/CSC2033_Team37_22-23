@@ -27,7 +27,7 @@ def validate_phone(self,data_field):
 
 #Initialising register form validators
 class RegisterForm(FlaskForm):
-    username = StringField(validators=[DataRequired(), Email()])
+    email = StringField(validators=[DataRequired(), Email()])
     firstname = StringField(validators=[DataRequired(), character_check])
     lastname = StringField(validators=[DataRequired(), character_check])
     phone = StringField(validators=[DataRequired(), validate_phone])
@@ -42,7 +42,7 @@ class RegisterForm(FlaskForm):
     submit = SubmitField(validators=[DataRequired()])
 
 class LoginForm(FlaskForm):
-    username = StringField(validators=[DataRequired(), Email()])
+    email = StringField(validators=[DataRequired(), Email()])
     password = PasswordField('password',
                              validators=[DataRequired()])
     submit = SubmitField(validators=[DataRequired()])
