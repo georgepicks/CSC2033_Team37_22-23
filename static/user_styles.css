@@ -83,3 +83,10 @@ input[type=password], select, textarea {
   resize: vertical;
     margin-bottom: 10px;
 }
+
+a:link,
+a:visited,
+a:hover,
+a:active {
+  color: #FFFFFF; /* Change this to your desired color */
+}
