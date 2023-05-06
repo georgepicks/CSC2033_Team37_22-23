@@ -7,13 +7,12 @@ users_blueprint = Blueprint('users_templates', __name__, template_folder='templa
 @users_blueprint.route('/register', methods=['Get', 'Post'])
 def register():
     form = RegisterForm()
+    return render_template('users/register.html', form=form)
 
-    return render_template('../users/register.html', form=form)
-
-
+@users_blueprint.route('/login', methods=['Get', 'Post'])
 def login():
-    pass
-
+    form = LoginForm()
+    return render_template('users/login.html', form=form)
 
 
 def account():
