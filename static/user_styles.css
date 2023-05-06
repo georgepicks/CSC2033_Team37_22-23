@@ -15,18 +15,39 @@
     position: absolute;
     top: 1px;
     left: 1px;
-    width: 1950px; /* Set the width of the rectangle */
-    height: 100px; /* Set the height of the rectangle */
-    background-color: #59a956; /* Set the background color of the rectangle */
+    width: 1950px;
+    height: 100px;
+    background-color: #59a956;
 }
 
 .rectangle_bottom {
     position: absolute;
     top: 900px;
     left: 1px;
-    width: 2000px; /* Set the width of the rectangle */
-    height: 100px; /* Set the height of the rectangle */
-    background-color: #59a956; /* Set the background color of the rectangle */
+    width: 2000px;
+    height: 100px;
+    background-color: #59a956;
+}
+
+.home_button{
+    position: absolute;
+    top: 30px;
+    left: 1550px;
+    font-size: 30px;
+}
+
+.login_button{
+    position: absolute;
+    top: 30px;
+    left: 1650px;
+    font-size: 30px;
+}
+
+.register_button{
+    position: absolute;
+    top: 30px;
+    left: 1750px;
+    font-size: 30px;
 }
 
 .center {
@@ -35,4 +56,30 @@
     align-items: center;
     height: 100vh;
     margin-top: -50px;
+}
+
+.leftover_text{
+    text-align: center;
+    top: 300px;
+    left: 902px;
+    font-size: 30px;
+}
+
+
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+input[type=password], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+    margin-bottom: 10px;
 }
