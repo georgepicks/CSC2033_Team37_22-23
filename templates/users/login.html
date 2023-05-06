@@ -2,7 +2,42 @@
 
 {% block content %}
 
-    <title>Login Form</title>
+    <title>Login form</title>
+
+    <div class="background">
+    <div class="center">
+        <div class="column is-5 is-offset-4">
+            <h3 class="page_text">Login</h3>
+            <div class="box">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="notification is-danger">
+                            {{ messages[0] }}. Go to <a href="{{ url_for('users.login') }}">login page</a>.
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <form method="POST">
+                    <div class="field">
+                        {{ form.csrf_token() }}
+                        <div class="control">
+                            {{ form.email(class="input", placeholder="Email") }}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            {{ form.password(class="input", placeholder="Password") }}
+                        </div>
+                    </div>
+                    <div>
+                        <div class="submit">{{ form.submit(class="button is-info is-centered") }}</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
 
 
 {% endblock %}
