@@ -4,18 +4,9 @@
 
     <title>Login form</title>
 
-    <div class="background">
     <div class="center">
         <div class="column is-5 is-offset-4">
             <h3 class="page_text">Login</h3>
-            <div class="box">
-                {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        <div class="notification is-danger">
-                            {{ messages[0] }}. Go to <a href="{{ url_for('users.login') }}">login page</a>.
-                        </div>
-                    {% endif %}
-                {% endwith %}
                 <form method="POST">
                     <div class="field">
                         {{ form.csrf_token() }}
@@ -34,10 +25,5 @@
                 </form>
             </div>
         </div>
-    </div>
-    </div>
-
-
-
 
 {% endblock %}

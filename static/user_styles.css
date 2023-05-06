@@ -29,21 +29,21 @@
     background-color: #59a956;
 }
 
-.home_button{
+.home_link{
     position: absolute;
     top: 30px;
     left: 1550px;
     font-size: 30px;
 }
 
-.login_button{
+.login_link{
     position: absolute;
     top: 30px;
     left: 1650px;
     font-size: 30px;
 }
 
-.register_button{
+.register_link{
     position: absolute;
     top: 30px;
     left: 1750px;
@@ -56,13 +56,6 @@
     align-items: center;
     height: 100vh;
     margin-top: -50px;
-}
-
-.leftover_text{
-    text-align: center;
-    top: 300px;
-    left: 902px;
-    font-size: 30px;
 }
 
 
@@ -89,4 +82,12 @@ a:visited,
 a:hover,
 a:active {
   color: #FFFFFF; /* Change this to your desired color */
+}
+
+.leftovers_text{
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    font-size: 60px;
+    color: #FFFFFF;
 }
