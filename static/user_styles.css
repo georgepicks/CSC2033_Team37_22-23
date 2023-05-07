@@ -91,3 +91,34 @@ a:active {
     font-size: 60px;
     color: #FFFFFF;
 }
+
+
+input[type="submit"] {
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  transform: translate(-50%, -50%);
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+    border-radius: 4px;
+}
+
+
+input[type="submit"]:hover {
+  background-color: #3e8e41; /* Darker green */
+}
+
+.new_account_text {
+    position: absolute;
+    top: 600px;
+    left: 900px;
+    color: #000000
+}
+
