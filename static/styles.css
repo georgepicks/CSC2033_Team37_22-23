@@ -29,25 +29,22 @@
     background-color: #59a956;
 }
 
-.home_link{
+.home_link, .login_link, .register_link {
     position: absolute;
     top: 30px;
+    font-size: 30px;
+}
+
+.home_link {
     left: 1550px;
-    font-size: 30px;
 }
 
-.login_link{
-    position: absolute;
-    top: 30px;
+.login_link {
     left: 1650px;
-    font-size: 30px;
 }
 
-.register_link{
-    position: absolute;
-    top: 30px;
+.register_link {
     left: 1750px;
-    font-size: 30px;
 }
 
 .center {
@@ -127,4 +124,27 @@ input[type="submit"]:hover {
     left: 200px;
     width: 400px;
     height: 400px;
+}
+
+
+.about_us, .contact, .privacy_policy, .tandc {
+    position: absolute;
+    top: 930px;
+    font-size: 30px;
+}
+
+.about_us {
+    left: 50px;
+}
+
+.contact {
+    left: 200px;
+}
+
+.privacy_policy {
+    left: 375px;
+}
+
+.tandc {
+    left: 575px;
 }
