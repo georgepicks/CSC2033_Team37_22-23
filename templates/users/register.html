@@ -14,25 +14,10 @@
                 <form method="POST">
                     <div class="field">
                         {{ form.csrf_token() }}
-                        <div class="control">
-                            {{ form.email(class="input", placeholder="Email") }}
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control">
-                            {{ form.phone(class="input", placeholder="Phone") }}
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control">
-                            {{ form.password(class="input", placeholder="Password") }}
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control">
-                            {{ form.confirm_password(class="input", placeholder="Confirm Password") }}
-                        </div>
-
+                        <div class="control">{{ form.email(class="input", placeholder="Email") }}</div>
+                        <div class="control">{{ form.phone(class="input", placeholder="Phone") }}</div>
+                        <div class="control">{{ form.password(class="input", placeholder="Password") }}</div>
+                        <div class="control">{{ form.confirm_password(class="input", placeholder="Confirm Password") }}</div>
                     </div>
                     <div>
                         <div class="submit">{{ form.submit(class_="btn btn-primary") }}</div>
