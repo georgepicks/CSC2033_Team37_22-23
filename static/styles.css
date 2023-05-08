@@ -77,10 +77,10 @@ input[type=password], select, textarea {
     margin-bottom: 10px;
 }
 
-a:link,
-a:visited,
-a:hover,
-a:active {
+a:not(.new_account_text):link,
+a:not(.new_account_text):visited,
+a:not(.new_account_text):hover,
+a:not(.new_account_text):active {
   color: #FFFFFF; /* Change this to your desired color */
 }
 
@@ -95,10 +95,10 @@ a:active {
 
 input[type="submit"] {
   position: absolute;
-  top: 50%;
+  top: 50px;
   left: 30px;
   transform: translate(-50%, -50%);
-  background-color: #4CAF50; /* Green */
+  background-color: #59a956;
   border: none;
   color: white;
   padding: 15px 32px;
@@ -117,8 +117,15 @@ input[type="submit"]:hover {
 
 .new_account_text {
     position: absolute;
-    top: 600px;
-    left: 900px;
+    top: 725px;
+    left: 850px;
     color: #000000
 }
 
+.image{
+    position: absolute;
+    top: 350px;
+    left: 200px;
+    width: 400px;
+    height: 400px;
+}
