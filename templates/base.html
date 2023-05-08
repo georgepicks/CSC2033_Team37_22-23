@@ -14,26 +14,21 @@
     <div class="rectangle_bottom"></div>
 
      <div class="navbar-item">
-        <div class="leftovers_text">Leftovers</div>
+         <div class="leftovers_text">Leftovers</div>
      </div>
-    <a href="{{ url_for('index') }}" class="navbar-item">
-        <div class="home_link">Home</div>
-    </a>
+    <a href="{{ url_for('index') }}" class="navbar-item"><div class="home_link">Home</div></a>
 
-    <a href="{{ url_for('users.login') }}" class="navbar-item">
-        <div class="login_link">Login</div>
-    </a>
+    <a href="{{ url_for('users.login') }}" class="navbar-item"><div class="login_link">Login</div></a>
 
-    <a href="{{ url_for('users.register') }}" class="navbar-item">
-        <div class="register_link">Register</div>
-    </a>
+    <a href="{{ url_for('users.register') }}" class="navbar-item"><div class="register_link">Register</div></a>
 
-        <div class="hero-body">
-            <div class="container has-text-centered">
-               {% block content %}
-               {% endblock %}
-            </div>
+
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            {% block content %}
+            {% endblock %}
         </div>
+    </div>
 </body>
 
 </html>

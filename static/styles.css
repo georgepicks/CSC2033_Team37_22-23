@@ -92,7 +92,6 @@ a:not(.new_account_text):active {
     color: #FFFFFF;
 }
 
-
 input[type="submit"] {
   position: absolute;
   top: 50px;
