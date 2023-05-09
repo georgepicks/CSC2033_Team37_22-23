@@ -1,0 +1,18 @@
+Index: templates/base.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\n<html>\n\n<head>\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" href=\"../static/styles.css\"/>\n</head>\n\n<body>\n    <div class=\"rectangle_top\"></div>\n    <div class=\"rectangle_bottom\"></div>\n    <div class=\"leftovers_text\">Leftovers</div>\n\n    <a href=\"{{ url_for('index') }}\"><div class=\"home_link\">Home</div></a>\n    <a href=\"{{ url_for('users.login') }}\"><div class=\"login_link\">Login</div></a>\n    <a href=\"{{ url_for('users.register') }}\"><div class=\"register_link\">Register</div></a>\n    <a href=\"{{ url_for('static', filename='about_us.html') }}\"><div class=\"about_us\">About Us</div></a>\n    <a href=\"{{ url_for('static', filename='contact.html') }}\"><div class=\"contact\">Contact Us</div></a>\n    <a href=\"{{ url_for('static', filename='privacy.html') }}\"><div class=\"privacy\">Privacy Policy</div></a>\n    <a href=\"{{ url_for('static', filename='terms.html') }}\"><div class=\"terms\">Terms and Conditions</div></a>\n\n\n    <div class=\"hero-body\">\n        <div class=\"container has-text-centered\">\n            {% block content %}\n            {% endblock %}\n        </div>\n    </div>\n</body>\n\n</html>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/templates/base.html b/templates/base.html
+--- a/templates/base.html	(revision 91fcfbf1d61742f5ec8361e8b4e706a3d7724ace)
++++ b/templates/base.html	(date 1683633537044)
+@@ -21,7 +21,6 @@
+     <a href="{{ url_for('static', filename='privacy.html') }}"><div class="privacy">Privacy Policy</div></a>
+     <a href="{{ url_for('static', filename='terms.html') }}"><div class="terms">Terms and Conditions</div></a>
+ 
+-
+     <div class="hero-body">
+         <div class="container has-text-centered">
+             {% block content %}
