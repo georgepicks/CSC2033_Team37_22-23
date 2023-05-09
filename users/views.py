@@ -1,8 +1,7 @@
-# IMPORTS
 from flask import Blueprint, render_template, flash, redirect, url_for
 
 from Users.forms import RegisterForm, LoginForm
-# CONFIG
+
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
 
@@ -13,9 +12,7 @@ def home():
 
 @users_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
-
     form = RegisterForm()
-
     return render_template('users/register.html', form=form)
 
 
