@@ -5,7 +5,6 @@ from flask import flash, render_template, request, redirect
 from models import Inventory
 from consumer import view
 
-app = Flask(__name__)
 
 app = Flask(__name__)
 # initialise database
