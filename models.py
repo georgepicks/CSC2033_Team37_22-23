@@ -1,6 +1,7 @@
 from app import db, app
 import datetime
 
+
 class User(db.Model):
     __tablename__ = 'users'
 
@@ -14,7 +15,7 @@ class User(db.Model):
     role = db.Column(db.String(100), nullable=False, default='consumer')
     orders = db.relationship('Order')
     # only for producers:
-    inventory = db.relationship('Inventory')
+    inventory = db.relationship('InventoryItems')
     # verification to be added for producers too
 
     def __init__(self, email, firstname, lastname, password, postcode, phone, role):
@@ -27,36 +28,50 @@ class User(db.Model):
         self.role = role
 
 
-class Inventory(db.Model):
+class InventoryItems(db.Model):
     __tablename__ = 'inventory items'
-    producer_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
-    item = db.Column(db.String(100), nullable=False)
+    item = db.Column(db.String(100), nullable=False, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, producer_id, item, quantity):
-        self.producer_id = producer_id
+    def __init__(self, item, quantity):
         self.item = item
         self.quantity = quantity
 
-class Order(db.Model):
+
+class Orders(db.Model):
     __tablename__ = 'orders'
     order_id = db.Column(db.Integer, primary_key=True)
     producer_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
     consumer_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
-    items = db.Column(db.List, nullable=False)
     order_time = db.Column(db.DateTime, nullable=False)
+    items = db.Relationship('OrderItems')
 
-    def __init(self, producer_id, consumer_id, items, order_time):
+
+    def __init(self, producer_id, consumer_id, order_time):
         self.producer_id = producer_id
         self.consumer_id = consumer_id
         self.producer_id = producer_id
-        self.items = items
-        self.datetime = datetime
+        self.order_time = order_time
 
-# DO NOT RUN init_db YET, DATABASE IS NOT READY
+
+class OrderItems(db.Model):
+    __tablename__ = 'order items'
+    item = db.Column(db.String(100), nullable=False, primary_key=True)
+    quantity = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, item, quantity):
+        self.item = item
+        self.quantity = quantity
+
+
 def init_db():
-    db.drop_all()
-    db.create_all()
-    db.session.commit()
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+        db.session.commit()
 
-init_db()
+    #new_user = User(email='a@m', firstname='a', lastname='m', password='p', postcode='n 1', phone='1', role='consumer')
+    #db.session.add(new_user)
+
+
+#init_db()
