@@ -11,22 +11,21 @@
     font-size: 30px;
 }
 
-.rectangle_top {
+.rectangle_top, .rectangle_bottom{
     position: absolute;
-    top: 1px;
-    left: 1px;
     width: 1950px;
     height: 100px;
     background-color: #59a956;
 }
 
+.rectangle_top {
+    top: 1px;
+    left: 1px;
+}
+
 .rectangle_bottom {
-    position: absolute;
     top: 900px;
     left: 1px;
-    width: 2000px;
-    height: 100px;
-    background-color: #59a956;
 }
 
 .home_link, .login_link, .register_link {
@@ -141,10 +140,10 @@ input[type="submit"]:hover {
     left: 200px;
 }
 
-.privacy_policy {
+.privacy {
     left: 375px;
 }
 
-.tandc {
+.terms {
     left: 575px;
 }

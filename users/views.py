@@ -6,22 +6,19 @@ from users.forms import RegisterForm, LoginForm
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
 
-
-
 @users_blueprint.route('/index')
 def home():
     return render_template('main/index.html')
 
+
 @users_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
-    # create signup form object
+
     form = RegisterForm()
 
-    # if request method is GET or form not valid re-render signup page
     return render_template('users/register.html', form=form)
 
 
-# view user login
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
