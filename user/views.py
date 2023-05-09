@@ -4,11 +4,13 @@ from sqlalchemy.testing.pickleable import User
 from app import db
 from user.form import RegisterForm, LoginForm
 import bcrypt
-from flask_login import login_user,logout_user,login_required,current_user
+from flask_login import login_user,current_user
 from datetime import datetime
 import logging
 
-# @user_blueprint.route('/register', methods=['GET', 'POST'])
+users_blueprint = Blueprint('users', __name__, template_folder='templates')
+
+@users_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     # create signup form object
     form = RegisterForm()
@@ -42,7 +44,7 @@ def register():
     # if request method is GET or form not valid re-render signup page
     # return render_template('users/register.html', form=form)
 
-
+@users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     # create login form object
     form = LoginForm()
@@ -77,17 +79,17 @@ def login():
         else:
             # user login is initiated
             login_user(user)
-            # current login user is equvated to last logiin user
+            # current login user is matched to the last login user
             user.last_login = user.current_login
             user.current_login = datetime.now()
             db.session.add(user)
             db.session.commit()
             # Data is recorded in lottery.log each time login action takes place
-            logging.warning('SECURITY - Log in [%s, %s, %s]', current_user.id, current_user.email, request.remote_addr)
+            logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
             if current_user.role == "admin":
                 # returns to admin page if the logged in user is an "admin"
-                # return render_template('admin/admin.html')
+                return render_template('')
             # returns to profile page if the logged in user is a normal user
-            # return render_template('users/profile.html')
+            return render_template('')
     # returns login if all the functions fail
-    return render_template(, form=form)
+    return render_template('', form=form)
