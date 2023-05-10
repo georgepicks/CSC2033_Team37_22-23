@@ -46,9 +46,7 @@ class Orders(db.Model):
     order_time = db.Column(db.DateTime, nullable=False)
     items = db.Relationship('OrderItems')
 
-
     def __init(self, producer_id, consumer_id, order_time):
-        self.producer_id = producer_id
         self.consumer_id = consumer_id
         self.producer_id = producer_id
         self.order_time = order_time
@@ -69,9 +67,5 @@ def init_db():
         db.drop_all()
         db.create_all()
         db.session.commit()
-
-    #new_user = User(email='a@m', firstname='a', lastname='m', password='p', postcode='n 1', phone='1', role='consumer')
-    #db.session.add(new_user)
-
 
 #init_db()
