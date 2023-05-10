@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, flash, redirect, url_for,session,Markup,request
-from sqlalchemy.testing.pickleable import User
-
+from models import User
 from app import db
 from user.form import RegisterForm, LoginForm
 import bcrypt
@@ -65,7 +64,7 @@ def login():
             # Session incremented after each invalid login
             session['authentication_attempts'] += 1
 
-            # checks if the user has invalid logins for three consecutive times
+            # checks if the user has invalid logins for five consecutive times
             if session.get('authentication_attempts') == 5:
                 flash(Markup('Number of incorrect login attempts exceeded.'))
                 # reinitialises sessions to 0
@@ -92,4 +91,4 @@ def login():
             # returns to profile page if the logged in user is a normal user
             return render_template('')
     # returns login if all the functions fail
-    return render_template('', form=form)
+    return render_template('login.html', form=form)
