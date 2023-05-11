@@ -1,3 +1,5 @@
+
+=======
 from flask import Blueprint, render_template,request,session, redirect, url_for
 from flask_login import login_required
 from models import User, Inventory
@@ -108,4 +110,5 @@ def order_details(order_id):
 
   if order:
     return render_template('order_details.html', order=order)
+
 

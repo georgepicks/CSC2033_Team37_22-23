@@ -1,5 +1,3 @@
-from app import db, app
-import datetime
 
 
 class User(db.Model):
