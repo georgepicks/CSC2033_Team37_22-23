@@ -1,9 +1,8 @@
-
-=======
-from flask import Blueprint, render_template,request,session, redirect, url_for
-from flask_login import login_required
-from models import User, Inventory
-from app import app,db
+from flask import Blueprint, render_template, request, session, redirect, url_for
+from flask_login import login_required, current_user
+from models import User, InventoryItems
+from app import app, db
+import pgeocode
 
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
@@ -17,7 +16,7 @@ def search():
       query = request.form.get('query')  # Retrieve the search query from the form
 
       # Perform the search in the database using SQLAlchemy
-      results = Inventory.item.query.filter(Inventory.item.name.ilike(f'%{query}%')).all()
+      results = InventoryItems.item.query.filter(InventoryItems.item.name.ilike(f'%{query}%')).all()
 
       if not results:
         message = "No items found matching your search query."
@@ -112,3 +111,16 @@ def order_details(order_id):
     return render_template('order_details.html', order=order)
 
 
+@app.route('/')
+def find_producers(distance_range):
+    geo = pgeocode.GeoDistance('gb')
+    nearby_producers = []
+    # collect all producers into list
+    producers = User.query.filter_by(role="producer")
+    for i in producers:
+        # calculate distance between all producers and current user
+        distance = geo.query_postal_code(current_user.postcode, i.postcode)
+        if distance < distance_range:
+            nearby_producers.append(i)
+
+    return nearby_producers

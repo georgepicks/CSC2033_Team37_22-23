@@ -18,12 +18,11 @@ def hello_world():  # put application's code here
 
 if __name__ == '__main__':
     app.run()
-=======
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from flask import flash, render_template, request, redirect
-from models import Inventory
+from models import InventoryItems
 from consumer import view
 
 
@@ -51,7 +50,7 @@ def search_results(search):
     results = []
     search_string = search.data['search']
     if search.data['search'] == '':
-        qry = db.session.query(Inventory.item)
+        qry = db.session.query(InventoryItems.item)
         results = qry.all()
     if not results:
         flash('No results found!')
@@ -65,7 +64,6 @@ def search_results(search):
 if __name__ == '__main__':
     app.run()
 
-=======
 from flask import Flask, redirect, url_for
 from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
