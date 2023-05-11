@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template,request,session, redirect, url_for
-from flask_login import login_required
-from models import User, Inventory
+from flask_login import login_required, current_user
+from models import User, InventoryItems
 from app import app,db
-
+import pgeocode
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
@@ -108,4 +108,19 @@ def order_details(order_id):
 
   if order:
     return render_template('order_details.html', order=order)
+
+
+@app.route('/')
+def find_producers(range):
+    geo = pgeocode.GeoDistance('gb')
+    nearby_producers = []
+    # collect all producers into list
+    producers = User.query.filter_by(role="producer")
+    for i in producers:
+        # calculate distance between all producers and current user
+        distance = geo.query_postal_code(current_user.postcode, i.postcode)
+        if distance < range:
+            nearby_producers.append(i)
+
+    return nearby_producers
 
