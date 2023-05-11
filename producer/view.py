@@ -2,7 +2,7 @@
 =======
 from flask import render_template, redirect, url_for, request,Blueprint
 from flask_login import login_required
-from models import Inventory
+from models import InventoryItems
 from app import app, db
 
 producer_blueprint = Blueprint('producer', __name__, template_folder='templates')
@@ -11,14 +11,14 @@ producer_blueprint = Blueprint('producer', __name__, template_folder='templates'
 @app.route('/admin/inventory')
 @login_required
 def inventory():
-    items = Inventory.query.all()
+    items = InventoryItems.query.all()
     return render_template('', items=items)
 
 
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def edit_item(id):
-    item = Inventory.query.get_or_404(id)
+    item = InventoryItems.query.get_or_404(id)
     if request.method == 'POST':
         item.name = request.form['name']
         item.quantity = request.form['quantity']
@@ -34,7 +34,7 @@ def add_item():
     if request.method == 'POST':
         name = request.form['name']
         quantity = request.form['quantity']
-        item = Inventory.item(name=name, quantity=quantity)
+        item = InventoryItems.item(name=name, quantity=quantity)
         db.session.add(item)
         db.session.commit()
         return redirect(url_for('inventory'))
@@ -47,7 +47,7 @@ def orders():
     cursor = db.cursor()
 
     # Retrieve all orders from the database
-    select_query = "SELECT * FROM OrderItems"
+    select_query = "SELECT * FROM Orders"
     cursor.execute(select_query)
     orders = cursor.fetchall()
 

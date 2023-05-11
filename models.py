@@ -29,11 +29,16 @@ class User(db.Model):
 class InventoryItems(db.Model):
     __tablename__ = 'inventory items'
     item = db.Column(db.String(100), nullable=False, primary_key=True)
+
+    producer_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, item, quantity):
+
+    def __init__(self, item, quantity, order_id):
+
         self.item = item
         self.quantity = quantity
+        self.order_id = order_id
 
 
 class Orders(db.Model):
@@ -52,10 +57,12 @@ class Orders(db.Model):
 
 class OrderItems(db.Model):
     __tablename__ = 'order items'
+
+ order_id = db.Column(db.Integer, db.ForeignKey(Orders.order_id), nullable=False)
     item = db.Column(db.String(100), nullable=False, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, item, quantity):
+    def __init__(self, order_id, item, quantity):
         self.item = item
         self.quantity = quantity
 

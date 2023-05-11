@@ -2,8 +2,8 @@
 =======
 from flask import Blueprint, render_template,request,session, redirect, url_for
 from flask_login import login_required
-from models import User, Inventory
-from app import app,db
+from models import User, InventoryItems
+from app import app, db
 
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
@@ -17,7 +17,7 @@ def search():
       query = request.form.get('query')  # Retrieve the search query from the form
 
       # Perform the search in the database using SQLAlchemy
-      results = Inventory.item.query.filter(Inventory.item.name.ilike(f'%{query}%')).all()
+      results = InventoryItems.item.query.filter(InventoryItems.item.name.ilike(f'%{query}%')).all()
 
       if not results:
         message = "No items found matching your search query."
@@ -43,7 +43,7 @@ def filter_search():
 
 def get_product_by_id(product_id):
   # Find a product with the given ID
-  for product in Inventory.item:
+  for product in InventoryItems.item:
     if product['id'] == product_id:
       return product
   return None
@@ -75,13 +75,12 @@ def edit_order(order_id):
         # Get the updated order information from the form
         new_order_info = {
             'item': request.form['item'],
-            'producer_id': request.form['producer_id'],
-            'consumer_id': request.form['consumer_id']
+            'quantity': request.form['quantity'],
         }
 
         # Update the order in the database
-        update_query = "UPDATE Order SET items=%s, producer_idy=%s, consumer_id=%s WHERE order_id=%s"
-        cursor.execute(update_query, (new_order_info['item'], new_order_info['producer_id'], new_order_info['consumer_id'], order_id))
+        update_query = "UPDATE OrderItems SET item=%s, quantity=%s WHERE order_id=%s"
+        cursor.execute(update_query, (new_order_info['item'], new_order_info['quantity'], order_id))
         db.commit()
 
         # Redirect to the order details page
