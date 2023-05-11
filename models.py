@@ -4,6 +4,7 @@ import datetime
 
 class User(db.Model):
     __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     firstname = db.Column(db.String(100), nullable=False)
@@ -14,7 +15,7 @@ class User(db.Model):
     role = db.Column(db.String(100), nullable=False, default='consumer')
     orders = db.relationship('Order')
     # only for producers:
-    inventory = db.relationship('Inventory')
+    inventory = db.relationship('InventoryItems')
     # verification to be added for producers too
 
     def __init__(self, email, firstname, lastname, password, postcode, phone, role):
@@ -27,44 +28,36 @@ class User(db.Model):
         self.role = role
 
 
-class Inventory(db.Model):
+class InventoryItems(db.Model):
     __tablename__ = 'inventory items'
-    producer_id = db.Column(db.Integer, db.ForeignKey(User.id), primary_key=True, nullable=False)
-    item = db.Column(db.String(100), nullable=False)
+    item = db.Column(db.String(100), nullable=False, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, producer_id, item, quantity):
-        self.producer_id = producer_id
+    def __init__(self, item, quantity):
         self.item = item
         self.quantity = quantity
 
 
-class Order(db.Model):
+class Orders(db.Model):
     __tablename__ = 'orders'
     order_id = db.Column(db.Integer, primary_key=True)
     producer_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
     consumer_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
     order_time = db.Column(db.DateTime, nullable=False)
-    items = db.relationship('OrderItems')
+    items = db.Relationship('OrderItems')
 
-    def __init__(self, order_id, consumer_id, producer_id, items, order_time):
-        self.order_id = order_id
+    def __init(self, producer_id, consumer_id, order_time):
         self.consumer_id = consumer_id
         self.producer_id = producer_id
-        self.items = items
         self.order_time = order_time
 
 
 class OrderItems(db.Model):
     __tablename__ = 'order items'
-    item_id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey(Order.order_id))
-    item = db.Column(db.String(100), nullable=False)
+    item = db.Column(db.String(100), nullable=False, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, item_id, order_id, item, quantity):
-        self.item_id = item_id
-        self.order_id = order_id
+    def __init__(self, item, quantity):
         self.item = item
         self.quantity = quantity
 
@@ -75,4 +68,4 @@ def init_db():
         db.create_all()
         db.session.commit()
 
-# init_db()
+#init_db()
