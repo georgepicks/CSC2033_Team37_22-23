@@ -7,10 +7,10 @@ app.secret_key = 'your_secret_key'
 
 
 # initialise database
-engine = create_engine('mysql+pymysql://csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk:3306/csc2033_team37')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk/csc2033_team37'
+engine = create_engine('mariadb:///csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk:3306/csc2033_team37')
+# engine = create_engine("jdbc:mariadb://cs-db.ncl.ac.uk:3306/csc2033_team37")
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mariadb://csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk/csc2033_team37'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
 
 
 from flask import  redirect
