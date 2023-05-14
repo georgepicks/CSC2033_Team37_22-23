@@ -19,7 +19,6 @@
     flex-grow: 1;
 }
 
-
 .rectangle_top {
     top: 1px;
     left: 1px;
@@ -30,7 +29,7 @@
     left: 1px;
 }
 
-.home_link, .login_link, .register_link {
+.home_link, .login_link, .register_link, .leftovers_text {
     position: absolute;
     top: 30px;
     font-size: 30px;
@@ -46,6 +45,13 @@
 
 .register_link {
     left: 1750px;
+}
+
+.leftovers_text{
+    top: 20px;
+    left: 40px;
+    font-size: 60px;
+    color: #FFFFFF;
 }
 
 .center {
@@ -75,24 +81,15 @@ input[type=password], select, textarea {
     margin-bottom: 10px;
 }
 
-a:not(.new_account_text):link,
-a:not(.new_account_text):visited,
-a:not(.new_account_text):hover,
-a:not(.new_account_text):active {
+a:link,
+a:visited{
   color: #FFFFFF; /* Change this to your desired color */
 }
 
-.leftovers_text{
-    position: absolute;
-    top: 20px;
-    left: 40px;
-    font-size: 60px;
-    color: #FFFFFF;
-}
 
 input[type="submit"] {
   position: absolute;
-  top: 50px;
+  top: 10px;
   left: 30px;
   transform: translate(-50%, -50%);
   background-color: #59a956;
@@ -112,19 +109,12 @@ input[type="submit"]:hover {
   background-color: #3e8e41; /* Darker green */
 }
 
-.new_account_text {
-    position: absolute;
-    top: 725px;
-    left: 850px;
-    color: #000000
-}
-
 .image{
     position: absolute;
-    top: 350px;
-    left: 200px;
-    width: 400px;
-    height: 400px;
+    top: 30px;
+    left: 285px;
+    width: 50px;
+    height: 50px;
 }
 
 
@@ -261,5 +251,5 @@ body {
     position: absolute;
     top:30px;
     font-size: 30px;
-    left: 300px;
+    left: 500px;
 }

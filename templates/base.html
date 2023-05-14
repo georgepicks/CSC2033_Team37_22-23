@@ -12,14 +12,13 @@
     <div class="rectangle_top"></div>
     <div class="rectangle_bottom"></div>
     <div class="leftovers_text">Leftovers</div>
+    <img src="https://lh3.googleusercontent.com/MzZovyUtjNtzjBH-gn-s2dDM17PE0-2P7Jly_9tRLfDkKOejznOi3U5TT1Wd8PS0URudImGfGl78ucUl629hOLaLMPASuZmky-WQgmfF4Ucd3SqOWeyOhFFF7KtFJu-AH4i_1Wu_Sg=w2400" alt="Food" class="image"/>
+
 
     <a href="{{ url_for('index') }}"><div class="home_link">Home</div></a>
     <a href="{{ url_for('users.login') }}"><div class="login_link">Login</div></a>
     <a href="{{ url_for('users.register') }}"><div class="register_link">Register</div></a>
-    <a href="{{ url_for('static', filename='about_us.html') }}"><div class="about_us">About Us</div></a>
-    <a href="{{ url_for('static', filename='contact.html') }}"><div class="contact">Contact Us</div></a>
-    <a href="{{ url_for('static', filename='privacy.html') }}"><div class="privacy">Privacy Policy</div></a>
-    <a href="{{ url_for('static', filename='terms.html') }}"><div class="terms">Terms and Conditions</div></a>
+    <a href="{{ url_for('users.about_us') }}"><div class="about_us">About Us</div></a>
     <a href="{{ url_for('users.feed') }}"><div class="test_button">test</div></a>
 
     <div class="hero-body">

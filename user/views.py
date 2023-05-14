@@ -13,10 +13,13 @@ users_blueprint = Blueprint('users', __name__, template_folder='templates')
 def home():
     return render_template('main/index.html')
 
-
 @users_blueprint.route('/feed')
 def feed():
     return render_template('consumer/feed.html')
+
+@users_blueprint.route('/about_us')
+def about_us():
+    return render_template('other_pages/about_us.html')
 
 @users_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
@@ -38,9 +41,6 @@ def login():
         if not session.get('authentication_attempts'):
             session['authentication_attempts'] = 0
 
-        # checks if the user already exists in the database
-
-        # if condition checking if the encrypted password is similar to database, if the user exists and the verification key entered is false
 
     return render_template('users/login.html', form=form)
 
