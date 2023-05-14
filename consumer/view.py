@@ -1,8 +1,8 @@
 
-=======
+
 from flask import Blueprint, render_template,request,session, redirect, url_for
 from flask_login import login_required
-from models import User, Inventory
+from models import User, InventoryItems
 from app import app,db
 
 
@@ -17,7 +17,7 @@ def search():
       query = request.form.get('query')  # Retrieve the search query from the form
 
       # Perform the search in the database using SQLAlchemy
-      results = Inventory.item.query.filter(Inventory.item.name.ilike(f'%{query}%')).all()
+      results = InventoryItems.item.query.filter(InventoryItems.item.name.ilike(f'%{query}%')).all()
 
       if not results:
         message = "No items found matching your search query."
@@ -43,7 +43,7 @@ def filter_search():
 
 def get_product_by_id(product_id):
   # Find a product with the given ID
-  for product in Inventory.item:
+  for product in InventoryItems.item:
     if product['id'] == product_id:
       return product
   return None

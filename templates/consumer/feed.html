@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div id="ui-container">
+        <div class="search-container">
+            <input type="text" id="location-search" placeholder="Location">
+            <button id="allergens-button">Allergens</button>
+            <div id="allergens-dropdown">
+                <ul>
+                    <li>Dairy-free</li>
+                    <li>Gluten-free</li>
+                    <li>Nut-free</li>
+                    <li>Soy-free</li>
+                </ul>
+            </div>
+            <button id="filter-button">Search</button>
+        </div>
+        <div id="cards-container" style="overflow: auto; max-height: 400px;">
+            <a href="https://example.com/pasta">
+                <div class="card">
+                    <img src="https://source.unsplash.com/600x600/?abstract" alt="Food">
+                    <h2>Pasta</h2>
+                    <p>New York, NY</p>
+                    <p class="allergen-warning">Gluten-free</p>
+                </div>
+            </a>
+            <a href="https://example.com/burger">
+                <div class="card">
+                    <img src="https://source.unsplash.com/600x600/?abstract" alt="Food">
+                    <h2>Burger</h2>
+                    <p>Los Angeles, CA</p>
+                    <p class="allergen-warning">Soy-free</p>
+                </div>
+            </a>
+            <a href="https://example.com/pizza">
+                <div class="card">
+                    <img src="https://source.unsplash.com/600x600/?abstract" alt="Food">
+                    <h2>Pizza</h2>
+                    <p>Chicago, IL</p>
+                    <p class="allergen-warning">Dairy-free</p>
+                </div>
+            </a>
+            <a href="https://example.com/salad">
+                <div class="card">
+                    <img src="https://source.unsplash.com/600x600/?abstract" alt="Food">
+                    <h2>Salad</h2>
+                    <p>San Francisco, CA</p>
+                    <p class="allergen-warning">Nut-free</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+    <script>
+        // Function to create a new card
+        function createCard(url, imageUrl, title, location, allergen) {
+            var cardContainer = document.getElementById("cards-container");
+
+            var cardLink = document.createElement("a");
+            cardLink.href = url;
+
+            var cardDiv = document.createElement("div");
+            cardDiv.classList.add("card");
+
+            var imageElement = document.createElement("img");
+            imageElement.src = imageUrl;
+            imageElement.alt = "Food";
+
+            var titleElement = document.createElement("h2");
+            titleElement.textContent = title;
+
+            var locationElement = document.createElement("p");
+            locationElement.textContent = location;
+
+            var allergenElement = document.createElement("p");
+            allergenElement.classList.add("allergen-warning");
+            allergenElement.textContent = allergen;
+
+            cardDiv.appendChild(imageElement);
+            cardDiv.appendChild(titleElement);
+            cardDiv.appendChild(locationElement);
+            cardDiv.appendChild(allergenElement);
+
+            cardLink.appendChild(cardDiv);
+
+            cardContainer.appendChild(cardLink);
+        }
+
+        // Example usage to create a new card
+        createCard(
+            "https://example.com/new-business",
+            "https://source.unsplash.com/600x600/?abstract",
+            "New Business",
+            "City, State",
+            "Allergen-free"
+        );
+    </script>
+
+
+{% endblock %}

@@ -1,5 +1,5 @@
 
-=======
+
 from flask import render_template, redirect, url_for, request,Blueprint
 from flask_login import login_required
 from models import Inventory

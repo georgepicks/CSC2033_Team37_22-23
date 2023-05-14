@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
 
-
 class LoginForm(FlaskForm):
     email = StringField(render_kw={"size": 50, "maxlength": 70})
     password = PasswordField(render_kw={"size": 50, "maxlength": 70})
