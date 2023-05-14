@@ -1,5 +1,3 @@
-
-=======
 from flask import render_template, redirect, url_for, request,Blueprint
 from flask_login import login_required
 from models import InventoryItems
@@ -41,7 +39,6 @@ def add_item():
     else:
         return render_template('')
 
-
 @app.route('/orders')
 def orders():
     cursor = db.cursor()
@@ -53,3 +50,28 @@ def orders():
 
     # Pass the orders to the template for rendering
     return render_template('orders.html', orders=orders)
+
+
+def accept_order(order_id, inventory):
+    for item in inventory:
+        if item['id'] == order_id:
+            inventory.remove(item)
+            return True
+    return False
+
+
+def remove_item(item_id):
+    item = InventoryItems.query.get(item_id)
+    if item:
+        db.session.delete(item)
+        db.session.commit()
+        return True
+    else:
+        return False
+
+@app.route('/inventory/remove/<int:item_id>', methods=['POST'])
+def remove_item_route(item_id):
+    if remove_item(item_id):
+        return redirect(url_for('inventory'))
+    else:
+        return "Item not found"
