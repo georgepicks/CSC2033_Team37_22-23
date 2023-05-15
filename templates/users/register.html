@@ -9,16 +9,13 @@
             <h3 class="page_text">Register</h3>
             <div class="ignore-styles">Already have an account? <a href="{{ url_for('users.login') }}">Sign in</a></div>
                 <form method="POST">
-                    <div class="field">
+                    <div class="container">
                         {{ form.csrf_token() }}
-                        <div class="control">{{ form.email(class="input", placeholder="Email") }}</div>
-                        <div class="control">{{ form.phone(class="input", placeholder="Phone") }}</div>
-                        <div class="control">{{ form.password(class="input", placeholder="Password") }}</div>
-                        <div class="control">{{ form.confirm_password(class="input", placeholder="Confirm Password") }}</div>
-                    </div>
-
-                    <div>
-                        <div class="submit">{{ form.submit(class_="btn btn-primary") }}</div>
+                        {{ form.email(class="input", placeholder="Email") }}
+                        {{ form.phone(class="input", placeholder="Phone") }}
+                        {{ form.password(class="input", placeholder="Password") }}
+                        {{ form.confirm_password(class="input", placeholder="Confirm Password") }}
+                        {{ form.submit(class_="button") }}
                     </div>
                 </form>
             </div>

@@ -8,11 +8,11 @@
         <div class="column is-5 is-offset-4">
             <h3 class="page_text">Login</h3>
                 <form method="POST">
-                    <div class="field">
+                    <div class="container">
                         {{ form.csrf_token() }}
-                        <div class="control">{{ form.email(class="input", placeholder="Email") }}</div>
-                        <div class="control">{{ form.password(class="input", placeholder="Password") }}</div>
-                        <div class="control">{{ form.submit(class="button is-info is-centered") }}</div>
+                        {{ form.email(class="input", placeholder="Email") }}
+                        {{ form.password(class="input", placeholder="Password") }}
+                        {{ form.submit(class="button") }}
                     </div>
                 </form>
             </div>
