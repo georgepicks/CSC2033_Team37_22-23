@@ -9,6 +9,14 @@ consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates'
 
 
 @app.route('/', methods=['GET', 'POST'])
+def generate_dashboard():
+    # need to change to allow consumers to select a max distance
+    placeholder = 1000
+    # get list of producers within user-specified range alongside their distance from consumer
+    producers = find_producers(placeholder)
+
+
+@app.route('/', methods=['GET', 'POST'])
 @login_required
 def search():
 
@@ -42,7 +50,7 @@ def filter_search():
 
 def get_product_by_id(product_id):
   # Find a product with the given ID
-  for product in Inventory.item:
+  for product in InventoryItems.item:
     if product['id'] == product_id:
       return product
   return None
@@ -112,15 +120,17 @@ def order_details(order_id):
 
 
 @app.route('/')
-def find_producers(distance_range):
-    geo = pgeocode.GeoDistance('gb')
-    nearby_producers = []
-    # collect all producers into list
-    producers = User.query.filter_by(role="producer")
+def find_producers(distance_range, filter):
+    geodistance = pgeocode.GeoDistance('gb')
+    nearby_producers = {}
+    # query all producers
+    producers = User.query.filter_by(role="producer").all()
     for i in producers:
         # calculate distance between all producers and current user
-        distance = geo.query_postal_code(current_user.postcode, i.postcode)
+        distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
         if distance < distance_range:
-            nearby_producers.append(i)
-
-    return nearby_producers
+            # key = producer, value = distance
+            nearby_producers.update({i:distance})
+    # sorts producers by distance from low to high
+    sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
+    return sorted_producers
