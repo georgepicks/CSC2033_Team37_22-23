@@ -4,17 +4,18 @@
     <div id="ui-container">
       <div class="search-container">
         <input type="text" id="location-search" placeholder="Location">
-        <button id="allergens-button">Allergens</button>
-        <div id="allergens-dropdown">
-          <ul>
-            <li>Dairy-free</li>
-            <li>Gluten-free</li>
-            <li>Nut-free</li>
-            <li>Soy-free</li>
-          </ul>
-        </div>
-        <button id="filter-button">Search</button>
+          <div class="dropdown">
+            <button onclick="toggleDropdown()" class="dropbtn">Allergens</button>
+              <button id="filter-button">Search</button>
+            <div id="dropdownContent" class="dropdown-content">
+                <a href="#">Dairy-free</a>
+                <a href="#">Gluten-free</a>
+                <a href="#">Nut-free</a>
+                <a href="#">Soy-free</a>
+            </div>
+          </div>
       </div>
+
         <div id="cards-container" style="overflow: auto; max-height: 400px;">
             <a href="https://example.com/pasta">
                 <div class="card">
@@ -30,35 +31,27 @@
 
     <script>
         createCard(
-            "https://example.com/new-business",
-            "https://source.unsplash.com/600x600/?abstract",
-            "New Business",
-            "City, State",
-            "Allergen-free"
+          "https://example.com/pasta",
+          "https://source.unsplash.com/600x600/?abstract",
+          "Pasta",
+          "New York, NY",
+          "Gluten-free"
         );
 
         createCard(
-            "https://example.com/new-business",
-            "https://source.unsplash.com/600x600/?abstract",
-            "New Business",
-            "City, State",
-            "Allergen-free"
+          "https://example.com/pasta",
+          "https://source.unsplash.com/600x600/?abstract",
+          "Pasta",
+          "New York, NY",
+          "Gluten-free"
         );
 
         createCard(
-            "https://example.com/new-business",
-            "https://source.unsplash.com/600x600/?abstract",
-            "New Business",
-            "City, State",
-            "Allergen-free"
-        );
-
-        createCard(
-            "https://example.com/new-business",
-            "https://source.unsplash.com/600x600/?abstract",
-            "New Business",
-            "City, State",
-            "Allergen-free"
+          "https://example.com/pasta",
+          "https://source.unsplash.com/600x600/?abstract",
+          "Pasta",
+          "New York, NY",
+          "Gluten-free"
         );
     </script>
 
