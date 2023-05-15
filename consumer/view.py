@@ -1,9 +1,11 @@
+from _curses import flash
 
-=======
-from flask import Blueprint, render_template,request,session, redirect, url_for
+from flask import Blueprint, render_template,request,session, redirect, url_for, jsonify
 from flask_login import login_required
-from models import User, InventoryItems
+from models import User, InventoryItems,Orders
 from app import app, db
+import pymysql
+from datetime import datetime, timedelta
 
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
@@ -50,13 +52,17 @@ def get_product_by_id(product_id):
 
 
 @app.route('/add_to_order/<int:product_id>', methods=['GET'])
-def add_to_order(product_id):
+def order_item(product_id):
   # Retrieve the product based on the product_id
   product = get_product_by_id(product_id)
   if product:
     selected_products = session.get('selected_products', [])
     selected_products.append(product)
     session['selected_products'] = selected_products
+    #setting the time for cancelling the order to be 5 minutes
+    cancellation_deadline = datetime.now() + timedelta(minutes=5)
+    session['cancellation_deadline'] = cancellation_deadline
+
   return redirect(url_for('order'))
 
 
@@ -110,4 +116,16 @@ def order_details(order_id):
   if order:
     return render_template('order_details.html', order=order)
 
+  # Cancel order endpoint
+  @app.route('/cancel-order', methods=['POST'])
+  def cancel_order():
+      cancellation_deadline = session.get('cancellation_deadline')
+      if cancellation_deadline and datetime.now() < cancellation_deadline:
+          # Perform cancellation logic
+          session.pop('selected_products', None)
+          session.pop('cancellation_deadline', None)
+          flash('Order is cancelled')
+      else:
+          flash('Cancellation period has expired.')
 
+      return redirect(url_for('order'))
