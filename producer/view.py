@@ -39,15 +39,39 @@ def add_item():
     else:
         return render_template('')
 
-
 @app.route('/orders')
 def orders():
     cursor = db.cursor()
 
     # Retrieve all orders from the database
-    select_query = "SELECT * FROM OrderItems"
+    select_query = "SELECT * FROM Orders"
     cursor.execute(select_query)
     orders = cursor.fetchall()
 
     # Pass the orders to the template for rendering
     return render_template('orders.html', orders=orders)
+
+
+def accept_order(order_id, inventory):
+    for item in inventory:
+        if item['id'] == order_id:
+            inventory.remove(item)
+            return True
+    return False
+
+
+def remove_item(item_id):
+    item = InventoryItems.query.get(item_id)
+    if item:
+        db.session.delete(item)
+        db.session.commit()
+        return True
+    else:
+        return False
+
+@app.route('/inventory/remove/<int:item_id>', methods=['POST'])
+def remove_item_route(item_id):
+    if remove_item(item_id):
+        return redirect(url_for('inventory'))
+    else:
+        return "Item not found"
