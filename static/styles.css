@@ -1,69 +1,82 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+
 .submit {
-    position: absolute;
-    top: 650px;
-    left: 920px;
+  position: absolute;
+  top: 650px;
+  left: 920px;
+}
+.page_text {
+  text-align: center;
+  top: 300px;
+  left: 902px;
+  font-size: 30px;
 }
 
-.page_text{
-    text-align: center;
-    top: 300px;
-    left: 902px;
-    font-size: 30px;
-}
-
-.rectangle_top, .rectangle_bottom{
-    position: absolute;
-    width: 1950px;
-    height: 100px;
-    background-color: #59a956;
-    flex-grow: 1;
+.rectangle_top, .rectangle_bottom {
+  position: absolute;
+  width: 1950px;
+  height: 100px;
+  background-color: #59a956;
+  flex-grow: 1;
 }
 
 .rectangle_top {
-    top: 1px;
-    left: 1px;
+  top: 1px;
+  left: 1px;
 }
 
 .rectangle_bottom {
-    top: 900px;
-    left: 1px;
+  top: 900px;
+  left: 1px;
 }
 
 .home_link, .login_link, .register_link, .leftovers_text {
-    position: absolute;
-    top: 30px;
-    font-size: 30px;
+  position: absolute;
+  top: 30px;
+  font-size: 30px;
 }
 
 .home_link {
-    left: 1550px;
+  left: 1550px;
 }
 
 .login_link {
-    left: 1650px;
+  left: 1650px;
 }
 
 .register_link {
-    left: 1750px;
+  left: 1750px;
 }
 
-.leftovers_text{
-    top: 20px;
-    left: 40px;
-    font-size: 60px;
-    color: #FFFFFF;
+.leftovers_text {
+  top: 20px;
+  left: 40px;
+  font-size: 60px;
+  color: #ffffff;
 }
 
 .center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin-top: -50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin-top: -50px;
 }
 
-
-input[type=text], select, textarea {
+input[type="text"],
+input[type="password"],
+select,
+textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -72,20 +85,10 @@ input[type=text], select, textarea {
   margin-bottom: 10px;
 }
 
-input[type=password], select, textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: vertical;
-    margin-bottom: 10px;
-}
-
 a:link,
-a:visited{
-  color: #FFFFFF; /* Change this to your desired color */
+a:visited {
+  color: #ffffff;
 }
-
 
 input[type="submit"] {
   position: absolute;
@@ -101,43 +104,50 @@ input[type="submit"] {
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
-    border-radius: 4px;
+  border-radius: 4px;
 }
 
-
-input[type="submit"]:hover {
-  background-color: #3e8e41; /* Darker green */
+.image {
+  position: absolute;
+  top: 175px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 150px;
 }
 
-.image{
-    position: absolute;
-    top: 30px;
-    left: 285px;
-    width: 50px;
-    height: 50px;
+.exclude-image .image {
+  display: none;
 }
 
-
-.about_us, .contact, .privacy, .terms {
-    position: absolute;
-    top: 930px;
-    font-size: 30px;
+.about_us, .contact {
+  position: absolute;
+  top: 930px;
+  font-size: 30px;
 }
 
 .about_us {
-    left: 50px;
+  left: 50px;
 }
 
 .contact {
-    left: 200px;
+  left: 200px;
 }
 
-.privacy {
-    left: 375px;
+.hero-body {
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.terms {
-    left: 575px;
+
+.test_button {
+  position: absolute;
+  top: 30px;
+  font-size: 30px;
+  left: 500px;
 }
 
 
@@ -215,41 +225,3 @@ input[type="submit"]:hover {
   transition: all 0.3s ease;
 }
 
-
-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  margin: 0;
-}
-
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-
-.hero-body {
-  flex-grow: 1;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-@media (max-width: 600px) {
-  .container {
-    flex-direction: column;
-  }
-}
-
-.test_button{
-    position: absolute;
-    top:30px;
-    font-size: 30px;
-    left: 500px;
-}

@@ -1,21 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-
     <div id="ui-container">
-        <div class="search-container">
-            <input type="text" id="location-search" placeholder="Location">
-            <button id="allergens-button">Allergens</button>
-            <div id="allergens-dropdown">
-                <ul>
-                    <li>Dairy-free</li>
-                    <li>Gluten-free</li>
-                    <li>Nut-free</li>
-                    <li>Soy-free</li>
-                </ul>
-            </div>
-            <button id="filter-button">Search</button>
+      <div class="search-container">
+        <input type="text" id="location-search" placeholder="Location">
+        <button id="allergens-button">Allergens</button>
+        <div id="allergens-dropdown">
+          <ul>
+            <li>Dairy-free</li>
+            <li>Gluten-free</li>
+            <li>Nut-free</li>
+            <li>Soy-free</li>
+          </ul>
         </div>
+        <button id="filter-button">Search</button>
+      </div>
         <div id="cards-container" style="overflow: auto; max-height: 400px;">
             <a href="https://example.com/pasta">
                 <div class="card">
@@ -28,42 +27,8 @@
         </div>
     </div>
 
+
     <script>
-        // Function to create a new card
-        function createCard(url, imageUrl, title, location, allergen) {
-            var cardContainer = document.getElementById("cards-container");
-
-            var cardLink = document.createElement("a");
-            cardLink.href = url;
-
-            var cardDiv = document.createElement("div");
-            cardDiv.classList.add("card");
-
-            var imageElement = document.createElement("img");
-            imageElement.src = imageUrl;
-            imageElement.alt = "Food";
-
-            var titleElement = document.createElement("h2");
-            titleElement.textContent = title;
-
-            var locationElement = document.createElement("p");
-            locationElement.textContent = location;
-
-            var allergenElement = document.createElement("p");
-            allergenElement.classList.add("allergen-warning");
-            allergenElement.textContent = allergen;
-
-            cardDiv.appendChild(imageElement);
-            cardDiv.appendChild(titleElement);
-            cardDiv.appendChild(locationElement);
-            cardDiv.appendChild(allergenElement);
-
-            cardLink.appendChild(cardDiv);
-
-            cardContainer.appendChild(cardLink);
-        }
-
-        // Example usage to create a new card
         createCard(
             "https://example.com/new-business",
             "https://source.unsplash.com/600x600/?abstract",
@@ -72,27 +37,29 @@
             "Allergen-free"
         );
 
+        createCard(
+            "https://example.com/new-business",
+            "https://source.unsplash.com/600x600/?abstract",
+            "New Business",
+            "City, State",
+            "Allergen-free"
+        );
 
+        createCard(
+            "https://example.com/new-business",
+            "https://source.unsplash.com/600x600/?abstract",
+            "New Business",
+            "City, State",
+            "Allergen-free"
+        );
 
-        // Fetch data from the backend and create a new card
-        //fetch("https://example.com/api/businesses") // Replace with your backend endpoint to retrieve business data-
-            //.then(response => response.json())
-            //.then(data => {
-                // Assuming the data is an array of objects representing businesses
-               // data.forEach(business => {
-                    //createCard(
-                       // business.url,
-                        //business.imageUrl,
-                        //business.title,
-                       // business.location,
-                       // business.allergen
-                   // );
-                //});
-           // })
-           // .catch(error => {
-              //  console.error("Error:", error);
-           // });
-
+        createCard(
+            "https://example.com/new-business",
+            "https://source.unsplash.com/600x600/?abstract",
+            "New Business",
+            "City, State",
+            "Allergen-free"
+        );
     </script>
 
 {% endblock %}
