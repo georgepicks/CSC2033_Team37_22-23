@@ -28,23 +28,24 @@ def validate_phone(self,data_field):
 
 #Initialising register form validators
 class RegisterForm(FlaskForm):
-    email = StringField(validators=[DataRequired(), Email()])
-    firstname = StringField(validators=[DataRequired(), character_check])
-    lastname = StringField(validators=[DataRequired(), character_check])
-    phone = StringField(validators=[DataRequired(), validate_phone])
+    email = StringField(validators=[DataRequired(), Email()],render_kw={"size": 50, "maxlength": 70})
+    firstname = StringField(validators=[DataRequired(), character_check],render_kw={"size": 50, "maxlength": 70})
+    lastname = StringField(validators=[DataRequired(), character_check],render_kw={"size": 50, "maxlength": 70})
+    phone = StringField(validators=[DataRequired(), validate_phone],render_kw={"size": 50, "maxlength": 70})
     password = PasswordField('password',
-                            validators=[DataRequired(), Length(min=6, max=15), validate_password ])
+                            validators=[DataRequired(), Length(min=6, max=15), validate_password],render_kw={"size": 50, "maxlength": 70})
     confirm_password = PasswordField('confirm_password', validators=[
-        EqualTo('password', message='Both password fields must be equal!')])
+        EqualTo('password', message='Both password fields must be equal!')],render_kw={"size": 50, "maxlength": 70})
     postcode = StringField('Postcode', validators=[
-        Regexp('^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\s?[0-9][A-Za-z]{2}$', message='Invalid postcode')])
+        Regexp('^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\s?[0-9][A-Za-z]{2}$', message='Invalid postcode')],render_kw={"size": 50, "maxlength": 70})
     role = RadioField('Are you registering as a producer or consumer?',
-                      choices=[('producer', 'Producer'), ('consumer', 'Consumer')], validators=[DataRequired()])
-    submit = SubmitField(validators=[DataRequired()])
+                      choices=[('producer', 'Producer'), ('consumer', 'Consumer')], validators=[DataRequired()],render_kw={"size": 50, "maxlength": 70})
+    submit = SubmitField(validators=[DataRequired()],render_kw={"size": 50, "maxlength": 50})
 
+    
 class LoginForm(FlaskForm):
-    email = StringField(validators=[DataRequired(), Email()])
+    email = StringField(validators=[DataRequired(), Email()],render_kw={"size": 50, "maxlength": 70})
     password = PasswordField('password',
-                             validators=[DataRequired()])
-    submit = SubmitField(validators=[DataRequired()])
+                             validators=[DataRequired()],render_kw={"size": 50, "maxlength": 70})
+    submit = SubmitField(validators=[DataRequired()],render_kw={"size": 50, "maxlength": 50})
 
