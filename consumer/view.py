@@ -1,5 +1,7 @@
-from _curses import flash
 
+from flask_login import login_required, current_user
+import pgeocode
+from _curses import flash
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
 from flask_login import login_required
 from models import User, InventoryItems
@@ -7,7 +9,16 @@ from app import app, db
 from datetime import datetime, timedelta
 
 
+
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
+
+
+@app.route('/', methods=['GET', 'POST'])
+def generate_dashboard():
+    # need to change to allow consumers to select a max distance
+    placeholder = 1000
+    # get list of producers within user-specified range alongside their distance from consumer
+    producers = find_producers(placeholder)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -17,7 +28,11 @@ def search():
     if request.method == 'POST':
       query = request.form.get('query')  # Retrieve the search query from the form
 
+
+
+
 # Perform the search in the database using SQLAlchemy
+
       results = InventoryItems.item.query.filter(InventoryItems.item.name.ilike(f'%{query}%')).all()
 
       if not results:
@@ -51,6 +66,7 @@ def filter_by_dietary(food_type):
 
 
 def get_product_by_id(product_id):
+
     # Find a product with the given ID
   for product in InventoryItems.item:
     if product['id'] == product_id:
@@ -134,5 +150,24 @@ def order_details(order_id):
           flash('Order is cancelled')
       else:
           flash('Cancellation period has expired.')
+     return redirect(url_for('order'))
 
-      return redirect(url_for('order'))
+
+@app.route('/')
+def find_producers(distance_range, filter):
+    geodistance = pgeocode.GeoDistance('gb')
+    nearby_producers = {}
+    # query all producers
+    producers = User.query.filter_by(role="producer").all()
+    for i in producers:
+        # calculate distance between all producers and current user
+        distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
+        if distance < distance_range:
+            # key = producer, value = distance
+            nearby_producers.update({i:distance})
+    # sorts producers by distance from low to high
+    sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
+    return sorted_producers
+
+      
+

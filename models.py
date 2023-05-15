@@ -1,4 +1,4 @@
-
+from app import db, app
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -11,7 +11,8 @@ class User(db.Model):
     postcode = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(100), nullable=False, default='consumer')
-    orders = db.relationship('Order')
+    consumer_orders = db.relationship('Orders', foreign_keys='Orders.consumer_id')
+    producer_orders = db.relationship('Orders', foreign_keys='Orders.producer_id')
     # only for producers:
     inventory = db.relationship('InventoryItems')
     # verification to be added for producers too
@@ -32,13 +33,14 @@ class InventoryItems(db.Model):
 
     producer_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
+    producer = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
+    dietary = db.Column(db.String(100), nullable=False, default="None")
 
 
-    def __init__(self, item, quantity, order_id):
-
+    def __init__(self, item, quantity, dietary):
         self.item = item
         self.quantity = quantity
-        self.order_id = order_id
+        self.dietary = dietary
 
 
 class Orders(db.Model):
@@ -61,16 +63,24 @@ class OrderItems(db.Model):
  order_id = db.Column(db.Integer, db.ForeignKey(Orders.order_id), nullable=False)
     item = db.Column(db.String(100), nullable=False, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey(Orders.order_id))
 
     def __init__(self, order_id, item, quantity):
         self.item = item
         self.quantity = quantity
 
 
-def init_db():
-    with app.app_context():
-        db.drop_all()
-        db.create_all()
-        db.session.commit()
+#def init_db():
+#    with app.app_context():
+        #db.drop_all()
+        #db.create_all()
+        #user1 = User("a@m.com", "Alex", "MacMillan", "secretPassword1", "NE1 4SH", '07538152684', 'admin')
+        #user2 = User("s@k.com", "Sree", 'Kalathil', 'secretPassword2', 'NE1 2YX', '012345678910', 'producer')
+        #user3 = User('b@g.com', 'Broden', 'Gates', 'secretPassword3', 'NE3 4TT', '0987654321', 'consumer')
+        #db.session.add(user1)
+        #db.session.add(user2)
+        #db.session.add(user3)
+        #db.session.commit()
 
-#init_db()
+
+# init_db()
