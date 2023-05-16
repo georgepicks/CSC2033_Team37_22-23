@@ -1,6 +1,8 @@
 from flask import Flask, redirect, url_for
 from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
+import pymysql
+pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'

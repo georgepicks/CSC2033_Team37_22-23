@@ -4,7 +4,7 @@ import pgeocode
 from _curses import flash
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
 from flask_login import login_required
-from models import User, InventoryItems
+from models import User, InventoryItems,OrderItems,Orders
 from app import app, db
 from datetime import datetime, timedelta
 
@@ -63,30 +63,6 @@ def filter_by_dietary(food_type):
     })
 
 
-def get_product_by_id(product_id):
-
-    # Find a product with the given ID
-  for product in InventoryItems.item:
-    if product['id'] == product_id:
-      return product
-  return None
-
-
-@app.route('/add_to_order/<int:product_id>', methods=['GET'])
-def order_item(product_id):
-    # Retrieve the product based on the product_id
-  product = get_product_by_id(product_id)
-  if product:
-    selected_products = session.get('selected_products', [])
-    selected_products.append(product)
-    session['selected_products'] = selected_products
-#setting the time for cancelling the order to be 5 minutes
-    cancellation_deadline = datetime.now() + timedelta(minutes=5)
-    session['cancellation_deadline'] = cancellation_deadline
-
-  return redirect(url_for('order'))
-
-
 @app.route('/search_results/<query>')
 @login_required
 def search_results(query):
@@ -111,6 +87,7 @@ def edit_order(order_id):
         db.commit()
 
         # Redirect to the order details page
+        cursor.close()
         return redirect(url_for('Order', order_id=order_id))
     else:
         # Retrieve the order from the database
@@ -119,12 +96,12 @@ def edit_order(order_id):
         order = cursor.fetchone()
 
         if order:
-          return render_template('edit_order.html', order=order)
-
+            cursor.close()
+            return render_template('edit_order.html', order=order)
         else:
-          return 'Order not found'
+            cursor.close()
+            return 'Order not found'
 
-    cursor.close()
 
 
 @app.route('/order/<int:order_id>')
@@ -137,9 +114,31 @@ def order_details(order_id):
   if order:
     return render_template('order_details.html', order=order)
 
-# Cancel order endpoint
-  @app.route('/cancel-order', methods=['POST'])
-  def cancel_order():
+  from datetime import datetime
+
+def place_order(consumer_id, producer_id, items):
+  order_time = datetime.now()
+
+  # Create an instance of the Orders model
+  order = Orders(producer_id=producer_id, consumer_id=consumer_id, order_time=order_time)
+  db.session.add(order)
+  db.session.commit()
+
+  # Retrieve the order_id for the newly created order
+  order_id = order.order_id
+
+  # Create instances of OrderItems for each item in the order
+  for item, quantity in items.items():
+      order_item = OrderItems(item=item, quantity=quantity, order_id=order_id)
+      db.session.add(order_item)
+
+  db.session.commit()
+
+  return order_id
+
+#Cancel order endpoint
+@app.route('/cancel-order', methods=['POST'])
+def cancel_order():
       cancellation_deadline = session.get('cancellation_deadline')
       if cancellation_deadline and datetime.now() < cancellation_deadline:
         # Perform cancellation logic
