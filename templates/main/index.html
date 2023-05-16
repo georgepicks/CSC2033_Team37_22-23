@@ -1,7 +1,33 @@
-{% extends "base.html" %}
-
-{% block content %}
-
-    <title>Home Page</title>
-
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-Hunger App</title>
+    <link rel="stylesheet" href="../../static/IndexStyle.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Leftovers</div>
+        <nav>
+            <a href="../../templates/users/register.html">Sign up</a>
+            <a href="../../templates/users/login.html">Log in</a>
+        </nav>
+    </header>
+    <section class="hero">
+        <img src="../../templates/static/Food.png" alt="Food" class="hero-image"/>
+        <h1>Fight Hunger, Share Leftovers</h1>
+        <p>Join our mission to end hunger by sharing your leftover food with those in need.</p>
+        <div class="cta-buttons">
+            <a href="../../templates/users/register.html" class="cta-supplier">Become a Supplier</a>
+            <a href="../../templates/users/register.html" class="cta-receiver">Find Food as a Receiver</a>
+        </div>
+    </section>
+    <footer>
+        <nav>
+            <a href="../../templates/other_pages/about_us.html">About Us</a>
+            <a href="../../templates/other_pages/contact.html">Contact Us</a>
+        </nav>
+    </footer>
+</body>
+</html>
