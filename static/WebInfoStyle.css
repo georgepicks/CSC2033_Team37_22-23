@@ -50,7 +50,7 @@ footer nav a:hover {
     padding-top: 3rem;
 }
 .content-image {
-  max-width: 100px; /* Adjust the size as needed */
+    max-width: 100px; /* Adjust the size as needed */
     margin-bottom: 2rem;
     margin-top: 0.1rem;
 }
@@ -58,6 +58,53 @@ footer nav a:hover {
   margin-top: 1rem;
 }
 .content-image2 {
-  max-width: 100px; /* Adjust the size as needed */
+    max-width: 100px; /* Adjust the size as needed */
     margin-bottom: 2rem;
     margin-top: 2rem;
+}
+.contact-us {
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    background-color: #f4f4f4;
+    padding-top: 3rem;
+}
+.contact-us h1{
+    font-size: 2rem;
+}
+.contact-us-snap {
+    max-width: 80px;
+    margin-top: 1.5rem;
+}
+.contact-us-insta{
+    max-width: 60px;
+    margin-top: 3rem;
+}
+.contact-us-mail{
+    max-width: 60px;
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.contact-us-twitter{
+    max-width: 70px;
+    margin-top: 1.5rem;
+}
+.contact-item {
+    display: flex;
+    align-items: center;
+}
+
+.contact-item img {
+    margin-right: 10px; /* Adjust as needed */
+}
+
+.contact-item p {
+    margin: 0; /* Remove the default paragraph margin */
+}
+.contact-us h1{
+    margin-bottom: 2rem;
+}
