@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../static/styles.css"/>
-    <script src="static/scripts.js"></script>
+    <script src="../static/scripts.js"></script>
 </head>
 
 <body>
@@ -20,17 +20,14 @@
     <a href="{{ url_for('users.login') }}"><div class="login_link">Login</div></a>
     <a href="{{ url_for('users.register') }}"><div class="register_link">Register</div></a>
 
-    <a href="{{ url_for('users.about_us') }}"><div class="about_us">About Us</div></a>
-    <a href="{{ url_for('users.contact_us') }}"><div class="contact">Contact Us</div></a>
+    <a href="{{ url_for('pages.about_us') }}"><div class="about_us">About Us</div></a>
+    <a href="{{ url_for('pages.contact_us') }}"><div class="contact">Contact Us</div></a>
 
-    <a href="{{ url_for('users.feed') }}"><div class="test_button">Feed</div></a>
+    <a href="{{ url_for('pages.feed') }}"><div class="test_button">Discover</div></a>
 
-    <div class="hero-body">
-        <div class="container has-text-centered">
-            {% block content %}
-            {% endblock %}
-        </div>
-    </div>
+    {% block content %}
+    {% endblock %}
+
 </body>
 
 </html>

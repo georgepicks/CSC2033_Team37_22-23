@@ -7,28 +7,6 @@ import logging
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
-
-@users_blueprint.route('/index')
-def home():
-    return render_template('main/index.html')
-
-
-@users_blueprint.route('/feed')
-def feed():
-    return render_template('consumer/feed.html')
-
-
-@users_blueprint.route('/about_us')
-def about_us():
-    return render_template('main/about_us.html')
-
-
-@users_blueprint.route('/contact')
-def contact_us():
-    return render_template('main/contact.html')
-
-
-
 @users_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()

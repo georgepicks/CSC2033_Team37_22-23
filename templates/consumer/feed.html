@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div id="ui-container">
-      <div class="search-container">
-        <input type="text" id="location-search" placeholder="Location">
+    <div id="ui_container">
+      <div class="search_container">
+        <input type="text" id="location_search" placeholder="Location">
           <div class="dropdown">
             <button onclick="toggleDropdown()" class="dropbtn">Allergens</button>
-              <button id="filter-button">Search</button>
-            <div id="dropdownContent" class="dropdown-content">
+              <button id="filter_button">Search</button><div id="dropdownContent" class="dropdown_content">
                 <a href="#">Dairy-free</a>
                 <a href="#">Gluten-free</a>
                 <a href="#">Nut-free</a>
@@ -15,42 +14,14 @@
             </div>
           </div>
       </div>
-
-        <div id="cards-container" style="overflow: auto; max-height: 400px;">
-            <a href="https://example.com/pasta">
-                <div class="card">
-                    <img src="https://source.unsplash.com/600x600/?abstract" alt="Food">
-                    <h2>Pasta</h2>
-                    <p>New York, NY</p>
-                    <p class="allergen-warning">Gluten-free</p>
-                </div>
-            </a>
-        </div>
+        <div id="cards_container" style="overflow: auto; max-height: 400px;"></div>
     </div>
-
-
     <script>
         createCard(
           "https://example.com/pasta",
           "https://source.unsplash.com/600x600/?abstract",
           "Pasta",
-          "New York, NY",
-          "Gluten-free"
-        );
-
-        createCard(
-          "https://example.com/pasta",
-          "https://source.unsplash.com/600x600/?abstract",
-          "Pasta",
-          "New York, NY",
-          "Gluten-free"
-        );
-
-        createCard(
-          "https://example.com/pasta",
-          "https://source.unsplash.com/600x600/?abstract",
-          "Pasta",
-          "New York, NY",
+          "Newcastle",
           "Gluten-free"
         );
     </script>
