@@ -74,14 +74,15 @@ footer nav a:hover {
 }
 .contact-us h1{
     font-size: 2rem;
+    margin-bottom: 0.5rem;
 }
 .contact-us-snap {
     max-width: 80px;
     margin-top: 1.5rem;
 }
 .contact-us-insta{
-    max-width: 60px;
-    margin-top: 3rem;
+    max-width: 80px;
+    margin-top: 1.5rem;
 }
 .contact-us-mail{
     max-width: 60px;
@@ -93,18 +94,17 @@ footer nav a:hover {
     max-width: 70px;
     margin-top: 1.5rem;
 }
-.contact-item {
-    display: flex;
-    align-items: center;
-}
-
-.contact-item img {
-    margin-right: 10px; /* Adjust as needed */
-}
 
 .contact-item p {
     margin: 0; /* Remove the default paragraph margin */
 }
-.contact-us h1{
-    margin-bottom: 2rem;
+.contact-item {
+    display: flex;
+    margin-top: 1rem;
+    align-items: center; /* This will vertically center the text relative to the image */
 }
+
+.contact-item img {
+    margin-right: 10px; /* This will create some space between the image and the text */
+}
+
