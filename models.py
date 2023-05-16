@@ -1,4 +1,4 @@
-from app import db, app
+from app import db
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -60,7 +60,6 @@ class Orders(db.Model):
 class OrderItems(db.Model):
     __tablename__ = 'order items'
 
- order_id = db.Column(db.Integer, db.ForeignKey(Orders.order_id), nullable=False)
     item = db.Column(db.String(100), nullable=False, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
     order_id = db.Column(db.Integer, db.ForeignKey(Orders.order_id))
@@ -71,6 +70,7 @@ class OrderItems(db.Model):
 
 
 #def init_db():
+#    to use this function, "from app import app"
 #    with app.app_context():
         #db.drop_all()
         #db.create_all()

@@ -19,6 +19,7 @@ def generate_dashboard():
     placeholder = 1000
     # get list of producers within user-specified range alongside their distance from consumer
     producers = find_producers(placeholder)
+    return render_template("")
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -28,10 +29,7 @@ def search():
     if request.method == 'POST':
       query = request.form.get('query')  # Retrieve the search query from the form
 
-
-
-
-# Perform the search in the database using SQLAlchemy
+    # Perform the search in the database using SQLAlchemy
 
       results = InventoryItems.item.query.filter(InventoryItems.item.name.ilike(f'%{query}%')).all()
 
@@ -150,7 +148,7 @@ def order_details(order_id):
           flash('Order is cancelled')
       else:
           flash('Cancellation period has expired.')
-     return redirect(url_for('order'))
+      return redirect(url_for('order'))
 
 
 @app.route('/')
