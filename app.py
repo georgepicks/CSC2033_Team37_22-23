@@ -15,8 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mariadb://csc2033_team37:BikeRode4out@c
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-from flask import  redirect
-
+from flask import redirect
 # BLUEPRINTS
 # import blueprints
 from user.views import users_blueprint
