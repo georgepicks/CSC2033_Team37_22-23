@@ -1,17 +1,14 @@
-
-from flask_login import login_required, current_user
-import pgeocode
 from _curses import flash
+import pgeocode
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
-from flask_login import login_required
+from flask_login import login_required, current_user
 from models import User, InventoryItems,OrderItems,Orders
 from app import app, db
 from datetime import datetime, timedelta
-
+from user import views
 
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
-
 
 @app.route('/', methods=['GET', 'POST'])
 def generate_dashboard():
@@ -147,8 +144,7 @@ def cancel_order():
       else:
           flash('Cancellation period has expired.')
 
-      return redirect(url_for('order'))for('order'))
-
+      return redirect(url_for('order'))
 
 @app.route('/')
 def find_producers(distance_range, filter):
@@ -166,5 +162,4 @@ def find_producers(distance_range, filter):
     sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
     return sorted_producers
 
-      
 
