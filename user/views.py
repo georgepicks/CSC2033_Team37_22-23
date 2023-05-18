@@ -1,12 +1,12 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, session, Markup, request
-from models import User
+from models import User,Orders,OrderItems
 from app import db
-from user.forms import RegisterForm, LoginForm
+from user.form import RegisterForm, LoginForm
 import bcrypt
 from flask_login import login_user, current_user
 from datetime import datetime
 import logging
-
+from flask_mail import Message, Mail
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
 
@@ -49,7 +49,6 @@ def register():
 def login():
     # create login form object
     form = LoginForm()
-
     # if request method is POST or form is valid
     if form.validate_on_submit():
         # session implemented to limit the number of logins if user failsto login
@@ -97,3 +96,22 @@ def login():
     # returns login if all the functions fail
     return render_template('users/login.html', form=form)
 
+def send_email(subject, recipients, body):
+    msg = Message(subject=subject, recipients=recipients)
+    msg.body = body
+    Mail.send(msg)
+
+def send_mail_notification(consumer_id, order_id):
+    subject = 'New Order Notification'
+    recipients = get_producer_email(consumer_id)
+    body = f"You have received a new order from a consumer. Order ID: {order_id}"
+    send_email(subject, recipients, body)
+    return 'Email sent successfully!'
+
+
+def get_producer_email(consumer_id):
+    order = Orders.query.filter_by(consumer_id=consumer_id).first()
+    if order:
+        producer = User.query.get(order.producer_id)
+        return [producer.email]
+    return []
