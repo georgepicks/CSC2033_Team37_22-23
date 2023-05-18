@@ -29,8 +29,7 @@ def search():
     if request.method == 'POST':
       query = request.form.get('query')  # Retrieve the search query from the form
 
-    # Perform the search in the database using SQLAlchemy
-
+# Perform the search in the database using SQLAlchemy
       results = InventoryItems.item.query.filter(InventoryItems.item.name.ilike(f'%{query}%')).all()
 
       if not results:
@@ -114,7 +113,6 @@ def order_details(order_id):
   if order:
     return render_template('order_details.html', order=order)
 
-  from datetime import datetime
 
 def place_order(consumer_id, producer_id, items):
   order_time = datetime.now()
@@ -133,6 +131,7 @@ def place_order(consumer_id, producer_id, items):
       db.session.add(order_item)
 
   db.session.commit()
+  views.send_mail_notification(consumer_id, order_id)
 
   return order_id
 
@@ -147,7 +146,8 @@ def cancel_order():
           flash('Order is cancelled')
       else:
           flash('Cancellation period has expired.')
-      return redirect(url_for('order'))
+
+      return redirect(url_for('order'))for('order'))
 
 
 @app.route('/')
