@@ -1,28 +1,53 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div id="ui_container">
-      <div class="search_container">
-        <input type="text" id="location_search" placeholder="Location">
-          <div class="dropdown">
-            <button onclick="toggleDropdown()" class="dropbtn">Allergens</button>
-              <button id="filter_button">Search</button><div id="dropdownContent" class="dropdown_content">
-                <a href="#">Dairy-free</a>
-                <a href="#">Gluten-free</a>
-                <a href="#">Nut-free</a>
-                <a href="#">Soy-free</a>
+   <div id="ui_container">
+        <div class="search_container">
+            <input type="text" id="location_search" placeholder="Location">
+            <div class="dropdown">
+                <button onclick="toggleDropdown()" class="dropbtn">Allergens</button>
+                <button id="search_button">Search</button>
+                <div id="dropdownContent" class="dropdown_content">
+                    <a href="#" onclick="filterCards('Dairy-free')">Dairy-free</a>
+                    <a href="#" onclick="filterCards('Gluten-free')">Gluten-free</a>
+                    <a href="#" onclick="filterCards('Nut-free')">Nut-free</a>
+                    <a href="#" onclick="filterCards('Soy-free')">Soy-free</a>
+                </div>
             </div>
-          </div>
-      </div>
+        </div>
         <div id="cards_container" style="overflow: auto; max-height: 400px;"></div>
     </div>
     <script>
         createCard(
           "https://example.com/pasta",
           "https://source.unsplash.com/600x600/?abstract",
-          "Pasta",
+          "Food Type",
           "Newcastle",
-          "Gluten-free"
+          "Nut-free"
+        );
+
+        createCard(
+          "https://example.com/pasta",
+          "https://source.unsplash.com/600x600/?abstract",
+          "Food Type",
+          "Location",
+          "Dairy-free"
+        );
+
+        createCard(
+          "https://example.com/pasta",
+          "https://source.unsplash.com/600x600/?abstract",
+          "Food Type",
+          "Location",
+          "Dairy-free"
+        );
+
+        createCard(
+          "https://example.com/pasta",
+          "https://source.unsplash.com/600x600/?abstract",
+          "Food Type",
+          "Location",
+          "Dairy-free"
         );
     </script>
 

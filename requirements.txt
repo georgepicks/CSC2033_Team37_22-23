@@ -2,4 +2,7 @@ Flask~=2.3.2
 flask_sqlalchemy
 flask_login
 flask_wtf
-MySQLdb
+WTForms~=3.0.1
+bcrypt~=4.0.1
+PyMySQL~=1.0.3
+SQLAlchemy~=2.0.13

@@ -1,36 +1,36 @@
 // Function to create a new card
-        function createCard(url, imageUrl, title, location, allergen) {
-            var cardContainer = document.getElementById("cards-container");
+function createCard(url, imageUrl, title, location, allergen) {
+    var cardContainer = document.getElementById("cards_container");
 
-            var cardLink = document.createElement("a");
-            cardLink.href = url;
+    var cardLink = document.createElement("a");
+    cardLink.href = url;
 
-            var cardDiv = document.createElement("div");
-            cardDiv.classList.add("card");
+    var cardDiv = document.createElement("div");
+    cardDiv.classList.add("card");
 
-            var imageElement = document.createElement("img");
-            imageElement.src = imageUrl;
-            imageElement.alt = "Food";
+    var imageElement = document.createElement("img");
+    imageElement.src = imageUrl;
+    imageElement.alt = "Food";
 
-            var titleElement = document.createElement("h2");
-            titleElement.textContent = title;
+    var titleElement = document.createElement("h2");
+    titleElement.textContent = title;
 
-            var locationElement = document.createElement("p");
-            locationElement.textContent = location;
+    var locationElement = document.createElement("p");
+    locationElement.textContent = location;
 
-            var allergenElement = document.createElement("p");
-            allergenElement.classList.add("allergen-warning");
-            allergenElement.textContent = allergen;
+    var allergenElement = document.createElement("p");
+    allergenElement.classList.add("allergen-warning");
+    allergenElement.textContent = allergen;
 
-            cardDiv.appendChild(imageElement);
-            cardDiv.appendChild(titleElement);
-            cardDiv.appendChild(locationElement);
-            cardDiv.appendChild(allergenElement);
+    cardDiv.appendChild(imageElement);
+    cardDiv.appendChild(titleElement);
+    cardDiv.appendChild(locationElement);
+    cardDiv.appendChild(allergenElement);
 
-            cardLink.appendChild(cardDiv);
+    cardLink.appendChild(cardDiv);
 
-            cardContainer.appendChild(cardLink);
-        }
+    cardContainer.appendChild(cardLink);
+}
 
         //fetch("https://example.com/api/businesses") // Replace with your backend endpoint to retrieve business data-
             //.then(response => response.json())
@@ -49,20 +49,26 @@
               //  console.error("Error:", error);
            // });
 
+function toggleDropdown() {
+    var dropdownContent = document.getElementById("dropdownContent");
+    dropdownContent.classList.toggle("show");
+}
 
-        function toggleDropdown() {
-          var dropdownContent = document.getElementById("dropdownContent");
-          dropdownContent.classList.toggle("show");
-        }
+function filterCards(location) {
+    var cards = document.getElementsByClassName('card');
 
-        window.onclick = function(event) {
-          if (!event.target.matches('.dropbtn')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            for (var i = 0; i < dropdowns.length; i++) {
-              var openDropdown = dropdowns[i];
-              if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-              }
-            }
-          }
+    for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        var cardLocation = card.getAttribute('data-location');
+
+        if (cardLocation.toLowerCase() === location.toLowerCase()) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
         }
+    }
+}
+var searchInput = document.getElementById('location_search');
+searchInput.addEventListener('input', function() {
+    filterCards(searchInput.value);
+});

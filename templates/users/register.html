@@ -13,9 +13,12 @@
                     <div class="container">
                         {{ form.csrf_token() }}
                         {{ form.email(class="input", placeholder="Email") }}
+                        {{ form.firstname(class="input", placeholder="First Name") }}
+                        {{ form.lastname(class="input", placeholder="Last Name") }}
                         {{ form.phone(class="input", placeholder="Phone") }}
                         {{ form.password(class="input", placeholder="Password") }}
                         {{ form.confirm_password(class="input", placeholder="Confirm Password") }}
+                        {{ form.postcode(class="input", placeholder="Postcode") }}
                         {{ form.submit(class="button") }}
                     </div>
                 </form>

@@ -43,15 +43,15 @@ body {
 }
 
 .home_link {
-  left: calc(90% - 230px);
+  left: calc(90% - 200px);
 }
 
 .register_link {
-  left: calc(90% - 130px);
+  left: calc(90% - 95px);
 }
 
 .login_link {
-  left: 90%;
+  left: 92%;
 }
 
 .leftovers_text {
@@ -83,6 +83,7 @@ input[type="text"], input[type="password"], select, textarea {
   border-radius: 4px;
   resize: vertical;
   margin-bottom: 10px;
+  background-color: #FFE7AA;
 }
 
 button[type="submit"] {
@@ -151,7 +152,7 @@ button[type="submit"] {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
 #location_search {
@@ -161,9 +162,11 @@ button[type="submit"] {
   border-radius: 5px;
 }
 
-#filter_button{
+#search_button{
+  font-size: 16px;
   padding: 10px 20px;
   margin-left: 10px;
+  margin-bottom: 10px;
   background-color: #FFE7AA;
   color: black;
   border: none;
@@ -220,7 +223,7 @@ button[type="submit"] {
   color: #000000;
   padding: 10px;
   font-size: 16px;
-  border: none;
+  border: #FFE7AA;
   cursor: pointer;
 }
 
@@ -251,15 +254,15 @@ button[type="submit"] {
 
 .sign_in_link, .sign_in_text {
   position: absolute;
-  top: 72%;
+  top: 74%;
   color: #000000;
 }
 
 .sign_in_text{
-  left: 40%;
+  left: 42%;
 }
 
 .sign_in_link {
-  left: 53%;
+  left: 52%;
   text-decoration: underline;
 }

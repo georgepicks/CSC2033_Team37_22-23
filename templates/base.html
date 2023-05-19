@@ -13,21 +13,26 @@
     <div class="rectangle_top"></div>
     <div class="rectangle_bottom"></div>
     <div class="leftovers_text">Leftovers</div>
-    <!--<img src="../static/team_logo.png" alt="Food" class="image"/> -->
+    <!--<img src="../static/team_logo.PNG" alt="Food" class="image"/>-->
 
-    <a href="{{ url_for('index') }}"><div class="home_link">Home</div></a>
-
+    <a href="{{ url_for('pages.home') }}"><div class="home_link">Home</div></a>
     <a href="{{ url_for('users.login') }}"><div class="login_link">Login</div></a>
     <a href="{{ url_for('users.register') }}"><div class="register_link">Register</div></a>
 
     <a href="{{ url_for('pages.about_us') }}"><div class="about_us">About Us</div></a>
     <a href="{{ url_for('pages.contact_us') }}"><div class="contact">Contact Us</div></a>
 
-    <a href="{{ url_for('pages.feed') }}"><div class="test_button">Discover</div></a>
+
+    <!--{% if current_user.is_authenticated %}
+        <a href="{{ url_for('index') }}"><div class="home_link">Discover</div></a>
+        <a href="{{ url_for('users.login') }}"><div class="login_link">Account</div></a>
+        <a href="{{ url_for('users.register') }}"><div class="register_link">Logout</div></a>
+    {% endif %}-->
+
+    <a href="{{ url_for('pages.feed') }}"><div class="test_button">Feed</div></a>
 
     {% block content %}
     {% endblock %}
-
 </body>
 
 </html>
