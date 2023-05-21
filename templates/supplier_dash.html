@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-Hunger App</title>
+    <link rel="stylesheet" href="../static/SupplierDash.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Leftovers</div>
+        <nav>
+            <a href="account.html">Account</a>
+            <a href="index.html">Log out</a>
+        </nav>
+    </header>
+    <section class="dashboard">
+        <div id="ui-container">
+            <h1 class="title">Food Supplier Dashboard</h1>
+            <div class="dashboard-container">
+                <div class="column-1">
+                    <h2>Your Inventory</h2>
+                    <div class="item-list">
+                        <!-- These items would typically be loaded in dynamically -->
+                        <div class="item">
+                            <p class="item-title">Pasta</p>
+                            <button class="edit-button">Edit</button>
+                            <button class="delete-button">Delete</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="column-2">
+                    <h2>Reserved Orders</h2>
+                    <div class="order-list">
+                        <!-- These items would typically be loaded in dynamically -->
+                        <div class="order">
+                            <p class="order-item">Pasta</p>
+                            <p class="order-user">John Doe</p>
+                        </div>
+                        <!-- ... -->
+                    </div>
+                </div>
+                <div class="column-3">
+                    <h2>Add Item to Inventory</h2>
+                    <form method="POST" action="/add_item">
+                        <label>
+                            <input type="text" name="name" placeholder="Item Name">
+                        </label>
+                        <label>
+                            <input type="number" name="quantity" placeholder="Quantity">
+                        </label>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <nav>
+            <a href="about_us.html">About Us </a>
+            <a href="contact.html">Contact Us</a>
+        </nav>
+    </footer>
+<body>
+<html>

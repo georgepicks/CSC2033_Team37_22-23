@@ -1,0 +1,135 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  /*padding: 20px;*/
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+.title {
+  text-align: center;
+}
+
+#ui-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.column-1, .column-2, .column-3 {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+  border: 2px solid #4CAF50;
+}
+
+.column h2 {
+  margin-bottom: 10px;
+}
+
+.item-list, .order-list {
+  margin-bottom: 20px;
+}
+
+.item, .order {
+  margin-bottom: 10px;
+}
+
+.item-title, .order-item, .order-user {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.edit-button,.delete-button {
+  padding: 10px 20px;
+  margin-left: 10px;
+  background-color: #FFE7AA;
+  color: black;
+  border: none;
+  cursor: pointer;
+}
+
+.edit-button:hover, .delete-button:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form input {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #4CAF50;
+}
+header .logo {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 1rem;
+    font-size: 1.2rem;
+}
+footer {
+    background-color: #4CAF50;
+    padding: 1rem;
+}
+
+footer nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 0.5rem;
+}
+
+footer nav a:hover {
+    text-decoration: underline;
+}
+
+.dashboard {
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    background-color: #f4f4f4;
+    padding-top: 1.5rem
+}
+.dashboard h1{
+    font-size: 2rem;
+}
+button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #FFE7AA;
+  color: black;
+  border: none;
+  cursor: pointer;
+}
+button[type="submit"]:hover {
+  background-color: #4CAF50;
+  color: white;
+}
