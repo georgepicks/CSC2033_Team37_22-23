@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>FoodShare - Receiver's Feed</h1>
+
+    <div id="search-bar">
+        <input type="text" id="search-input" placeholder="Search suppliers..." onkeyup="filterSuppliers()">
+    </div>
+
+    <h2>Nearby Suppliers</h2>
+    <div id="suppliers">
+        {% for supplier in suppliers %}
+            <div class="supplier" onclick="redirectToSupplier('{{ supplier.id }}')">
+                <h3>{{ supplier.name }}</h3>
+                <p>{{ supplier.address }}</p>
+                <p class="allergens">{{ supplier.allergens }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

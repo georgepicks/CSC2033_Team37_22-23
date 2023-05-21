@@ -1,4 +1,3 @@
-// Function to create a new card
 function createCard(url, imageUrl, title, location, allergen) {
     var cardContainer = document.getElementById("cards_container");
 
@@ -54,21 +53,31 @@ function toggleDropdown() {
     dropdownContent.classList.toggle("show");
 }
 
-function filterCards(location) {
-    var cards = document.getElementsByClassName('card');
 
-    for (var i = 0; i < cards.length; i++) {
-        var card = cards[i];
-        var cardLocation = card.getAttribute('data-location');
+function filterSuppliers() {
+    var input, filter, suppliers, supplier, name, address, allergens;
+    input = document.getElementById('search-input');
+    filter = input.value.toUpperCase();
+    suppliers = document.getElementById('suppliers');
+    supplier = suppliers.getElementsByClassName('supplier');
 
-        if (cardLocation.toLowerCase() === location.toLowerCase()) {
-            card.style.display = 'block';
+    for (var i = 0; i < supplier.length; i++) {
+        name = supplier[i].getElementsByTagName('h3')[0];
+        address = supplier[i].getElementsByTagName('p')[0];
+        allergens = supplier[i].getElementsByClassName('allergens')[0];
+
+        if (
+            name.innerHTML.toUpperCase().indexOf(filter) > -1 ||
+            address.innerHTML.toUpperCase().indexOf(filter) > -1 ||
+            allergens.innerHTML.toUpperCase().indexOf(filter) > -1
+        ) {
+            supplier[i].style.display = '';
         } else {
-            card.style.display = 'none';
+            supplier[i].style.display = 'none';
         }
     }
 }
-var searchInput = document.getElementById('location_search');
-searchInput.addEventListener('input', function() {
-    filterCards(searchInput.value);
-});
+
+function redirectToSupplier(supplierId) {
+    window.location.href = 'https://example.com/pasta'; // Replace with the actual URL for the supplier page
+}

@@ -142,6 +142,13 @@ button[type="submit"] {
   left: 500px;
 }
 
+.test_button_2 {
+  position: absolute;
+  top: 30px;
+  font-size: 30px;
+  left: 600px;
+}
+
 #ui_container {
   width: 100%;
   max-width: 1200px;
@@ -160,17 +167,6 @@ button[type="submit"] {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
-}
-
-#search_button{
-  font-size: 16px;
-  padding: 10px 20px;
-  margin-left: 10px;
-  margin-bottom: 10px;
-  background-color: #FFE7AA;
-  color: black;
-  border: none;
-  cursor: pointer;
 }
 
 #filter_button:hover {
@@ -266,3 +262,37 @@ button[type="submit"] {
   left: 52%;
   text-decoration: underline;
 }
+
+.clicked {
+  background-color: #f7f7f7;
+  transition: background-color 0.2s;
+}
+
+#suppliers {
+    max-height: 400px; /* Adjust the height as needed */
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    text-align: center;
+}
+
+.supplier {
+    border: 1px solid #333;
+    padding: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: calc(25% - 10px); /* Adjust the width and margin as needed */
+    transition: background-color 0.3s ease;
+}
+
+.supplier:hover {
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+#search-bar {
+    margin-bottom: 10px;
+}
+
