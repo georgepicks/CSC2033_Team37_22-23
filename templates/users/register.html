@@ -19,6 +19,18 @@
                         {{ form.password(class="input", placeholder="Password") }}
                         {{ form.confirm_password(class="input", placeholder="Confirm Password") }}
                         {{ form.postcode(class="input", placeholder="Postcode") }}
+                        <div class="field">
+                            <div class="control">
+                                <label class="radio">
+                                    <input type="radio" name="role" value="producer">
+                                    Producer
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="role" value="consumer">
+                                    Consumer
+                                </label>
+                            </div>
+                        </div>
                         {{ form.submit(class="button") }}
                     </div>
                 </form>

@@ -2,25 +2,13 @@
 
 {% block content %}
    <div id="ui_container">
-        <div class="search_container">
-            <div class="dropdown">
-                <button onclick="toggleDropdown()" class="dropbtn">Allergens</button>
-                <div id="dropdownContent" class="dropdown_content">
-                    <a href="#" onclick="filterCards('Dairy-free')">Dairy-free</a>
-                    <a href="#" onclick="filterCards('Gluten-free')">Gluten-free</a>
-                    <a href="#" onclick="filterCards('Nut-free')">Nut-free</a>
-                    <a href="#" onclick="filterCards('Soy-free')">Soy-free</a>
-                </div>
-            </div>
-        </div>
-
        <div id="search-bar">
-            <input type="text" id="search-input" placeholder="Search suppliers..." onkeyup="filterSuppliers()">
+           <label for="search-input"></label><input type="text" id="search-input" placeholder="Search suppliers by name, location or allergens..." onkeyup="filterSuppliers()">
         </div>
 
         <div id="suppliers">
             {% for supplier in suppliers %}
-                <div class="supplier" onclick="redirectToSupplier('{{ supplier.id }}')">
+                <div class="supplier" onclick="redirectToSupplier('{{ supplier.id }}')" style="background-image: url('{{ supplier.image }}')">
                     <h3>{{ supplier.name }}</h3>
                     <p>{{ supplier.address }}</p>
                     <p class="allergens">{{ supplier.allergens }}</p>

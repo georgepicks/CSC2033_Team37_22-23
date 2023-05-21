@@ -1,37 +1,4 @@
-function createCard(url, imageUrl, title, location, allergen) {
-    var cardContainer = document.getElementById("cards_container");
-
-    var cardLink = document.createElement("a");
-    cardLink.href = url;
-
-    var cardDiv = document.createElement("div");
-    cardDiv.classList.add("card");
-
-    var imageElement = document.createElement("img");
-    imageElement.src = imageUrl;
-    imageElement.alt = "Food";
-
-    var titleElement = document.createElement("h2");
-    titleElement.textContent = title;
-
-    var locationElement = document.createElement("p");
-    locationElement.textContent = location;
-
-    var allergenElement = document.createElement("p");
-    allergenElement.classList.add("allergen-warning");
-    allergenElement.textContent = allergen;
-
-    cardDiv.appendChild(imageElement);
-    cardDiv.appendChild(titleElement);
-    cardDiv.appendChild(locationElement);
-    cardDiv.appendChild(allergenElement);
-
-    cardLink.appendChild(cardDiv);
-
-    cardContainer.appendChild(cardLink);
-}
-
-        //fetch("https://example.com/api/businesses") // Replace with your backend endpoint to retrieve business data-
+//fetch("https://example.com/api/businesses") // Replace with your backend endpoint to retrieve business data-
             //.then(response => response.json())
             //.then(data => {
                // data.forEach(business => {
@@ -80,4 +47,49 @@ function filterSuppliers() {
 
 function redirectToSupplier(supplierId) {
     window.location.href = 'https://example.com/pasta'; // Replace with the actual URL for the supplier page
+}
+
+function toggleSelected(itemId) {
+    var card = document.getElementById(itemId);
+    card.classList.toggle("selected");
+    var checkbox = card.querySelector("input[type='checkbox']");
+    checkbox.checked = !checkbox.checked;
+
+    var basket = document.getElementById("basket");
+    var itemName = card.querySelector(".item-name").textContent;
+    var itemQuantity = card.querySelector(".item-quantity").textContent;
+    var basketItem = document.createElement("li");
+    basketItem.textContent = itemName + " - " + itemQuantity;
+    if (card.classList.contains("selected")) {
+        basket.appendChild(basketItem);
+    } else {
+        var items = basket.getElementsByTagName("li");
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].textContent === basketItem.textContent) {
+                basket.removeChild(items[i]);
+                break;
+            }
+        }
+    }
+}
+function removeFromBasket(itemId) {
+  var basketItem = document.getElementById(itemId);
+  basketItem.style.opacity = 0; // Apply fade-out effect
+  setTimeout(function () {
+    basketItem.remove(); // Remove the item from the DOM after the fade-out
+  }, 500); // Adjust the duration (in milliseconds) of the fade-out effect
+}
+
+function addToOrder(itemId) {
+  var card = document.getElementById(itemId);
+  var itemName = card.querySelector(".item-name").textContent;
+  var itemQuantity = card.querySelector(".item-quantity").textContent;
+  var basket = document.getElementById("basket-list");
+  var basketItem = document.createElement("li");
+  basketItem.id = "basket-" + itemId;
+  basketItem.innerHTML = `
+    <span>${itemName} - ${itemQuantity}</span>
+    <span class="remove-item" onclick="removeFromBasket('basket-${itemId}')">x</span>
+  `;
+  basket.appendChild(basketItem);
 }
