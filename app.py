@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for, render_template
 from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
+
 pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
@@ -35,27 +36,30 @@ login_manager.init_app(app)
 from user.views import users_blueprint
 from producer.view import producer_blueprint
 from consumer.view import consumer_blueprint
+from pages.view import pages_blueprint
 
 # # register blueprints with app
 app.register_blueprint(users_blueprint)
 app.register_blueprint(producer_blueprint)
 app.register_blueprint(consumer_blueprint)
+app.register_blueprint(pages_blueprint)
+
 
 
 @login_manager.user_loader
 def load_user(email):
     return User.query.get(int(email))
 
+@app.route('/')
+def index():
+    redirect_url = url_for('dashboard')
+    return redirect(redirect_url)
+
+
 @app.route('/dashboard')
 def dashboard():
     return 'Welcome to the dashboard!'
 
-@app.route('/')
-def hello_world():  # put application's code here
-    return 'Hello World!'
-
 
 if __name__ == '__main__':
     app.run()
-
-
