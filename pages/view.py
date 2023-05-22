@@ -93,12 +93,3 @@ def order():
     }
     return render_template('consumer/order.html', supplier=supplier)
 
-
-@pages_blueprint.route('/about_us')
-def about_us():
-    return render_template('main/about_us.html')
-
-
-@pages_blueprint.route('/contact')
-def contact_us():
-    return render_template('main/contact.html')

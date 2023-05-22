@@ -12,18 +12,14 @@ app.secret_key = 'your_secret_key'
 
 # initialise database
 engine = create_engine('mariadb:///csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk:3306/csc2033_team37')
-# engine = create_engine("jdbc:mariadb://cs-db.ncl.ac.uk:3306/csc2033_team37")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mariadb://csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk/csc2033_team37'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-from flask import redirect
-
-
 # imports LoginManageer
 from flask_login import LoginManager, current_user
-from models import User
+from models import Consumer, Producer
 
 @app.route('/')
 def index():
@@ -48,17 +44,28 @@ app.register_blueprint(consumer_blueprint)
 app.register_blueprint(pages_blueprint)
 
 
-
 @login_manager.user_loader
 def load_user(email):
-    return User.query.get(int(email))
+    # if user exists in consumer table, return it's ID
+    if Consumer.query.filter_by(email=email).first():
+        user = Consumer.query.filter_by(email=email).first()
+        return user.id
+    # if the user's email doesn't exist in the consumer table, check the producer table too
+    else:
+        user = Producer.query.filter_by(email=email).first()
+        return user.id
+
+with app.app_context():
+    load_user('jd@jdwetherspoons.com')
+
+@app.route('/about_us')
+def about_us():
+    return render_template('main/about_us.html')
 
 
-
-@app.route('/dashboard')
-def dashboard():
-    return 'Welcome to the dashboard!'
-
+@app.route('/contact')
+def contact_us():
+    return render_template('main/contact.html')
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -71,25 +78,6 @@ def server_error(error):
 @app.errorhandler(403)
 def forbidden_action(error):
     return render_template("errors/error403.html"), 403
-
-@app.route('/')
-def about_us():
-    return render_template('other_pages/about_us.html')
-
-
-@app.route('/')
-def contact():
-    return render_template('other_pages/contact.html')
-
-
-@app.route('/')
-def privacy():
-    return render_template('other_pages/privacy.html')
-
-
-@app.route('/')
-def terms():
-    return render_template('other_pages/terms.html')
 
 
 if __name__ == '__main__':
