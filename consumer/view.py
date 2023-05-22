@@ -1,4 +1,3 @@
-
 from _curses import flash
 import pgeocode
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
@@ -7,13 +6,48 @@ from models import User, InventoryItems, OrderItems, Orders
 from app import app, db
 from datetime import datetime
 from user import views
-
+from user.forms import ConsumerRegisterForm
+import logging
 
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
+@consumer_blueprint.route('/register', methods=['GET', 'POST'])
+def register():
+    # create signup form object
+    form = ConsumerRegisterForm()
+
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        # if this returns a user, then the email already exists in database
+
+        # if email already exists redirect user back to signup page with error message so user can try again
+        if user:
+            flash('Email address already exists')
+            return render_template('users/register.html', form=form)
+
+        # create a new user with the form data
+        new_user = User(email=form.email.data,
+                        firstname=form.firstname.data,
+                        lastname=form.lastname.data,
+                        phone=form.phone.data,
+                        password=form.password.data,
+                        postcode=form.postcode.data,
+                        )
+
+        # add the new user to the database
+        db.session.add(new_user)
+        db.session.commit()
+
+        # sends user to login page
+        logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
+        return redirect(url_for('users/login.html'))
+    # if request method is GET or form not valid re-render signup page
+    return render_template('users/register.html', form=form)
 
 @app.route('/', methods=['GET', 'POST'])
+@login_required
 def generate_dashboard():
     # need to change to allow consumers to select a max distance
     placeholder = 1000
@@ -32,7 +66,6 @@ def search():
         # Searching using SQLALCHEMY
         results = InventoryItems.item.query.filter(InventoryItems.item.name.ilike(f'%{query}%')).all()
 
-
         if not results:
             message = "No items found matching your search query."
 
@@ -43,11 +76,13 @@ def search():
 
 # Function that allows to show items by a dietary filter
 @app.route('/food/<food_type>')
+@login_required
 def filter_by_dietary(food_type):
     # Retrieve the items based on the food type
     items = InventoryItems.query.filter(InventoryItems.dietary.ilike(food_type)).all()
-    
+
     if not items:
+        # Returns error if no item is found
         return jsonify({
             'success': False,
             'error': 'No items found for the specified food type.'
@@ -72,6 +107,7 @@ def search_results(query):
 
 # Function that allows the user to edit or make changes to the order before confirmation
 @app.route('/order/edit/<int:order_id>', methods=['GET', 'POST'])
+@login_required
 def edit_order(order_id):
     cursor = db.cursor()
 
@@ -106,6 +142,7 @@ def edit_order(order_id):
 
 # Shows the information about the order
 @app.route('/order/<int:order_id>')
+@login_required
 def order_details(order_id):
     cursor = db.cursor()
     select_query = "SELECT * FROM OrderItems WHERE order_id=%s"
@@ -115,8 +152,9 @@ def order_details(order_id):
     if order:
         return render_template('order_details.html', order=order)
 
-    
 # Function to place an order
+@app.route('/place_order-order', methods=['GET', 'POST'])
+@login_required
 def place_order(consumer_id, producer_id, items):
     order_time = datetime.now()
 
@@ -141,6 +179,7 @@ def place_order(consumer_id, producer_id, items):
 
 # Function to cancel an order made within a timeframe
 @app.route('/cancel-order', methods=['POST'])
+@login_required
 def cancel_order():
     # calls for cancellation deadline time
     cancellation_deadline = session.get('cancellation_deadline')
@@ -170,3 +209,4 @@ def find_producers(distance_range, filter):
     # sorts producers by distance from low to high
     sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
     return sorted_producers
+
