@@ -7,6 +7,7 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   padding: 20px;
+    overflow: hidden;
 }
 
 
@@ -63,7 +64,7 @@ body {
     margin-bottom: 5px;
 }
 
-.home_link, .login_link, .register_link, .leftovers_text {
+.home_link, .login_link, .leftovers_text {
   position: absolute;
   top: 30px;
   font-size: 30px;
@@ -71,11 +72,7 @@ body {
 }
 
 .home_link {
-  left: calc(90% - 200px);
-}
-
-.register_link {
-  left: calc(90% - 95px);
+  left: 86%;
 }
 
 .login_link {

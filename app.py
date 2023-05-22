@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template
+from flask import Flask, render_template
 from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
@@ -21,6 +21,10 @@ db = SQLAlchemy(app)
 # imports LoginManageer
 from flask_login import LoginManager, current_user
 from models import User
+
+@app.route('/')
+def index():
+    return render_template('main/index.html')
 
 
 # define login manager
@@ -47,11 +51,6 @@ app.register_blueprint(pages_blueprint)
 def load_user(email):
     return User.query.get(int(email))
 
-
-@app.route('/index')
-def index():
-    return render_template('main/index.html')
-
 @app.route('/about_us')
 def about_us():
     return render_template('main/about_us.html')
@@ -72,25 +71,6 @@ def server_error(error):
 @app.errorhandler(403)
 def forbidden_action(error):
     return render_template("errors/error403.html"), 403
-
-@app.route('/')
-def about_us():
-    return render_template('other_pages/about_us.html')
-
-
-@app.route('/')
-def contact():
-    return render_template('other_pages/contact.html')
-
-
-@app.route('/')
-def privacy():
-    return render_template('other_pages/privacy.html')
-
-
-@app.route('/')
-def terms():
-    return render_template('other_pages/terms.html')
 
 
 if __name__ == '__main__':
