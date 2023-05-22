@@ -12,22 +12,25 @@ def home():
 def feed():
     # Sample data for demonstration, will take data from D
     nearby_suppliers = [
-        {'name': 'Test', 'address': 'Newcastle', 'allergens': 'Allergens: Nuts',
+        {'name': 'Test', 'address': 'Newcastle', 'allergens': 'Allergens: Nut-free',
          'image': 'https://picsum.photos/200/300'},
-        {'name': 'Test', 'address': 'York', 'allergens': 'Allergens: Dairy', 'image': 'https://picsum.photos/200/300'},
-        {'name': 'Test', 'address': 'Newcastle', 'allergens': 'Allergens: Gluten',
+        {'name': 'Test', 'address': 'York', 'allergens': 'Allergens: Dairy-free',
          'image': 'https://picsum.photos/200/300'},
-        {'name': 'Test', 'address': 'Sheffield', 'allergens': 'Allergens: Soy',
+        {'name': 'Test', 'address': 'Newcastle', 'allergens': 'Allergens: Gluten-free',
          'image': 'https://picsum.photos/200/300'},
-        {'name': 'Test', 'address': 'London', 'allergens': 'Allergens: Nuts', 'image': 'https://picsum.photos/200/300'},
-        {'name': 'Test', 'address': 'Newcastle', 'allergens': 'Allergens: Soy',
+        {'name': 'Test', 'address': 'Sheffield', 'allergens': 'Allergens: Soy-free',
          'image': 'https://picsum.photos/200/300'},
-        {'name': 'Test', 'address': 'London', 'allergens': 'Allergens: Gluten',
+        {'name': 'Test', 'address': 'London', 'allergens': 'Allergens: Nut-free',
          'image': 'https://picsum.photos/200/300'},
-        {'name': 'Test', 'address': 'Leeds', 'allergens': 'Allergens: Nuts', 'image': 'https://picsum.photos/200/300'},
-        {'name': 'Test', 'address': 'Sheffield', 'allergens': 'Allergens: Dairy',
+        {'name': 'Test', 'address': 'Newcastle', 'allergens': 'Allergens: Soy-free',
          'image': 'https://picsum.photos/200/300'},
-        {'name': 'Test', 'address': 'Newcastle', 'allergens': 'Allergens: Nuts',
+        {'name': 'Test', 'address': 'London', 'allergens': 'Allergens: Gluten-free',
+         'image': 'https://picsum.photos/200/300'},
+        {'name': 'Test', 'address': 'Leeds', 'allergens': 'Allergens: Nut-free',
+         'image': 'https://picsum.photos/200/300'},
+        {'name': 'Test', 'address': 'Sheffield', 'allergens': 'Allergens: Dairy-free',
+         'image': 'https://picsum.photos/200/300'},
+        {'name': 'Test', 'address': 'Newcastle', 'allergens': 'Allergens: Nut-free',
          'image': 'https://picsum.photos/200/300'}
     ]
     return render_template('consumer/feed.html', suppliers=nearby_suppliers)

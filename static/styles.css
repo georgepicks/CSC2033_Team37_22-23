@@ -37,7 +37,7 @@ body {
 
 .rectangle_side {
     position: fixed;
-    top: 10%;
+    top: 25%;
     left: 86%;
     width: 14%;
     height: 500px;
@@ -49,6 +49,7 @@ body {
     border: 3px solid #fff;
     overflow-y: auto;
     box-sizing: border-box;
+    border-radius: 10px;
 }
 
 .rectangle_side h4 {
