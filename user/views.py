@@ -1,12 +1,13 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, session, Markup, request
-from models import User,Orders,OrderItems
+from models import User, Orders
 from app import db
-from user.form import RegisterForm, LoginForm
+from user.forms import RegisterForm, LoginForm
 import bcrypt
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 import logging
 from flask_mail import Message, Mail
+
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
 
@@ -40,7 +41,7 @@ def register():
 
         # sends user to login page
         logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
-        return redirect(url_for('users/login'))
+        return redirect(url_for('users/login.html'))
     # if request method is GET or form not valid re-render signup page
     return render_template('users/register.html', form=form)
 
@@ -74,7 +75,7 @@ def login():
                 session['authentication_attempts'] = 0
 
                 # invalid user is redirected to register page since user login is invalid
-                return redirect(url_for('users.register'))
+                return redirect(url_for('users/register.html'))
 
             flash('Please check your login details and try again,{} login attempts remaining'.format(
                 5 - session.get('authentication_attempts')))
@@ -89,19 +90,46 @@ def login():
             # Data is recorded in lottery.log each time login action takes place
             logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
             if current_user.role == "producer":
-                # returns to admin page if the logged in user is an "admin"
+                # returns to admin page if the logged-in user is an "admin"
                 return render_template('')
-            # returns to profile page if the logged in user is a normal user
+            # returns to profile page if the logged-in user is a normal user
             return render_template('')
     # returns login if all the functions fail
     return render_template('users/login.html', form=form)
 
+# view user account
+@users_blueprint.route('/account')
+@login_required
+def account():
+    # Shows the account details of the user
+    return render_template('users/account.html',
+                           id=current_user.id,
+                           email=current_user.email,
+                           firstname=current_user.firstname,
+                           lastname=current_user.lastname,
+                           phone=current_user.phone,
+                           postcode=current_user.postcode)
+
+
+@users_blueprint.route('/logout')
+@login_required
+def logout():
+    logging.warning('SECURITY - Log out [%s, %s, %s]', current_user.id, current_user.email, request.remote_addr)
+    #Function for the user to log out
+    logout_user()
+    #the user is redirected to index page after logout
+    return redirect(url_for('index'))
+
+
+# Function to send mails to producers while an order is made
 def send_email(subject, recipients, body):
     msg = Message(subject=subject, recipients=recipients)
     msg.body = body
     Mail.send(msg)
 
-def send_mail_notification(consumer_id, order_id):
+
+# Message for the producer that is sent through email
+def send_mail_notification_producer(consumer_id, order_id):
     subject = 'New Order Notification'
     recipients = get_producer_email(consumer_id)
     body = f"You have received a new order from a consumer. Order ID: {order_id}"
@@ -109,9 +137,27 @@ def send_mail_notification(consumer_id, order_id):
     return 'Email sent successfully!'
 
 
+# Function to retrieve relevant producer mail for the message to be sent
 def get_producer_email(consumer_id):
+    # order is retrieved in reference to the customer_id
     order = Orders.query.filter_by(consumer_id=consumer_id).first()
     if order:
         producer = User.query.get(order.producer_id)
         return [producer.email]
+    return []
+
+# Message for the consumer that is sent through email
+def send_mail_notification_consumer( order_id):
+    subject = 'New Order Notification'
+    recipients = get_consumer_mail(order_id)
+    body = f"Your order have been received, Order ID: {order_id}"
+    send_email(subject, recipients, body)
+    return 'Email sent successfully!'
+
+#Function to retrieve relevant consumer mail for the message to be sent
+def get_consumer_mail(order_id):
+    order = Orders.query.filter_by(order_id=order_id).first()
+    if order:
+        consumer = User.query.get(order.consumer_id)
+        return [consumer.email]
     return []

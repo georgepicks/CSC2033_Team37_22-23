@@ -19,6 +19,7 @@ def validate_password(self, data_field):
         raise ValidationError(
             "Password should contain 1 uppercase letter, lowercase letters, one digit and should be atleast 6 charscters with one special character")
 
+
 # Define phone validate function
 def validate_phone(self,data_field):
     i = re.compile(r'(?=\d\d\d\d-\d\d\d-\d\d\d\d)')
@@ -30,7 +31,6 @@ def validate_postcode(self, data_field):
     if not c.match(data_field.data):
         raise ValidationError("Invalid Postcode")
 
-
 #Initialising register form validators
 class RegisterForm(FlaskForm):
     email = StringField(validators=[DataRequired(), Email()],render_kw={"size": 50, "maxlength": 70})
@@ -41,8 +41,8 @@ class RegisterForm(FlaskForm):
                             validators=[DataRequired(), Length(min=6, max=15), validate_password],render_kw={"size": 50, "maxlength": 70})
     confirm_password = PasswordField('confirm_password', validators=[
         EqualTo('password', message='Both password fields must be equal!')],render_kw={"size": 50, "maxlength": 70})
-    postcode = StringField('Postcode', validators=[
-        DataRequired(), validate_postcode()],render_kw={"size": 50, "maxlength": 70})
+    postcode = StringField('Postcode', validators=[DataRequired(), validate_postcode],render_kw={"size": 50, "maxlength": 70})
+
     role = RadioField('Are you registering as a producer or consumer?',
                       choices=[('producer', 'Producer'), ('consumer', 'Consumer')], validators=[DataRequired()],render_kw={"size": 50, "maxlength": 70})
     submit = SubmitField(validators=[DataRequired()],render_kw={"size": 50, "maxlength": 50})
@@ -52,5 +52,6 @@ class LoginForm(FlaskForm):
     password = PasswordField('password',
                              validators=[DataRequired()],render_kw={"size": 50, "maxlength": 70})
     submit = SubmitField(validators=[DataRequired()],render_kw={"size": 50, "maxlength": 50})
+
 
 
