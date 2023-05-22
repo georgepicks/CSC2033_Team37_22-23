@@ -133,3 +133,16 @@ button[type="submit"]:hover {
   background-color: #4CAF50;
   color: white;
 }
+.item img {
+  width: 100px;
+  height: auto;
+}
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.item img {
+  margin-right: 20px;
+}
