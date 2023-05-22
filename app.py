@@ -60,6 +60,17 @@ def index():
 def dashboard():
     return 'Welcome to the dashboard!'
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("errors/error404.html"), 404
+
+@app.errorhandler(500)
+def server_error(error):
+    return render_template("errors/error500.html"), 500
+
+@app.errorhandler(403)
+def forbidden_action(error):
+    return render_template("errors/error403.html"), 403
 
 if __name__ == '__main__':
     app.run()

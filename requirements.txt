@@ -10,7 +10,5 @@ windows-curses
 _curses
 datetime
 pymysql
-wtforms.validators
-logging
 flask_mail
-
+email_validator
