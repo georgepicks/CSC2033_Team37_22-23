@@ -6,16 +6,18 @@ from app import app, db
 producer_blueprint = Blueprint('producer', __name__, template_folder='templates')
 
 
+# Function that shows the inventory to the producer
 @app.route('/admin/inventory')
 @login_required
-def inventory():
-    items = InventoryItems.query.all()
+def inventory(id):
+    items = InventoryItems.query.filter(InventoryItems.producer_id.ilike(id)).all()
     return render_template('', items=items)
 
 
+# Function to edit inventory table, authentication for relevant producer only
 @app.route('/', methods=['GET', 'POST'])
 @login_required
-def edit_item(id):
+def edit_inventory(id):
     item = InventoryItems.query.get_or_404(id)
     if request.method == 'POST':
         item.name = request.form['name']
@@ -25,7 +27,8 @@ def edit_item(id):
     else:
         return render_template('edit_item.hyml', item=item)
 
-
+    
+# Function to add an item to the inventory
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def add_item():
@@ -39,6 +42,8 @@ def add_item():
     else:
         return render_template('')
 
+
+# Function that shows the proper order from the consumer to the produxer
 @app.route('/orders')
 def orders():
     cursor = db.cursor()
@@ -52,6 +57,7 @@ def orders():
     return render_template('orders.html', orders=orders)
 
 
+# Function that allows the producer to accept an order by the consumer
 def accept_order(order_id, inventory):
     for item in inventory:
         if item['id'] == order_id:
@@ -60,6 +66,7 @@ def accept_order(order_id, inventory):
     return False
 
 
+# Function to remove an item from the inventory by the producer
 def remove_item(item_id):
     item = InventoryItems.query.get(item_id)
     if item:
@@ -69,9 +76,13 @@ def remove_item(item_id):
     else:
         return False
 
+    
+# Function prompts for an error handling part for remove_item(item_id)
 @app.route('/inventory/remove/<int:item_id>', methods=['POST'])
 def remove_item_route(item_id):
+    # Checks for any item removed
     if remove_item(item_id):
         return redirect(url_for('inventory'))
+    # Case for no item is found
     else:
         return "Item not found"
