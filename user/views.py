@@ -114,7 +114,6 @@ def account():
 @users_blueprint.route('/logout')
 @login_required
 def logout():
-    # Data is recorded in lottery.log each time a user logs out of the program
     logging.warning('SECURITY - Log out [%s, %s, %s]', current_user.id, current_user.email, request.remote_addr)
     #Function for the user to log out
     logout_user()
