@@ -40,7 +40,7 @@ footer nav a:hover {
     text-decoration: underline;
 }
 .content {
-    height: 85vh;
+    height: 95vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -59,7 +59,7 @@ footer nav a:hover {
 }
 .content-image2 {
     max-width: 100px; /* Adjust the size as needed */
-    margin-bottom: 2rem;
+    margin-bottom: 50px;
     margin-top: 2rem;
 }
 .contact-us {

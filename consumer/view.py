@@ -98,7 +98,7 @@ def edit_order(order_id):
 
         if order:
             cursor.close()
-            return render_template('edit_order.html', order=order)
+            return render_template('edit_item.html', order=order)
         else:
             cursor.close()
             return 'Order not found'

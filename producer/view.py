@@ -25,7 +25,7 @@ def edit_inventory(id):
         db.session.commit()
         return redirect(url_for('inventory'))
     else:
-        return render_template('edit_item.hyml', item=item)
+        return render_template('edit_item.html', item=item)
 
     
 # Function to add an item to the inventory
