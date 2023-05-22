@@ -1,10 +1,7 @@
-#
+from app import db, app
 
-from app import db
-
-class User(db.Model):
-    __tablename__ = 'users'
-
+class Consumer(db.Model):
+    __tablename__ = 'consumers'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     firstname = db.Column(db.String(100), nullable=False)
@@ -12,21 +9,40 @@ class User(db.Model):
     password = db.Column(db.String(100), nullable=False)
     postcode = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(100), nullable=False)
-    role = db.Column(db.String(100), nullable=False, default='consumer')
-    consumer_orders = db.relationship('Orders', foreign_keys='Orders.consumer_id')
-    producer_orders = db.relationship('Orders', foreign_keys='Orders.producer_id')
-    # only for producers:
-    inventory = db.relationship('InventoryItems')
-    # verification to be added for producers too
+    orders = db.relationship('Orders', foreign_keys='Orders.consumer_id')
 
-    def __init__(self, email, firstname, lastname, password, postcode, phone, role):
+    def __init__(self, email, firstname, lastname, password, postcode, phone):
         self.email = email
         self.firstname = firstname
         self.lastname = lastname
         self.password = password
         self.postcode = postcode
         self.phone = phone
-        self.role = role
+
+
+class Producer(db.Model):
+    __tablename__ = 'producers'
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    producer_name = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(100), nullable=False)
+    postcode = db.Column(db.String(100), nullable=False)
+    address_1 = db.Column(db.String(100), nullable=False)
+    address_2 = db.Column(db.String(100), nullable=False)
+    address_3 = db.Column(db.String(100), nullable=False)
+    inventory = db.relationship('InventoryItems')
+    orders = db.relationship('Orders')
+
+    def __init__(self, email, producer_name, password, phone, postcode, address_1, address_2, address_3):
+        self.email = email
+        self.producer_name = producer_name,
+        self.password = password
+        self.phone = phone
+        self.postcode = postcode
+        self.address_1 = address_1
+        self.address_2 = address_2
+        self. address_3 = address_3
 
 
 class InventoryItems(db.Model):
@@ -34,7 +50,7 @@ class InventoryItems(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     item = db.Column(db.String(100), nullable=False, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
-    producer = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
+    producer = db.Column(db.Integer, db.ForeignKey(Producer.id), nullable=False)
     dietary = db.Column(db.String(100), nullable=False, default="None")
 
 
@@ -48,8 +64,8 @@ class InventoryItems(db.Model):
 class Orders(db.Model):
     __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
-    producer_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
-    consumer_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
+    producer_id = db.Column(db.Integer, db.ForeignKey(Producer.id), nullable=False)
+    consumer_id = db.Column(db.Integer, db.ForeignKey(Consumer.id), nullable=False)
     order_time = db.Column(db.DateTime, nullable=False)
     items = db.Relationship('OrderItems')
 
@@ -73,16 +89,18 @@ class OrderItems(db.Model):
 
 #def init_db():
 #    to use this function, "from app import app"
-#    with app.app_context():
-        #db.drop_all()
-        #db.create_all()
-        #user1 = User("a@m.com", "Alex", "MacMillan", "secretPassword1", "NE1 4SH", '07538152684', 'admin')
-        #user2 = User("s@k.com", "Sree", 'Kalathil', 'secretPassword2', 'NE1 2YX', '012345678910', 'producer')
-        #user3 = User('b@g.com', 'Broden', 'Gates', 'secretPassword3', 'NE3 4TT', '0987654321', 'consumer')
-        #db.session.add(user1)
-        #db.session.add(user2)
-        #db.session.add(user3)
-        #db.session.commit()
+    #with app.app_context():
+    #    db.drop_all()
+    #    db.session.commit()
+    #    db.create_all()
+    #    new_producer = Producer("jd@jdwetherspoons.com", "The Keel Row", "secretPassword1", '07538152684', "NE1 4SH",
+    #                            'The Gate', 'Newgate St, Newcastle upon Tyne', 'Tyne and Wear')
+    #    new_consumer = Consumer("s@k.com", "Sree", 'Kalathil', 'secretPassword2', 'NE1 2YX', '012345678910')
+    #    #user3 = User('b@g.com', 'Broden', 'Gates', 'secretPassword3', 'NE3 4TT', '0987654321', 'consumer')
+    #    db.session.add(new_producer)
+    #    db.session.add(new_consumer)
+    #    db.session.add(user3)
+    #    db.session.commit()
 
 
 # init_db()

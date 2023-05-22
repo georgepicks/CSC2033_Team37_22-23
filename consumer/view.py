@@ -2,7 +2,7 @@ from _curses import flash
 import pgeocode
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
 from flask_login import login_required, current_user
-from models import User, InventoryItems, OrderItems, Orders
+from models import Consumer, InventoryItems, OrderItems, Orders
 from app import app, db
 from datetime import datetime
 from user import views
