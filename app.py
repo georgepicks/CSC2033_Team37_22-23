@@ -19,7 +19,7 @@ db = SQLAlchemy(app)
 
 # imports LoginManageer
 from flask_login import LoginManager, current_user
-from models import User
+from models import Consumer, Producer
 
 @app.route('/')
 def index():
@@ -44,10 +44,12 @@ app.register_blueprint(consumer_blueprint)
 app.register_blueprint(pages_blueprint)
 
 
-
 @login_manager.user_loader
-def load_user(email):
-    return User.query.get(int(email))
+def load_user(id):
+    if Consumer.query.get(int(id)):
+        return Consumer.query.get(int(id))
+    else:
+        return Producer.query.get(int(id))
 
 
 @app.route('/about_us')

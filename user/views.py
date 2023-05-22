@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, session, Markup, request
-from models import User, Orders
+from models import Consumer, Producer, Orders
 from app import db
 from user.forms import RegisterForm, LoginForm
 import bcrypt
