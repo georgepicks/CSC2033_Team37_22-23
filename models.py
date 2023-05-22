@@ -68,3 +68,20 @@ class OrderItems(db.Model):
         self.item = item
         self.quantity = quantity
         self.order_id = order_id
+
+#def init_db():
+#    to use this function, "from app import app"
+#    with app.app_context():
+        #db.drop_all()
+        #db.create_all()
+        #user1 = User("a@m.com", "Alex", "MacMillan", "secretPassword1", "NE1 4SH", '07538152684', 'admin')
+        #user2 = User("s@k.com", "Sree", 'Kalathil', 'secretPassword2', 'NE1 2YX', '012345678910', 'producer')
+        #user3 = User('b@g.com', 'Broden', 'Gates', 'secretPassword3', 'NE3 4TT', '0987654321', 'consumer')
+        #db.session.add(user1)
+        #db.session.add(user2)
+        #db.session.add(user3)
+        #db.session.commit()
+
+
+# init_db()
+
