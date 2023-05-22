@@ -11,13 +11,13 @@
         <p>Address Placeholder</p>
     </div>
 
+
+
     <div class="rectangle_side">
         <div id="basket">
             <h4><u>Your Basket:</u></h4>
             <ul id="basket-list"></ul>
-            <div class="submit-container">
-                <input type="submit" value="Submit Order" class="submit-button" id="submit-btn">
-            </div>
+            <input type="submit" value="Submit Order" class="submit-button" id="submit-btn">
         </div>
     </div>
 
@@ -27,11 +27,8 @@
             <div class="item-name">{{ item.item }}</div>
             <div class="item-quantity">Quantity: {{ item.quantity }}</div>
             <input type="hidden" name="item" value="{{ item.item }}">
-            <input type="hidden" name="quantity" value="{{ item.quantity }}">
         </div>
         {% endfor %}
     </div>
-
-
 
 {% endblock %}

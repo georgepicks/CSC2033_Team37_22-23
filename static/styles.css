@@ -21,7 +21,7 @@ body {
   position: fixed;
   width: 100%;
   height: 100px;
-    background-color: #78BE20;
+    background-color: #59a956;
   flex-grow: 1;
 }
 
@@ -36,18 +36,19 @@ body {
 }
 
 .rectangle_side {
+    position: fixed;
     top: 10%;
     left: 86%;
-    position: fixed;
     width: 14%;
-    height: 100%;
-    background-color: #78BE20;
-    flex-grow: 1;
+    height: 500px;
+    background-color: #59a956;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Align items at the top */
-    padding-top: 20px; /* Add top padding for spacing */
+    padding: 20px;
+    border: 3px solid #fff;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 .rectangle_side h4 {
@@ -206,7 +207,7 @@ button[type="submit"] {
 }
 
 #suppliers {
-    max-height: 400px; /* Adjust the height as needed */
+    max-height: 400px;
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
@@ -221,7 +222,7 @@ button[type="submit"] {
     padding: 20px;
     margin-right: 10px;
     margin-bottom: 10px;
-    width: calc(25% - 10px); /* Adjust the width and margin as needed */
+    width: calc(25% - 10px);
     transition: background-color 0.3s ease;
     box-sizing: border-box;
     background-size: cover;
@@ -241,17 +242,22 @@ button[type="submit"] {
 
 
 .inventory-container {
-    overflow-y: scroll;
-    max-height: 500px;
+    width: 35%;
+    max-height: 400px;
+    overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
+    text-align: center;
+    color: #FFFFFF;
+    text-shadow: 0 0 3px #000000, 0 0 5px #000000;
+    gap: 10px;
 }
 
 .inventory-card {
-    width: 19%;
+    width: 20%;
     margin-bottom: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #000000;
     padding: 10px;
     text-align: center;
 }
@@ -276,39 +282,39 @@ button[type="submit"] {
     background-color: #e0e0e0;
 }
 
-.submit-button {
-    margin-top: 10px;
-}
-
 .add-to-order-button {
     display: none;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
 }
 
-.submit-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-    margin-top: auto; /* Push the container to the top */
+.submit-button {
+    border: 3px solid #fff;
+  background-color: #59a956;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #478e47;
 }
 
 #basket {
-    flex-grow: 1; /* Expand to fill remaining space */
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Align items at the top */
-    overflow-y: auto; /* Add vertical scroll if needed */
     color: #FFFFFF;
     font-size: 30px;
+    margin-bottom: 20px;
 }
 
 #basket-list li {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   transition: opacity 0.5s ease; /* Add CSS transition */
     font-size: 20px;
 }
@@ -322,5 +328,23 @@ button[type="submit"] {
 #info{
     position: absolute;
     text-align: center;
-    top: 30%;
+    top: 20%;
+}
+
+.order-button {
+  background-color: #59a956;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.order-button:hover {
+  background-color: #478e47;
+}
+
+#basket h4 {
+  margin-bottom: 1px;
 }

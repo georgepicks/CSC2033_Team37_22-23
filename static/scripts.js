@@ -57,9 +57,8 @@ function toggleSelected(itemId) {
 
     var basket = document.getElementById("basket");
     var itemName = card.querySelector(".item-name").textContent;
-    var itemQuantity = card.querySelector(".item-quantity").textContent;
     var basketItem = document.createElement("li");
-    basketItem.textContent = itemName + " - " + itemQuantity;
+    basketItem.textContent = itemName;
     if (card.classList.contains("selected")) {
         basket.appendChild(basketItem);
     } else {
@@ -83,12 +82,11 @@ function removeFromBasket(itemId) {
 function addToOrder(itemId) {
   var card = document.getElementById(itemId);
   var itemName = card.querySelector(".item-name").textContent;
-  var itemQuantity = card.querySelector(".item-quantity").textContent;
   var basket = document.getElementById("basket-list");
   var basketItem = document.createElement("li");
   basketItem.id = "basket-" + itemId;
   basketItem.innerHTML = `
-    <span>${itemName} - ${itemQuantity}</span>
+    <span>${itemName}</span>
     <span class="remove-item" onclick="removeFromBasket('basket-${itemId}')">x</span>
   `;
   basket.appendChild(basketItem);
