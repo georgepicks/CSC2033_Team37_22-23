@@ -46,7 +46,8 @@ function filterSuppliers() {
 }
 
 function redirectToSupplier(supplierId) {
-    window.location.href = 'https://example.com/pasta'; // Replace with the actual URL for the supplier page
+    var supplierUrl = 'http://127.0.0.1:5000/order' + supplierId;
+    window.location.href = supplierUrl;
 }
 
 function toggleSelected(itemId) {

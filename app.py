@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, render_template
 from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
@@ -50,14 +50,9 @@ def index():
     return redirect(redirect_url)
 
 
-@app.route('/dashboard')
-def dashboard():
-    return 'Welcome to the dashboard!'
-
-
-@app.route('/index')
-def hello_world():  # put application's code here
-    return 'Hello World!'
+@app.errorhandler(400)
+def internal_error(error):
+    return render_template('errors/400.html'), 400
 
 
 if __name__ == '__main__':
