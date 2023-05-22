@@ -5,6 +5,7 @@ import pymysql
 
 pymysql.install_as_MySQLdb()
 
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
@@ -16,7 +17,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mariadb://csc2033_team37:BikeRode4out@c
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+
 from flask import redirect
+
 
 # imports LoginManageer
 from flask_login import LoginManager, current_user
@@ -50,15 +53,12 @@ app.register_blueprint(pages_blueprint)
 def load_user(email):
     return User.query.get(int(email))
 
-@app.route('/')
-def index():
-    redirect_url = url_for('dashboard')
-    return redirect(redirect_url)
 
 
 @app.route('/dashboard')
 def dashboard():
     return 'Welcome to the dashboard!'
+
 
 @app.errorhandler(404)
 def page_not_found(error):
@@ -71,6 +71,26 @@ def server_error(error):
 @app.errorhandler(403)
 def forbidden_action(error):
     return render_template("errors/error403.html"), 403
+
+@app.route('/')
+def about_us():
+    return render_template('other_pages/about_us.html')
+
+
+@app.route('/')
+def contact():
+    return render_template('other_pages/contact.html')
+
+
+@app.route('/')
+def privacy():
+    return render_template('other_pages/privacy.html')
+
+
+@app.route('/')
+def terms():
+    return render_template('other_pages/terms.html')
+
 
 if __name__ == '__main__':
     app.run()
