@@ -60,5 +60,10 @@ def internal_error(error):
     return render_template('errors/403.html'), 403
 
 
+@app.errorhandler(404)
+def internal_error(error):
+    return render_template('errors/404.html'), 404
+
+
 if __name__ == '__main__':
     app.run()
