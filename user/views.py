@@ -6,7 +6,9 @@ import bcrypt
 from flask_login import login_user, current_user
 from datetime import datetime
 import logging
+
 from flask_mail import Message, Mail
+
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
 
@@ -95,6 +97,7 @@ def login():
             return render_template('')
     # returns login if all the functions fail
     return render_template('users/login.html', form=form)
+
 
 # Function to send mails to producers while an order is made
 def send_email(subject, recipients, body):
