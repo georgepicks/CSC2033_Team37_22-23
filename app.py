@@ -18,16 +18,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-from flask import redirect
-
-
 # imports LoginManageer
 from flask_login import LoginManager, current_user
 from models import User
 
-@app.route('/')
-def index():
-    return render_template('main/index.html')
 
 # define login manager
 login_manager = LoginManager()
@@ -54,11 +48,18 @@ def load_user(email):
     return User.query.get(int(email))
 
 
+@app.route('/index')
+def index():
+    return render_template('main/index.html')
 
-@app.route('/dashboard')
-def dashboard():
-    return 'Welcome to the dashboard!'
+@app.route('/about_us')
+def about_us():
+    return render_template('main/about_us.html')
 
+
+@app.route('/contact')
+def contact_us():
+    return render_template('main/contact.html')
 
 @app.errorhandler(404)
 def page_not_found(error):
