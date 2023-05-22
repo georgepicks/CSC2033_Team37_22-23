@@ -1,11 +1,12 @@
-from flask import render_template, redirect, url_for, request,Blueprint, flash
-from flask_login import login_required
-from models import InventoryItems, User
+from flask import render_template, redirect, url_for, request, Blueprint, flash
+from flask_login import login_required, current_user
+from models import InventoryItems, Producer
 from app import app, db
 from user.forms import ProducerRegisterForm
 import logging
 
 producer_blueprint = Blueprint('producer', __name__, template_folder='templates')
+
 
 @producer_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
@@ -14,7 +15,7 @@ def register():
 
     # if request method is POST or form is valid
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = Producer.query.filter_by(email=form.email.data).first()
         # if this returns a user, then the email already exists in database
 
         # if email already exists redirect user back to signup page with error message so user can try again
@@ -23,13 +24,13 @@ def register():
             return render_template('users/register.html', form=form)
 
         # create a new user with the form data
-        new_user = User(email=form.email.data,
-                        producer_name =form.producer_name.data,
+        new_user = Producer(email=form.email.data,
+                        producer_name=form.producer_name.data,
                         phone=form.phone.data,
                         password=form.password.data,
-                        address1=form.address1.data ,
-                        address2=form.address2.data,
-                        address3=form.address3.data,
+                        address_1=form.address1.data,
+                        address_2=form.address2.data,
+                        address_3=form.address3.data,
                         postcode=form.postcode.data)
 
         # add the new user to the database
@@ -41,6 +42,8 @@ def register():
         return redirect(url_for('users/login.html'))
     # if request method is GET or form not valid re-render signup page
     return render_template('users/register.html', form=form)
+
+
 
 # Function that shows the inventory to the producer
 @app.route('/admin/inventory')
@@ -119,6 +122,7 @@ def remove_item(item_id):
     else:
         return False
 
+
 # Function prompts for an error handling part for remove_item(item_id)
 @app.route('/inventory/remove/<int:item_id>', methods=['POST'])
 @login_required
@@ -129,3 +133,20 @@ def remove_item_route(item_id):
     # Case for no item is found
     else:
         return "Item not found"
+
+
+# view user account
+@producer_blueprint.route('/account')
+@login_required
+def account():
+    # Shows the account details of the user
+    return render_template('users/account.html',
+                           id=current_user.id,
+                           email=current_user.email,
+                           producer_name=current_user.producer_name,
+                           phone=current_user.phone,
+                           postcode=current_user.postcode,
+                           address_1=current_user.address_1,
+                           address_2=current_user.address_2,
+                           address_3=current_user.address_3)
+
