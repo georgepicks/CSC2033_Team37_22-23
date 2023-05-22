@@ -70,5 +70,10 @@ def internal_error(error):
     return render_template('errors/500.html'), 500
 
 
+@app.errorhandler(503)
+def internal_error(error):
+    return render_template('errors/503.html'), 503
+
+
 if __name__ == '__main__':
     app.run()
