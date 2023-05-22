@@ -3,7 +3,7 @@ from _curses import flash
 import pgeocode
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
 from flask_login import login_required, current_user
-from models import Consumer, InventoryItems, OrderItems, Orders
+from models import Consumer, Producer, InventoryItems, OrderItems, Orders
 from app import app, db
 from datetime import datetime
 from user import views
@@ -31,7 +31,6 @@ def search():
 
         # Searching using SQLALCHEMY
         results = InventoryItems.item.query.filter(InventoryItems.item.name.ilike(f'%{query}%')).all()
-
 
         if not results:
             message = "No items found matching your search query."
@@ -160,7 +159,7 @@ def find_producers(distance_range, filter):
     geodistance = pgeocode.GeoDistance('gb')
     nearby_producers = {}
     # query all producers
-    producers = User.query.filter_by(role="producer").all()
+    producers = Producer.query.all()
     for i in producers:
         # calculate distance between all producers and current user
         distance = geodistance.query_postal_code(current_user.postcode, i.postcode)

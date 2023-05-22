@@ -45,12 +45,18 @@ app.register_blueprint(pages_blueprint)
 
 
 @login_manager.user_loader
-def load_user(id):
-    if Consumer.query.get(int(id)):
-        return Consumer.query.get(int(id))
+def load_user(email):
+    # if user exists in consumer table, return it's ID
+    if Consumer.query.filter_by(email=email).first():
+        user = Consumer.query.filter_by(email=email).first()
+        return user.id
+    # if the user's email doesn't exist in the consumer table, check the producer table too
     else:
-        return Producer.query.get(int(id))
+        user = Producer.query.filter_by(email=email).first()
+        return user.id
 
+with app.app_context():
+    load_user('jd@jdwetherspoons.com')
 
 @app.route('/about_us')
 def about_us():
