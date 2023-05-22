@@ -31,18 +31,6 @@ def validate_postcode(self, data_field):
     if not c.match(data_field.data):
         raise ValidationError("Invalid Postcode")
 
-
-# Define phone validate function
-def validate_phone(self, data_field):
-    i = re.compile(r'(?=\d\d\d\d-\d\d\d-\d\d\d\d)')
-    if not i.match(data_field.data):
-        raise ValidationError("Phone number must be of the format XXXX-XXX-XXX")
-
-class LoginForm(FlaskForm):
-    email = StringField(validators=[DataRequired()], render_kw={"size": 50, "maxlength": 70})
-    password = PasswordField('password',
-                             validators=[DataRequired()], render_kw={"size": 50, "maxlength": 70})
-    submit = SubmitField(validators=[DataRequired()], render_kw={"size": 50, "maxlength": 50})
 #Initialising register form validators
 class RegisterForm(FlaskForm):
     email = StringField(validators=[DataRequired(), Email()],render_kw={"size": 50, "maxlength": 70})
