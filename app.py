@@ -5,6 +5,7 @@ import pymysql
 
 pymysql.install_as_MySQLdb()
 
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
@@ -46,10 +47,10 @@ app.register_blueprint(pages_blueprint)
 def load_user(email):
     return User.query.get(int(email))
 
+
 @app.route('/index')
 def index():
     return render_template('main/index.html')
-
 
 @app.route('/about_us')
 def about_us():
@@ -59,6 +60,38 @@ def about_us():
 @app.route('/contact')
 def contact_us():
     return render_template('main/contact.html')
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("errors/error404.html"), 404
+
+@app.errorhandler(500)
+def server_error(error):
+    return render_template("errors/error500.html"), 500
+
+@app.errorhandler(403)
+def forbidden_action(error):
+    return render_template("errors/error403.html"), 403
+
+@app.route('/')
+def about_us():
+    return render_template('other_pages/about_us.html')
+
+
+@app.route('/')
+def contact():
+    return render_template('other_pages/contact.html')
+
+
+@app.route('/')
+def privacy():
+    return render_template('other_pages/privacy.html')
+
+
+@app.route('/')
+def terms():
+    return render_template('other_pages/terms.html')
+
 
 if __name__ == '__main__':
     app.run()
