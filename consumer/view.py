@@ -2,7 +2,7 @@ from _curses import flash
 import pgeocode
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
 from flask_login import login_required, current_user
-from models import User, InventoryItems, OrderItems, Orders
+from models import Consumer, InventoryItems, OrderItems, Orders,Producer
 from app import app, db
 from datetime import datetime
 from user import views
@@ -19,7 +19,7 @@ def register():
 
     # if request method is POST or form is valid
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = Consumer.query.filter_by(email=form.email.data).first()
         # if this returns a user, then the email already exists in database
 
         # if email already exists redirect user back to signup page with error message so user can try again
@@ -28,7 +28,7 @@ def register():
             return render_template('users/register.html', form=form)
 
         # create a new user with the form data
-        new_user = User(email=form.email.data,
+        new_user = Consumer(email=form.email.data,
                         firstname=form.firstname.data,
                         lastname=form.lastname.data,
                         phone=form.phone.data,
@@ -101,7 +101,7 @@ def filter_by_dietary(food_type):
 @app.route('/search_results/<query>')
 @login_required
 def search_results(query):
-    results = User.query.whoosh_search(query).all()
+    results = Consumer.query.whoosh_search(query).all()
     return render_template('search_results.html', query=query, results=results)
 
 
@@ -199,7 +199,7 @@ def find_producers(distance_range, filter):
     geodistance = pgeocode.GeoDistance('gb')
     nearby_producers = {}
     # query all producers
-    producers = User.query.filter_by(role="producer").all()
+    producers = Producer.query.all()
     for i in producers:
         # calculate distance between all producers and current user
         distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
@@ -210,3 +210,15 @@ def find_producers(distance_range, filter):
     sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
     return sorted_producers
 
+# view user account
+@consumer_blueprint.route('/account')
+@login_required
+def account():
+    # Shows the account details of the user
+    return render_template('users/account.html',
+                           id=current_user.id,
+                           email=current_user.email,
+                           firstname=current_user.firstname,
+                           lastname=current_user.lastname,
+                           phone=current_user.phone,
+                           postcode=current_user.postcode)
