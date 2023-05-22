@@ -46,8 +46,6 @@ class ConsumerRegisterForm(FlaskForm):
         EqualTo('password', message='Both password fields must be equal!')],render_kw={"size": 50, "maxlength": 70})
     postcode = StringField('Postcode', validators=[
         DataRequired(), validate_postcode],render_kw={"size": 50, "maxlength": 70})
-    role = RadioField('Are you registering as a producer or consumer?',
-                      choices=[('producer', 'Producer'), ('consumer', 'Consumer')], validators=[DataRequired()],render_kw={"size": 50, "maxlength": 70})
     submit = SubmitField(validators=[DataRequired()],render_kw={"size": 50, "maxlength": 50})
 
     
