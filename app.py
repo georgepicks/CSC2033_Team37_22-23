@@ -16,15 +16,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mariadb://csc2033_team37:BikeRode4out@c
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-from flask import redirect
 
 # imports LoginManageer
 from flask_login import LoginManager, current_user
 from models import User
 
-@app.route('/')
-def index():
-    return render_template('main/index.html')
 
 # define login manager
 login_manager = LoginManager()
@@ -50,16 +46,19 @@ app.register_blueprint(pages_blueprint)
 def load_user(email):
     return User.query.get(int(email))
 
-@app.route('/')
+@app.route('/index')
 def index():
-    redirect_url = url_for('dashboard')
-    return redirect(redirect_url)
+    return render_template('main/index.html')
 
 
-@app.route('/dashboard')
-def dashboard():
-    return 'Welcome to the dashboard!'
+@app.route('/about_us')
+def about_us():
+    return render_template('main/about_us.html')
 
+
+@app.route('/contact')
+def contact_us():
+    return render_template('main/contact.html')
 
 if __name__ == '__main__':
     app.run()
