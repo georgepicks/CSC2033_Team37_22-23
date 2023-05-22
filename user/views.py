@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, session, Markup, request
-from models import User,Orders,OrderItems
+from models import User, Orders
 from app import db
-from user.form import RegisterForm, LoginForm
+from user.forms import RegisterForm, LoginForm
 import bcrypt
 from flask_login import login_user, current_user
 from datetime import datetime
@@ -96,11 +96,13 @@ def login():
     # returns login if all the functions fail
     return render_template('users/login.html', form=form)
 
+# Function to send mails to producers while an order is made
 def send_email(subject, recipients, body):
     msg = Message(subject=subject, recipients=recipients)
     msg.body = body
     Mail.send(msg)
 
+# Message for the producer that is send through email
 def send_mail_notification(consumer_id, order_id):
     subject = 'New Order Notification'
     recipients = get_producer_email(consumer_id)
@@ -109,7 +111,9 @@ def send_mail_notification(consumer_id, order_id):
     return 'Email sent successfully!'
 
 
+# Function to retrieve relevant producer mail for the message to be sent
 def get_producer_email(consumer_id):
+    # order is retrieved in reference to the customer_id 
     order = Orders.query.filter_by(consumer_id=consumer_id).first()
     if order:
         producer = User.query.get(order.producer_id)
