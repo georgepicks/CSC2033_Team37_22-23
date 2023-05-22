@@ -21,6 +21,9 @@ db = SQLAlchemy(app)
 from flask_login import LoginManager, current_user
 from models import User
 
+@app.route('/')
+def index():
+    return render_template('main/index.html')
 
 # define login manager
 login_manager = LoginManager()
@@ -46,10 +49,6 @@ app.register_blueprint(pages_blueprint)
 def load_user(email):
     return User.query.get(int(email))
 
-
-@app.route('/index')
-def index():
-    return render_template('main/index.html')
 
 @app.route('/about_us')
 def about_us():
