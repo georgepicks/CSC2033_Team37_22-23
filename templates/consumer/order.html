@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <title>Order Page</title>
+    <h3>{{ supplier.name }}</h3>
+    <p>{{ supplier.address }}</p>
+
+    <div id="info">
+        <h3>Name placeholder</h3>
+        <p>Address Placeholder</p>
+    </div>
+
+
+
+    <div class="rectangle_side">
+        <div id="basket">
+            <h4><u>Your Basket:</u></h4>
+            <ul id="basket-list"></ul>
+            <input type="submit" value="Submit Order" class="submit-button" id="submit-btn">
+        </div>
+    </div>
+
+    <div class="inventory-container">
+        {% for item in supplier.inventory %}
+        <div class="inventory-card" id="item-{{ loop.index }}" onclick="addToOrder('item-{{ loop.index }}')">
+            <div class="item-name">{{ item.item }}</div>
+            <div class="item-quantity">Quantity: {{ item.quantity }}</div>
+            <input type="hidden" name="item" value="{{ item.item }}">
+        </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

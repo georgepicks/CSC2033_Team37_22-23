@@ -5,15 +5,14 @@
     <title>Login form</title>
 
     <div class="center">
-        <img src="https://lh3.googleusercontent.com/MzZovyUtjNtzjBH-gn-s2dDM17PE0-2P7Jly_9tRLfDkKOejznOi3U5TT1Wd8PS0URudImGfGl78ucUl629hOLaLMPASuZmky-WQgmfF4Ucd3SqOWeyOhFFF7KtFJu-AH4i_1Wu_Sg=w2400" alt="Food" class="image"/>
         <div class="column is-5 is-offset-4">
             <h3 class="page_text">Login</h3>
                 <form method="POST">
-                    <div class="field">
+                    <div class="container">
                         {{ form.csrf_token() }}
-                        <div class="control">{{ form.email(class="input", placeholder="Email") }}</div>
-                        <div class="control">{{ form.password(class="input", placeholder="Password") }}</div>
-                        <div class="submit">{{ form.submit(class="button is-info is-centered") }}</div>
+                        {{ form.email(class="input", placeholder="Email") }}
+                        {{ form.password(class="input", placeholder="Password") }}
+                        {{ form.submit(class="button") }}
                     </div>
                 </form>
             </div>

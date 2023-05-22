@@ -42,8 +42,6 @@ def add_item():
     else:
         return render_template('')
 
-
-# Function that shows the proper order from the consumer to the produxer
 @app.route('/orders')
 def orders():
     cursor = db.cursor()
@@ -56,8 +54,6 @@ def orders():
     # Pass the orders to the template for rendering
     return render_template('orders.html', orders=orders)
 
-
-# Function that allows the producer to accept an order by the consumer
 def accept_order(order_id, inventory):
     for item in inventory:
         if item['id'] == order_id:
@@ -66,7 +62,6 @@ def accept_order(order_id, inventory):
     return False
 
 
-# Function to remove an item from the inventory by the producer
 def remove_item(item_id):
     item = InventoryItems.query.get(item_id)
     if item:
@@ -86,3 +81,4 @@ def remove_item_route(item_id):
     # Case for no item is found
     else:
         return "Item not found"
+

@@ -1,3 +1,4 @@
+
 from _curses import flash
 import pgeocode
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
@@ -6,6 +7,7 @@ from models import User, InventoryItems, OrderItems, Orders
 from app import app, db
 from datetime import datetime
 from user import views
+
 
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
@@ -30,6 +32,7 @@ def search():
         # Searching using SQLALCHEMY
         results = InventoryItems.item.query.filter(InventoryItems.item.name.ilike(f'%{query}%')).all()
 
+
         if not results:
             message = "No items found matching your search query."
 
@@ -43,9 +46,8 @@ def search():
 def filter_by_dietary(food_type):
     # Retrieve the items based on the food type
     items = InventoryItems.query.filter(InventoryItems.dietary.ilike(food_type)).all()
-
+    
     if not items:
-        # Returns error if no item is found
         return jsonify({
             'success': False,
             'error': 'No items found for the specified food type.'

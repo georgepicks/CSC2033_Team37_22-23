@@ -1,5 +1,4 @@
 Flask~=2.3.2
-Flask
 flask_sqlalchemy
 flask_login
 flask_wtf
@@ -11,6 +10,5 @@ windows-curses
 _curses
 datetime
 pymysql
-wtforms.validators
-logging
 flask_mail
+email_validator
