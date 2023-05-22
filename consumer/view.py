@@ -46,6 +46,20 @@ def search():
 def filter_by_dietary(food_type):
     # Retrieve the items based on the food type
     items = InventoryItems.query.filter(InventoryItems.dietary.ilike(food_type)).all()
+    
+    if not items:
+        return jsonify({
+            'success': False,
+            'error': 'No items found for the specified food type.'
+        }), 404
+
+    results = [item.format() for item in items]
+
+    return jsonify({
+        'success': True,
+        'results': results,
+        'count': len(results)
+    })
 
 
 # The Function returning a list of all the relevant items from the search
