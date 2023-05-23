@@ -1,0 +1,57 @@
+Code Standards Document:
+
+The python code written in this program conforms to PEP-8 conventions, with the exception of increasing characters per
+line from 79 to 129 to conform to the default from the PyCharm IDE. These standards should be maintained while writing
+code and verified through the flake8 linter.
+
+Blank lines:
+    To maintain readability while minimizing unneeded lines, enter two blank lines after the end of a function or
+    class e.g.
+
+        def index():
+            return render_template('main/index.html')
+
+
+        login_manager = LoginManager()
+
+
+Line wrapping:
+    If an expression does not fit within pycharm's default 129 characters, break the wrap directly under bracket e.g.
+
+        postcode = StringField('Postcode', validators=[DataRequired(), validate_postcode],
+                               render_kw={"size": 50, "maxlength": 70})
+
+
+Whitespace:
+    Whitespace should follow every comma, and should both follow and precede every operator. Whitespace shouldn't
+    follow or precede parentheses e.g.
+
+        def calculate(a, b):
+            c = a + b
+
+Naming:
+    Variable names should be written in lowercase, using underscores in place of whitespace. Class names should be in
+    CamelCase with no spaces, but the beginning of every word is capitalised. Python pages should also be lowercase.
+
+
+Comments:
+    Comments should be used to explain code that may be hard for a reader to interpret. They should follow the format of
+    hash, whitespace, lowercase letter, and should be placed on the same indentation as what they're commenting e.g.
+
+        # calculates the sum of a and b
+        def calculate(a, b):
+
+
+Header comments:
+    Docstrings should be placed at the top of each python file, and explain what the file and each
+    function in the file does. e.g.
+
+        """
+        This page defines the forms which are called in the various views pages
+
+        ConsumerRegister():
+            ...
+
+        ...
+        """
+
