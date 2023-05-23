@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, request, Blueprint, flash
 from flask_login import login_required, current_user
-from models import InventoryItems, Producer
+from models import InventoryItems, Producer, OrderItems
 from app import app, db
 from user.forms import ProducerRegisterForm
 import logging
@@ -23,7 +23,7 @@ def register():
             flash('Email address already exists')
             return render_template('users/register.html', form=form)
 
-        # create a new user with the form data
+        # create a new user with the form data according to a producer
         new_user = Producer(email=form.email.data,
                         producer_name=form.producer_name.data,
                         phone=form.phone.data,
@@ -101,12 +101,20 @@ def orders():
 @app.route('/orders')
 @login_required
 def accept_order(order_id, inventory):
-    # If an item is accepted as an order, then it is removed from the inventory
+    # If an item is accepted as an order, then reduce its quantity in the inventory
     for item in inventory:
         if item['id'] == order_id:
-            inventory.remove(item)
-            return True
-    return False
+            if item['quantity'] > 0:
+                item['quantity'] -= 1
+                flash('Order accepted')
+            elif item['quantity'] == OrderItems.quantity:
+                inventory.remove(item)
+                return True
+            else:
+                flash('Insufficient quantity')
+            return redirect(url_for('dashboard'))
+    flash('Order not found')
+    return redirect(url_for('dashboard'))
 
 
 # Function to remove an item from the inventory by the producer
