@@ -21,9 +21,11 @@ db = SQLAlchemy(app)
 from flask_login import LoginManager, current_user
 from models import Consumer, Producer
 
+
 @app.route('/')
 def index():
     return render_template('main/index.html')
+
 
 # define login manager
 login_manager = LoginManager()
@@ -55,8 +57,10 @@ def load_user(email):
         user = Producer.query.filter_by(email=email).first()
         return user.id
 
+
 with app.app_context():
     load_user('jd@jdwetherspoons.com')
+
 
 @app.route('/about_us')
 def about_us():
@@ -67,13 +71,16 @@ def about_us():
 def contact_us():
     return render_template('main/contact.html')
 
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template("errors/error404.html"), 404
 
+
 @app.errorhandler(500)
 def server_error(error):
     return render_template("errors/error500.html"), 500
+
 
 @app.errorhandler(403)
 def forbidden_action(error):
