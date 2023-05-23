@@ -24,7 +24,7 @@ def ConsumerRegister():
         # if email already exists redirect user back to signup page with error message so user can try again
         if user:
             flash('Email address already exists')
-            return render_template('users/ProducerRegister.html', form=form)
+            return render_template('users/ConsumerRegister.html', form=form)
 
         # create a new user with the form data
         new_user = User(email=form.email.data,
