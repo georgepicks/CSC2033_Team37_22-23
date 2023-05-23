@@ -9,8 +9,7 @@ import logging
 from flask_mail import Message, Mail
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
-
-
+  
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     # create login form object
@@ -53,6 +52,7 @@ def login():
                 # Data is recorded in lottery.log each time login action takes place
                 logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
                 return render_template('')
+
 
         elif Consumer.query.filter_by(email=form.email.data).first():
             user = Consumer.query.filter_by(email=form.email.data).first()

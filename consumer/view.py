@@ -6,9 +6,6 @@ from models import Consumer, InventoryItems, OrderItems, Orders, Producer
 from app import app, db
 from datetime import datetime
 from user import views
-from user.forms import ConsumerRegisterForm
-import logging
-
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 

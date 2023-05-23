@@ -28,6 +28,7 @@ def validate_phone(self, data_field):
         raise ValidationError("Phone number must be of the format XXXX-XXX-XXX")
 
 
+
 # Define postcode validate function
 def validate_postcode(self, data_field):
     c = re.compile(r'^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\s?[0-9][A-Za-z]{2}$')
@@ -44,8 +45,7 @@ class ConsumerRegisterForm(FlaskForm):
     password = PasswordField('password',
                              validators=[DataRequired(), Length(min=6, max=15), validate_password],
                              render_kw={"size": 50, "maxlength": 70})
-    confirm_password = PasswordField('confirm_password', validators=[
-                                     EqualTo('password', message='Both password fields must be equal!')],
+    confirm_password = PasswordField('confirm_password', validators=[EqualTo('password', message='Both password fields must be equal!')],
                                      render_kw={"size": 50, "maxlength": 70})
     postcode = StringField('Postcode', validators=[DataRequired(), validate_postcode],
                            render_kw={"size": 50, "maxlength": 70})
@@ -68,6 +68,7 @@ class ProducerRegisterForm(FlaskForm):
     confirm_password = PasswordField('confirm_password',
                                      validators=[EqualTo('password', message='Both password fields must be equal!')],
                                      render_kw={"size": 50, "maxlength": 70})
+
     address1 = StringField('Address 1', validators=[DataRequired()], render_kw={"size": 50, "maxlength": 70})
     address2 = StringField('Address 2', validators=[DataRequired()], render_kw={"size": 50, "maxlength": 70})
     address3 = StringField('Address 2', validators=[DataRequired()], render_kw={"size": 50, "maxlength": 70})

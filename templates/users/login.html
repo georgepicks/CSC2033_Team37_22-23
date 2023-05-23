@@ -6,16 +6,16 @@
 
     <div class="center">
         <div class="column is-5 is-offset-4">
-            <h3 class="page_text">Login</h3>
-                <form method="POST">
-                    <div class="container">
-                        {{ form.csrf_token() }}
-                        {{ form.email(class="input", placeholder="Email") }}
-                        {{ form.password(class="input", placeholder="Password") }}
-                        {{ form.submit(class="button") }}
-                    </div>
-                </form>
-            </div>
+            <h3 class="PageText">Login</h3>
+            <form method="POST">
+                <div class="container">
+                    {{ form.csrf_token() }}
+                    {{ form.email(class="input", placeholder="Email") }}
+                    {{ form.password(class="input", placeholder="Password") }}
+                    {{ form.submit(class="button") }}
+                </div>
+            </form>
         </div>
+    </div>
 
 {% endblock %}
