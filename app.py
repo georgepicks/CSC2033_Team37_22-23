@@ -1,127 +1,88 @@
-
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
-
-app = Flask(__name__)
-# initialise database
-engine = create_engine('mariadb:///csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk:3306/csc2033_team37')
-# engine = create_engine("jdbc:mariadb://cs-db.ncl.ac.uk:3306/csc2033_team37")
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mariadb://csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk/csc2033_team37'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-
-@app.route('/')
-def hello_world():  # put application's code here
-    return 'Hello World!'
-
-
-if __name__ == '__main__':
-    app.run()
-=======
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
-from flask import flash, render_template, request, redirect
-from models import Inventory
-from consumer import view
-
-
-app = Flask(__name__)
-# initialise database
-engine = create_engine('mariadb:///csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk:3306/csc2033_team37')
-# engine = create_engine("jdbc:mariadb://cs-db.ncl.ac.uk:3306/csc2033_team37")
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mariadb://csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk/csc2033_team37'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-
-@app.route('/')
-def hello_world():  # put application's code here
-    return 'Hello World!'
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    search = view.Search_Item(request.form)
-    if request.method == 'POST':
-        return search_results(search)
-    return render_template('', form=search)
-
-@app.route('/results')
-def search_results(search):
-    results = []
-    search_string = search.data['search']
-    if search.data['search'] == '':
-        qry = db.session.query(Inventory.item)
-        results = qry.all()
-    if not results:
-        flash('No results found!')
-        return redirect('/')
-    else:
-        # display results
-        return render_template('', results=results)
-
-
-
-if __name__ == '__main__':
-    app.run()
-
-=======
-from flask import Flask, redirect, url_for
+from flask import Flask, render_template
 from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
+import pymysql
+
+pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-
 # initialise database
 engine = create_engine('mariadb:///csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk:3306/csc2033_team37')
-# engine = create_engine("jdbc:mariadb://cs-db.ncl.ac.uk:3306/csc2033_team37")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mariadb://csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk/csc2033_team37'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-from flask import  redirect
-
-# BLUEPRINTS
-# import blueprints
-from user.views import users_blueprint
-from producer.view import producer_blueprint
-from consumer.view import consumer_blueprint
-
 # imports LoginManageer
 from flask_login import LoginManager, current_user
-from models import User
+from models import Consumer, Producer
 
-# # register blueprints with app
-app.register_blueprint(users_blueprint)
-app.register_blueprint(producer_blueprint)
-app.register_blueprint(consumer_blueprint)
+
+@app.route('/')
+def index():
+    return render_template('main/index.html')
+
 
 # define login manager
 login_manager = LoginManager()
 login_manager.login_view = 'users.login'
 login_manager.init_app(app)
 
+# BLUEPRINTS
+# import blueprints
+from user.views import users_blueprint
+from producer.view import producer_blueprint
+from consumer.view import consumer_blueprint
+from pages.view import pages_blueprint
+
+# # register blueprints with app
+app.register_blueprint(users_blueprint)
+app.register_blueprint(producer_blueprint)
+app.register_blueprint(consumer_blueprint)
+app.register_blueprint(pages_blueprint)
+
+
 @login_manager.user_loader
 def load_user(email):
-    return User.query.get(int(email))
+    # if user exists in consumer table, return it's ID
+    if Consumer.query.filter_by(email=email).first():
+        user = Consumer.query.filter_by(email=email).first()
+        return user.id
+    # if the user's email doesn't exist in the consumer table, check the producer table too
+    else:
+        user = Producer.query.filter_by(email=email).first()
+        return user.id
 
-@app.route('/')
-def index():
-    redirect_url = url_for('dashboard')
-    return redirect(redirect_url)
 
-@app.route('/dashboard')
-def dashboard():
-    return 'Welcome to the dashboard!'
+with app.app_context():
+    load_user('jd@jdwetherspoons.com')
 
-@app.route('/')
-def hello_world():  # put application's code here
-    return 'Hello World!'
+
+@app.route('/about_us')
+def about_us():
+    return render_template('main/about_us.html')
+
+
+@app.route('/contact')
+def contact_us():
+    return render_template('main/contact.html')
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("errors/error404.html"), 404
+
+
+@app.errorhandler(500)
+def server_error(error):
+    return render_template("errors/error500.html"), 500
+
+
+@app.errorhandler(403)
+def forbidden_action(error):
+    return render_template("errors/error403.html"), 403
 
 
 if __name__ == '__main__':
     app.run()
-
-

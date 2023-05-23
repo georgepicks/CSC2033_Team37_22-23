@@ -1,5 +1,13 @@
 Flask~=2.3.2
-Flask
 flask_sqlalchemy
 flask_login
 flask_wtf
+WTForms~=3.0.1
+bcrypt~=4.0.1
+SQLAlchemy~=2.0.12
+pgeocode~=0.4.0
+windows-curses
+datetime
+pymysql
+flask_mail
+email_validator
