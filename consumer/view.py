@@ -2,7 +2,7 @@ from _curses import flash
 import pgeocode
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
 from flask_login import login_required, current_user
-from models import Consumer, InventoryItems, OrderItems, Orders,Producer
+from models import Consumer, InventoryItems, OrderItems, Orders, Producer
 from app import app, db
 from datetime import datetime
 from user import views
@@ -11,6 +11,7 @@ import logging
 
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
+
 
 @consumer_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
@@ -29,12 +30,11 @@ def register():
 
         # create a new user with the form data
         new_user = Consumer(email=form.email.data,
-                        firstname=form.firstname.data,
-                        lastname=form.lastname.data,
-                        phone=form.phone.data,
-                        password=form.password.data,
-                        postcode=form.postcode.data,
-                        )
+                            firstname=form.firstname.data,
+                            lastname=form.lastname.data,
+                            phone=form.phone.data,
+                            password=form.password.data,
+                            postcode=form.postcode.data)
 
         # add the new user to the database
         db.session.add(new_user)
@@ -45,6 +45,7 @@ def register():
         return redirect(url_for('users/login.html'))
     # if request method is GET or form not valid re-render signup page
     return render_template('users/register.html', form=form)
+
 
 @app.route('/', methods=['GET', 'POST'])
 @login_required
@@ -152,6 +153,7 @@ def order_details(order_id):
     if order:
         return render_template('order_details.html', order=order)
 
+
 # Function to place an order
 @app.route('/place_order-order', methods=['GET', 'POST'])
 @login_required
@@ -209,6 +211,7 @@ def find_producers(distance_range, filter):
     # sorts producers by distance from low to high
     sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
     return sorted_producers
+
 
 # view user account
 @consumer_blueprint.route('/account')

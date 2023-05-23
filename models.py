@@ -1,5 +1,6 @@
 from app import db, app
 
+
 class Consumer(db.Model):
     __tablename__ = 'consumers'
     id = db.Column(db.Integer, primary_key=True)
@@ -53,7 +54,6 @@ class InventoryItems(db.Model):
     producer = db.Column(db.Integer, db.ForeignKey(Producer.id), nullable=False)
     dietary = db.Column(db.String(100), nullable=False, default="None")
 
-
     def __init__(self, item, quantity, producer, dietary):
         self.item = item
         self.quantity = quantity
@@ -104,4 +104,3 @@ class OrderItems(db.Model):
 
 
 # init_db()
-

@@ -25,13 +25,13 @@ def register():
 
         # create a new user with the form data
         new_user = Producer(email=form.email.data,
-                        producer_name=form.producer_name.data,
-                        phone=form.phone.data,
-                        password=form.password.data,
-                        address_1=form.address1.data,
-                        address_2=form.address2.data,
-                        address_3=form.address3.data,
-                        postcode=form.postcode.data)
+                            producer_name=form.producer_name.data,
+                            phone=form.phone.data,
+                            password=form.password.data,
+                            address_1=form.address1.data,
+                            address_2=form.address2.data,
+                            address_3=form.address3.data,
+                            postcode=form.postcode.data)
 
         # add the new user to the database
         db.session.add(new_user)
@@ -42,7 +42,6 @@ def register():
         return redirect(url_for('users/login.html'))
     # if request method is GET or form not valid re-render signup page
     return render_template('users/register.html', form=form)
-
 
 
 # Function that shows the inventory to the producer
@@ -149,4 +148,3 @@ def account():
                            address_1=current_user.address_1,
                            address_2=current_user.address_2,
                            address_3=current_user.address_3)
-
