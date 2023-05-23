@@ -1,8 +1,7 @@
-from _curses import flash
 import pgeocode
-from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify, flash
 from flask_login import login_required, current_user
-from models import Consumer, InventoryItems, OrderItems, Orders,Producer
+from models import Consumer, InventoryItems, OrderItems, Orders, Producer
 from app import app, db
 from datetime import datetime
 from user import views
@@ -11,6 +10,7 @@ import logging
 
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
+
 
 @consumer_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
@@ -27,7 +27,7 @@ def register():
             flash('Email address already exists')
             return render_template('users/register.html', form=form)
 
-        # create a new user with the form data
+        # create a new user with the form data according to a consumer
         new_user = Consumer(email=form.email.data,
                         firstname=form.firstname.data,
                         lastname=form.lastname.data,
@@ -45,6 +45,7 @@ def register():
         return redirect(url_for('users/login.html'))
     # if request method is GET or form not valid re-render signup page
     return render_template('users/register.html', form=form)
+
 
 @app.route('/', methods=['GET', 'POST'])
 @login_required
@@ -153,6 +154,7 @@ def order_details(order_id):
         return render_template('order_details.html', order=order)
 
 # Function to place an order
+
 @app.route('/place_order-order', methods=['GET', 'POST'])
 @login_required
 def place_order(consumer_id, producer_id, items):
@@ -211,6 +213,8 @@ def find_producers(distance_range, filter):
     return sorted_producers
 
 # view user account
+
+
 @consumer_blueprint.route('/account')
 @login_required
 def account():
@@ -222,3 +226,4 @@ def account():
                            lastname=current_user.lastname,
                            phone=current_user.phone,
                            postcode=current_user.postcode)
+
