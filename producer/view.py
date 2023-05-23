@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, request, Blueprint, flash
 from flask_login import login_required, current_user
-from models import InventoryItems, Producer, OrderItems
+from models import InventoryItems, Producer, OrderItems, Orders
 from app import app, db
 from user.forms import ProducerRegisterForm
 import logging
@@ -87,9 +87,9 @@ def add_item():
 @login_required
 def orders():
     cursor = db.cursor()
-
+    # orders = Orders.query.filter(Orders.producer_id.ilike(id).all)
     # Retrieve all orders from the database
-    select_query = "SELECT * FROM Orders"
+    select_query = "SELECT * FROM Orders where Orders.producer_id = InventoryItems.producer_id"
     cursor.execute(select_query)
     orders = cursor.fetchall()
 
