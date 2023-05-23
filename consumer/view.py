@@ -2,7 +2,7 @@ from _curses import flash
 import pgeocode
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
 from flask_login import login_required, current_user
-from models import User, InventoryItems, OrderItems, Orders
+from models import Consumer, InventoryItems, OrderItems, Orders, Producer
 from app import app, db
 from datetime import datetime
 from user import views
@@ -10,7 +10,42 @@ from user import views
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
 
+@consumer_blueprint.route('/register', methods=['GET', 'POST'])
+def register():
+    # create signup form object
+    form = ConsumerRegisterForm()
+
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        user = Consumer.query.filter_by(email=form.email.data).first()
+        # if this returns a user, then the email already exists in database
+
+        # if email already exists redirect user back to signup page with error message so user can try again
+        if user:
+            flash('Email address already exists')
+            return render_template('users/register.html', form=form)
+
+        # create a new user with the form data
+        new_user = Consumer(email=form.email.data,
+                            firstname=form.firstname.data,
+                            lastname=form.lastname.data,
+                            phone=form.phone.data,
+                            password=form.password.data,
+                            postcode=form.postcode.data)
+
+        # add the new user to the database
+        db.session.add(new_user)
+        db.session.commit()
+
+        # sends user to login page
+        logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
+        return redirect(url_for('users/login.html'))
+    # if request method is GET or form not valid re-render signup page
+    return render_template('users/register.html', form=form)
+
+
 @app.route('/', methods=['GET', 'POST'])
+@login_required
 def generate_dashboard():
     # need to change to allow consumers to select a max distance
     placeholder = 1000
@@ -39,11 +74,13 @@ def search():
 
 # Function that allows to show items by a dietary filter
 @app.route('/food/<food_type>')
+@login_required
 def filter_by_dietary(food_type):
     # Retrieve the items based on the food type
     items = InventoryItems.query.filter(InventoryItems.dietary.ilike(food_type)).all()
 
     if not items:
+        # Returns error if no item is found
         return jsonify({
             'success': False,
             'error': 'No items found for the specified food type.'
@@ -62,12 +99,13 @@ def filter_by_dietary(food_type):
 @app.route('/search_results/<query>')
 @login_required
 def search_results(query):
-    results = User.query.whoosh_search(query).all()
+    results = Consumer.query.whoosh_search(query).all()
     return render_template('search_results.html', query=query, results=results)
 
 
 # Function that allows the user to edit or make changes to the order before confirmation
 @app.route('/order/edit/<int:order_id>', methods=['GET', 'POST'])
+@login_required
 def edit_order(order_id):
     cursor = db.cursor()
 
@@ -102,6 +140,7 @@ def edit_order(order_id):
 
 # Shows the information about the order
 @app.route('/order/<int:order_id>')
+@login_required
 def order_details(order_id):
     cursor = db.cursor()
     select_query = "SELECT * FROM OrderItems WHERE order_id=%s"
@@ -113,6 +152,8 @@ def order_details(order_id):
 
 
 # Function to place an order
+@app.route('/place_order-order', methods=['GET', 'POST'])
+@login_required
 def place_order(consumer_id, producer_id, items):
     order_time = datetime.now()
 
@@ -137,6 +178,7 @@ def place_order(consumer_id, producer_id, items):
 
 # Function to cancel an order made within a timeframe
 @app.route('/cancel-order', methods=['POST'])
+@login_required
 def cancel_order():
     # calls for cancellation deadline time
     cancellation_deadline = session.get('cancellation_deadline')
@@ -156,7 +198,7 @@ def find_producers(distance_range, filter):
     geodistance = pgeocode.GeoDistance('gb')
     nearby_producers = {}
     # query all producers
-    producers = User.query.filter_by(role="producer").all()
+    producers = Producer.query.all()
     for i in producers:
         # calculate distance between all producers and current user
         distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
@@ -166,3 +208,17 @@ def find_producers(distance_range, filter):
     # sorts producers by distance from low to high
     sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
     return sorted_producers
+
+
+# view user account
+@consumer_blueprint.route('/account')
+@login_required
+def account():
+    # Shows the account details of the user
+    return render_template('users/account.html',
+                           id=current_user.id,
+                           email=current_user.email,
+                           firstname=current_user.firstname,
+                           lastname=current_user.lastname,
+                           phone=current_user.phone,
+                           postcode=current_user.postcode)
