@@ -24,11 +24,6 @@ def index():
     return render_template('main/index.html')
 
 
-@app.route('/')
-def index():
-    return render_template('main/index.html')
-
-
 # define login manager
 login_manager = LoginManager()
 login_manager.login_view = 'users.login'

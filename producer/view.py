@@ -21,7 +21,7 @@ def register():
         # if email already exists redirect user back to signup page with error message so user can try again
         if user:
             flash('Email address already exists')
-            return render_template('users/register.html', form=form)
+            return render_template('users/ProducerRegister.html', form=form)
 
         # create a new user with the form data according to a producer
         new_user = Producer(email=form.email.data,
@@ -41,7 +41,7 @@ def register():
         logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
         return redirect(url_for('users/login.html'))
     # if request method is GET or form not valid re-render signup page
-    return render_template('users/register.html', form=form)
+    return render_template('users/ProducerRegister.html', form=form)
 
 
 # Function that shows the inventory to the producer
