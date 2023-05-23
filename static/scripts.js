@@ -45,6 +45,10 @@ function filterSuppliers() {
     }
 }
 
+function filterItem(){
+    var test = 1
+}
+
 function redirectToSupplier(supplierId) {
     var supplierUrl = 'http://127.0.0.1:5000/order' + supplierId;
     window.location.href = supplierUrl;

@@ -7,22 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../static/styles.css"/>
     <script src="../static/scripts.js"></script>
-    <link rel="shortcut icon" type="image/x-icon" href="../static/team_logo_2.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="../static/images/team_logo_2.png" />
 </head>
 
 <body>
-    <div class="rectangle_top"></div>
-    <div class="rectangle_bottom"></div>
-    <div class="leftovers_text">Leftovers</div>
-    <img src="../static/team_logo_2.PNG" alt="Food" class="image"/>
+    <div class="RectangleTop"></div>
+    <div class="RectangleBottom"></div>
+    <div class="LeftoversText">Leftovers</div>
+    <img src="../static/images/team_logo_2.PNG" alt="Food" class="image"/>
 
-    <a href="{{ url_for('index') }}"><div class="home_link">Home</div></a>
-    <a href="{{ url_for('users.login') }}"><div class="login_link">Login</div></a>
+    <a href="{{ url_for('index') }}"><div class="HomeLink">Home</div></a>
+    <a href="{{ url_for('users.login') }}"><div class="LoginLink">Login</div></a>
 
-    <a href="{{ url_for('about_us') }}"><div class="about_us">About Us</div></a>
+    <a href="{{ url_for('about_us') }}"><div class="AboutUs">About Us</div></a>
     <a href="{{ url_for('contact_us') }}"><div class="contact">Contact Us</div></a>
 
-    <a href="{{ url_for('pages.feed') }}"><div class="test_button">Feed</div></a>
+    <a href="{{ url_for('pages.feed') }}"><div class="TestButton">Feed</div></a>
     <!--<a href="{{ url_for('pages.order') }}"><div class="test_button_2">Order</div></a>-->
 
     {% block content %}

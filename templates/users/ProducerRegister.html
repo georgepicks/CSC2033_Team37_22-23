@@ -6,24 +6,24 @@
 
     <div class="center">
         <div class="column is-5 is-offset-4">
-            <h3 class="page_text">Register</h3>
-            <div class="sign_in_text">Already have an account?</div>
-            <a href="{{ url_for('users.login') }}"> <div class="sign_in_link">Sign in</div></a>
-                <form method="POST">
-                    <div class="container">
-                        {{ form.csrf_token() }}
-                        {{ form.email(class="input", placeholder="Email") }}
-                        {{ form.producer_name(class="input", placeholder="Name") }}
-                        {{ form.phone(class="input", placeholder="Phone") }}
-                        {{ form.password(class="input", placeholder="Password") }}
-                        {{ form.confirm_password(class="input", placeholder="Confirm Password") }}
-                        {{ form.address1(class="input", placeholder="Address Line 1") }}
-                        {{ form.address2(class="input", placeholder="Address Line 2") }}
-                        {{ form.address3(class="input", placeholder="Address Line 3") }}
-                        {{ form.postcode(class="input", placeholder="Postcode") }}
-                        {{ form.submit(class="button") }}
-                    </div>
-                </form>
-            </div>
+            <h3 class="PageText">Register</h3>
+            <div class="SignInText">Already have an account?</div>
+            <a href="{{ url_for('users.login') }}"> <div class="SignInLink">Sign in</div></a>
+            <form method="POST">
+                <div class="container">
+                    {{ form.csrf_token() }}
+                    {{ form.email(class="input", placeholder="Email") }}
+                    {{ form.producer_name(class="input", placeholder="Name") }}
+                    {{ form.phone(class="input", placeholder="Phone") }}
+                    {{ form.password(class="input", placeholder="Password") }}
+                    {{ form.confirm_password(class="input", placeholder="Confirm Password") }}
+                    {{ form.address1(class="input", placeholder="Address Line 1") }}
+                    {{ form.address2(class="input", placeholder="Address Line 2") }}
+                    {{ form.address3(class="input", placeholder="Address Line 3") }}
+                    {{ form.postcode(class="input", placeholder="Postcode") }}
+                    {{ form.submit(class="button") }}
+                </div>
+            </form>
         </div>
+    </div>
 {% endblock %}

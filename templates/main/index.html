@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zero-Hunger App</title>
     <link rel="stylesheet" href="../../static/IndexStyle.css">
-    <link rel="shortcut icon" type="image/x-icon" href="../../static/team_logo_2.png" />
-
+    <link rel="shortcut icon" type="image/x-icon" href="../../static/images/team_logo_2.png" />
 </head>
 <body>
     <header>
@@ -16,7 +15,7 @@
         </nav>
     </header>
     <section class="hero">
-        <img src="../../static/food.PNG" alt="Food" class="hero-image"/>
+        <img src="../../static/images/food.PNG" alt="Food" class="hero-image"/>
         <h1>Fight Hunger, Share Leftovers</h1>
         <p>Join our mission to end hunger by sharing your leftover food with those in need.</p>
         <div class="cta-buttons">
@@ -26,8 +25,8 @@
     </section>
     <footer>
         <nav>
-            <a href="{{ url_for('users.login') }}">">About Us</a>
-            <a href="{{ url_for('users.login') }}">>Contact Us</a>
+            <a href="{{ url_for('about_us') }}">About Us</a>
+            <a href="{{ url_for('contact_us') }}">Contact Us</a>
         </nav>
     </footer>
 </body>
