@@ -10,16 +10,17 @@ from flask_mail import Message, Mail
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
-
+# defining a login function
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     # create login form object
     form = LoginForm()
     # if request method is POST or form is valid
     if form.validate_on_submit():
-        # session implemented to limit the number of logins if user failsto login
+        # session implemented to limit the number of logins if user fails to login
         if not session.get('authentication_attempts'):
             session['authentication_attempts'] = 0
+        # checks if the user mail logged in is a producer mail
         if Producer.query.filter_by(email=form.email.data).first():
             user = Producer.query.filter_by(email=form.email.data).first()
             # if condition checking if the encrypted password is similar to database, if the user exists and the
@@ -54,6 +55,7 @@ def login():
                 logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
                 return render_template('')
 
+        # checks if the user mail logged in is a consumer mail
         elif Consumer.query.filter_by(email=form.email.data).first():
             user = Consumer.query.filter_by(email=form.email.data).first()
             # if condition checking if the encrypted password is similar to database, if the user exists and the
@@ -160,5 +162,7 @@ def get_consumer_mail(order_id):
         consumer = Consumer.query.get(order.consumer_id)
         return [consumer.email]
     return []
+
+
 
 
