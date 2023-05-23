@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, session, Markup, request
 from models import User, Orders
 from app import db
-from user.forms import RegisterForm, LoginForm
+from user.forms import ConsumerRegisterForm, ProducerRegisterForm, LoginForm
 import bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
@@ -11,10 +11,10 @@ from flask_mail import Message, Mail
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
 
-@users_blueprint.route('/register', methods=['GET', 'POST'])
-def register():
+@users_blueprint.route('/ConsumerRegister', methods=['GET', 'POST'])
+def ConsumerRegister():
     # create signup form object
-    form = RegisterForm()
+    form = ConsumerRegisterForm()
 
     # if request method is POST or form is valid
     if form.validate_on_submit():
@@ -24,7 +24,7 @@ def register():
         # if email already exists redirect user back to signup page with error message so user can try again
         if user:
             flash('Email address already exists')
-            return render_template('users/register.html', form=form)
+            return render_template('users/ProducerRegister.html', form=form)
 
         # create a new user with the form data
         new_user = User(email=form.email.data,
@@ -43,7 +43,40 @@ def register():
         logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
         return redirect(url_for('users/login.html'))
     # if request method is GET or form not valid re-render signup page
-    return render_template('users/register.html', form=form)
+    return render_template('users/ConsumerRegister.html', form=form)
+
+
+@users_blueprint.route('/ProducerRegister', methods=['GET', 'POST'])
+def ProducerRegister():
+    # create signup form object
+    form = ProducerRegisterForm()
+
+    # if request method is POST or form is valid
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        # if this returns a user, then the email already exists in database
+
+        # if email already exists redirect user back to signup page with error message so user can try again
+        if user:
+            flash('Email address already exists')
+            return render_template('users/ProducerRegister.html', form=form)
+
+        # create a new user with the form data
+        new_user = User(email=form.email.data,
+                        phone=form.phone.data,
+                        password=form.password.data,
+                        postcode=form.postcode.data,
+                        role=form.role.data)
+
+        # add the new user to the database
+        db.session.add(new_user)
+        db.session.commit()
+
+        # sends user to login page
+        logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
+        return redirect(url_for('users/login.html'))
+    # if request method is GET or form not valid re-render signup page
+    return render_template('users/ProducerRegister.html', form=form)
 
 
 @users_blueprint.route('/login', methods=['GET', 'POST'])
@@ -75,7 +108,7 @@ def login():
                 session['authentication_attempts'] = 0
 
                 # invalid user is redirected to register page since user login is invalid
-                return redirect(url_for('users/register.html'))
+                return redirect(url_for('users/ProducerRegister.html'))
 
             flash('Please check your login details and try again,{} login attempts remaining'.format(
                 5 - session.get('authentication_attempts')))

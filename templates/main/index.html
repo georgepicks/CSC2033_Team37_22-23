@@ -10,7 +10,6 @@
     <header>
         <div class="logo">Leftovers</div>
         <nav>
-            <a href="{{ url_for('users.register') }}">Sign up</a>
             <a href="{{ url_for('users.login') }}">Log in</a>
         </nav>
     </header>
@@ -19,8 +18,8 @@
         <h1>Fight Hunger, Share Leftovers</h1>
         <p>Join our mission to end hunger by sharing your leftover food with those in need.</p>
         <div class="cta-buttons">
-            <a href="{{ url_for('users.register') }}" class="cta-supplier">Become a Supplier</a>
-            <a href="{{ url_for('users.register') }}" class="cta-receiver">Find Food as a Receiver</a>
+            <a href="{{ url_for('users.ProducerRegister') }}" class="cta-supplier">Become a Supplier</a>
+            <a href="{{ url_for('users.ConsumerRegister') }}" class="cta-receiver">Find Food as a Receiver</a>
         </div>
     </section>
     <footer>

@@ -32,26 +32,43 @@ def validate_postcode(self, data_field):
         raise ValidationError("Invalid Postcode")
 
 #Initialising register form validators
-class RegisterForm(FlaskForm):
-    email = StringField(validators=[DataRequired(), Email()],render_kw={"size": 50, "maxlength": 70})
-    firstname = StringField(validators=[DataRequired(), character_check],render_kw={"size": 50, "maxlength": 70})
-    lastname = StringField(validators=[DataRequired(), character_check],render_kw={"size": 50, "maxlength": 70})
-    phone = StringField(validators=[DataRequired(), validate_phone],render_kw={"size": 50, "maxlength": 70})
+class ConsumerRegisterForm(FlaskForm):
+    email = StringField(validators=[DataRequired(), Email()], render_kw={"size": 50, "maxlength": 70})
+    firstname = StringField(validators=[DataRequired(), character_check], render_kw={"size": 50, "maxlength": 70})
+    lastname = StringField(validators=[DataRequired(), character_check], render_kw={"size": 50, "maxlength": 70})
+    phone = StringField(validators=[DataRequired(), validate_phone], render_kw={"size": 50, "maxlength": 70})
     password = PasswordField('password',
-                            validators=[DataRequired(), Length(min=6, max=15), validate_password],render_kw={"size": 50, "maxlength": 70})
+                             validators=[DataRequired(), Length(min=6, max=15), validate_password],
+                             render_kw={"size": 50, "maxlength": 70})
     confirm_password = PasswordField('confirm_password', validators=[
-        EqualTo('password', message='Both password fields must be equal!')],render_kw={"size": 50, "maxlength": 70})
-    postcode = StringField('Postcode', validators=[DataRequired(), validate_postcode],render_kw={"size": 50, "maxlength": 70})
+        EqualTo('password', message='Both password fields must be equal!')], render_kw={"size": 50, "maxlength": 70})
+    postcode = StringField('Postcode', validators=[
+        DataRequired(), validate_postcode], render_kw={"size": 50, "maxlength": 70})
+    submit = SubmitField(validators=[DataRequired()], render_kw={"size": 50, "maxlength": 50})
 
-    role = RadioField('Are you registering as a producer or consumer?',
-                      choices=[('producer', 'Producer'), ('consumer', 'Consumer')], validators=[DataRequired()],render_kw={"size": 50, "maxlength": 70})
-    submit = SubmitField(validators=[DataRequired()],render_kw={"size": 50, "maxlength": 50})
 
 class LoginForm(FlaskForm):
-    email = StringField(validators=[DataRequired(), Email()],render_kw={"size": 50, "maxlength": 70})
+    email = StringField(validators=[DataRequired(), Email()], render_kw={"size": 50, "maxlength": 70})
     password = PasswordField('password',
-                             validators=[DataRequired()],render_kw={"size": 50, "maxlength": 70})
-    submit = SubmitField(validators=[DataRequired()],render_kw={"size": 50, "maxlength": 50})
+                             validators=[DataRequired()], render_kw={"size": 50, "maxlength": 70})
+    submit = SubmitField(validators=[DataRequired()], render_kw={"size": 50, "maxlength": 50})
+
+
+class ProducerRegisterForm(FlaskForm):
+    email = StringField(validators=[DataRequired(), Email()], render_kw={"size": 50, "maxlength": 70})
+    producer_name = StringField(validators=[DataRequired(), character_check], render_kw={"size": 50, "maxlength": 70})
+    phone = StringField(validators=[DataRequired(), validate_phone], render_kw={"size": 50, "maxlength": 70})
+    password = PasswordField('password',
+                             validators=[DataRequired(), Length(min=6, max=15), validate_password],
+                             render_kw={"size": 50, "maxlength": 70})
+    confirm_password = PasswordField('confirm_password', validators=[
+        EqualTo('password', message='Both password fields must be equal!')], render_kw={"size": 50, "maxlength": 70})
+    address1 = StringField('Address 1', validators=[DataRequired()], render_kw={"size": 50, "maxlength": 70})
+    address2 = StringField('Address 2', validators=[DataRequired()], render_kw={"size": 50, "maxlength": 70})
+    address3 = StringField('Address 2', validators=[DataRequired()], render_kw={"size": 50, "maxlength": 70})
+    postcode = StringField('Postcode', validators=[
+        DataRequired(), validate_postcode], render_kw={"size": 50, "maxlength": 70})
+    submit = SubmitField(validators=[DataRequired()], render_kw={"size": 50, "maxlength": 50})
 
 
 
