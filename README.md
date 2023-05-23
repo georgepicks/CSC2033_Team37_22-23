@@ -18,3 +18,17 @@ To install these dependencies enter this command in the PyCharm terminal (locate
 
 `pip install -r requirements.txt`
 
+### Execution
+Once the environment is ready and dependencies are installed, navigate to the file named "app.py", at the bottom of the file is the code:
+
+`if __name__ == '__main__':
+    app.run()`
+
+In the margin of this is a green button, click this and then "Run 'Flask (app.py)'"
+
+## GitHub Repository
+This project was developed collaboratively by a team using GitHub for version control, to access this repository, this link can be used:
+
+https://github.com/newcastleuniversity-computing/CSC2033_Team37_22-23
+
+Notice: To view this repository, you must be a member of the "newcastleuniversity-computing" organisation
