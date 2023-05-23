@@ -6,8 +6,6 @@ from app import app, db
 from datetime import datetime
 from user import views
 from user.forms import ConsumerRegisterForm
-import logging
-
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
@@ -25,16 +23,15 @@ def register():
         # if email already exists redirect user back to signup page with error message so user can try again
         if user:
             flash('Email address already exists')
-            return render_template('users/register.html', form=form)
+            return render_template('users/ConsumerRegister.html', form=form)
 
         # create a new user with the form data according to a consumer
         new_user = Consumer(email=form.email.data,
-                        firstname=form.firstname.data,
-                        lastname=form.lastname.data,
-                        phone=form.phone.data,
-                        password=form.password.data,
-                        postcode=form.postcode.data,
-                        )
+                            firstname=form.firstname.data,
+                            lastname=form.lastname.data,
+                            phone=form.phone.data,
+                            password=form.password.data,
+                            postcode=form.postcode.data)
 
         # add the new user to the database
         db.session.add(new_user)
@@ -44,7 +41,8 @@ def register():
         logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
         return redirect(url_for('users/login.html'))
     # if request method is GET or form not valid re-render signup page
-    return render_template('users/register.html', form=form)
+    return render_template('users/ConsumerRegister.html', form=form)
+
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -153,6 +151,7 @@ def order_details(order_id):
     if order:
         return render_template('order_details.html', order=order)
 
+
 # Function to place an order
 
 @app.route('/place_order-order', methods=['GET', 'POST'])
@@ -211,6 +210,7 @@ def find_producers(distance_range, filter):
     # sorts producers by distance from low to high
     sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
     return sorted_producers
+
 
 # view user account
 

@@ -10,7 +10,10 @@ from flask_mail import Message, Mail
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
+
 # defining a login function
+
+
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     # create login form object
@@ -55,7 +58,9 @@ def login():
                 logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
                 return render_template('')
 
+
         # checks if the user mail logged in is a consumer mail
+
         elif Consumer.query.filter_by(email=form.email.data).first():
             user = Consumer.query.filter_by(email=form.email.data).first()
             # if condition checking if the encrypted password is similar to database, if the user exists and the
@@ -96,7 +101,6 @@ def login():
     return render_template('users/login.html', form=form)
 
 
-
 # view user account
 @users_blueprint.route('/account')
 @login_required
@@ -114,11 +118,11 @@ def account():
 @users_blueprint.route('/logout')
 @login_required
 def logout():
-    # Data is recorded in lottery.log each time a user logs out of the program
+    # data is recorded in lottery.log each time a user logs out of the program
     logging.warning('SECURITY - Log out [%s, %s, %s]', current_user.id, current_user.email, request.remote_addr)
-    #Function for the user to log out
+    # function for the user to log out
     logout_user()
-    #the user is redirected to index page after logout
+    # the user is redirected to index page after logout
     return redirect(url_for('index'))
 
 
@@ -147,22 +151,21 @@ def get_producer_email(consumer_id):
         return [producer.email]
     return []
 
+
 # Message for the consumer that is sent through email
-def send_mail_notification_consumer( order_id):
+def send_mail_notification_consumer(order_id):
     subject = 'New Order Notification'
     recipients = get_consumer_mail(order_id)
     body = f"Your order have been received, Order ID: {order_id}"
     send_email(subject, recipients, body)
     return 'Email sent successfully!'
 
-#Function to retrieve relevant consumer mail for the message to be sent
+
+# function to retrieve relevant consumer mail for the message to be sent
 def get_consumer_mail(order_id):
     order = Orders.query.filter_by(order_id=order_id).first()
     if order:
         consumer = Consumer.query.get(order.consumer_id)
         return [consumer.email]
     return []
-
-
-
 

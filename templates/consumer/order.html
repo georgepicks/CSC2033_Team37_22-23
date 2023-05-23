@@ -11,21 +11,23 @@
         <p>Address Placeholder</p>
     </div>
 
+    <div id="SearchBar">
+        <label for="SearchInput"></label><input type="text" id="SearchInput" placeholder="Search for items" onkeyup="filterSuppliers()">
+    </div>
 
-
-    <div class="rectangle_side">
+    <div class="RectangleSide">
         <div id="basket">
             <h4><u>Your Basket:</u></h4>
-            <ul id="basket-list"></ul>
-            <input type="submit" value="Submit Order" class="submit-button" id="submit-btn">
+            <ul id="BasketList"></ul>
+            <input type="submit" value="Submit Order" class="SubmitButton" id="SubmitBtn">
         </div>
     </div>
 
-    <div class="inventory-container">
+    <div class="InventoryContainer">
         {% for item in supplier.inventory %}
-        <div class="inventory-card" id="item-{{ loop.index }}" onclick="addToOrder('item-{{ loop.index }}')">
-            <div class="item-name">{{ item.item }}</div>
-            <div class="item-quantity">Quantity: {{ item.quantity }}</div>
+        <div class="InventoryCard" id="item-{{ loop.index }}" onclick="addToOrder('item-{{ loop.index }}')">
+            <div class="ItemName">{{ item.item }}</div>
+            <div class="ItemQuantity">Quantity: {{ item.quantity }}</div>
             <input type="hidden" name="item" value="{{ item.item }}">
         </div>
         {% endfor %}

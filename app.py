@@ -1,14 +1,12 @@
-from flask import Flask, redirect, url_for, render_template
+from flask import Flask, render_template
 from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
 
 pymysql.install_as_MySQLdb()
 
-
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-
 
 # initialise database
 engine = create_engine('mariadb:///csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk:3306/csc2033_team37')
@@ -16,14 +14,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mariadb://csc2033_team37:BikeRode4out@c
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-
 # imports LoginManageer
 from flask_login import LoginManager, current_user
 from models import Consumer, Producer
 
+
 @app.route('/')
 def index():
     return render_template('main/index.html')
+
 
 # define login manager
 login_manager = LoginManager()
@@ -55,8 +54,10 @@ def load_user(email):
         user = Producer.query.filter_by(email=email).first()
         return user.id
 
+
 with app.app_context():
     load_user('jd@jdwetherspoons.com')
+
 
 @app.route('/about_us')
 def about_us():
@@ -67,13 +68,16 @@ def about_us():
 def contact_us():
     return render_template('main/contact.html')
 
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template("errors/error404.html"), 404
 
+
 @app.errorhandler(500)
 def server_error(error):
     return render_template("errors/error500.html"), 500
+
 
 @app.errorhandler(403)
 def forbidden_action(error):
