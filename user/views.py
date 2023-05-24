@@ -135,7 +135,7 @@ def send_mail_notification_consumer( order_id):
     send_email(subject, recipients, body)
     return 'Email sent successfully!'
 
-#Function to retrieve relevant consumer mail for the message to be sent
+# Function to retrieve relevant consumer mail for the message to be sent
 def get_consumer_mail(order_id):
     order = Orders.query.filter_by(order_id=order_id).first()
     if order:
