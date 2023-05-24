@@ -15,8 +15,10 @@ def register():
 
     # if request method is POST or form is valid
     if form.validate_on_submit():
-        # if this returns a user, then the email already exists in database
+
         user = Producer.query.filter_by(email=form.email.data).first()
+        # if this returns a user, then the email already exists in the database
+
 
         # if email already exists redirect user back to signup page with error message so user can try again
         if user:
@@ -40,6 +42,7 @@ def register():
         # sends user to login page
         logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
         return render_template('users/login.html', form=form)
+
     # if request method is GET or form not valid re-render signup page
     return render_template('users/ProducerRegister.html', form=form)
 
@@ -117,7 +120,6 @@ def accept_order(order_id, inventory):
 
 
 # Function to remove an item from the inventory by the producer
-
 @app.route('/orders')
 @login_required
 def remove_item(item_id):

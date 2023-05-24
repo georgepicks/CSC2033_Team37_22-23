@@ -3,13 +3,12 @@ from models import Orders, Producer, Consumer
 from app import db
 from user.forms import LoginForm
 import bcrypt
-from flask_login import login_user, current_user, logout_user, login_required
+from flask_login import login_user, current_user, logout_user, login_required, UserMixin
 from datetime import datetime
 import logging
 from flask_mail import Message, Mail
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
-
 
 # defining a login function
 @users_blueprint.route('/login', methods=['GET', 'POST'])
@@ -58,6 +57,7 @@ def login():
             user = Consumer.query.filter_by(email=form.email.data).first()
             # if condition checking if the encrypted password is similar to database, if the user exists and the
             # verification key entered is false
+
             if not user:
                 logging.warning('SECURITY - Failed login attempt [%s, %s]', form.email.data, request.remote_addr)
                 # logging warning returns the login is failed and to try again
@@ -91,28 +91,14 @@ def login():
     return render_template('users/login.html', form=form)
 
 
-# view user account
-@users_blueprint.route('/account')
-@login_required
-def account():
-    # Shows the account details of the user
-    return render_template('users/account.html',
-                           id=current_user.id,
-                           email=current_user.email,
-                           firstname=current_user.firstname,
-                           lastname=current_user.lastname,
-                           phone=current_user.phone,
-                           postcode=current_user.postcode)
-
-
 @users_blueprint.route('/logout')
 @login_required
 def logout():
-    # data is recorded in lottery.log each time a user logs out of the program
+    # Data is recorded in lottery.log each time a user logs out of the program
     logging.warning('SECURITY - Log out [%s, %s, %s]', current_user.id, current_user.email, request.remote_addr)
-    # function for the user to log out
+    #Function for the user to log out
     logout_user()
-    # the user is redirected to index page after logout
+    #the user is redirected to index page after logout
     return redirect(url_for('index'))
 
 
@@ -141,21 +127,20 @@ def get_producer_email(consumer_id):
         return [producer.email]
     return []
 
-
 # Message for the consumer that is sent through email
-def send_mail_notification_consumer(order_id):
+def send_mail_notification_consumer( order_id):
     subject = 'New Order Notification'
     recipients = get_consumer_mail(order_id)
     body = f"Your order have been received, Order ID: {order_id}"
     send_email(subject, recipients, body)
     return 'Email sent successfully!'
 
-
-# function to retrieve relevant consumer mail for the message to be sent
+# Function to retrieve relevant consumer mail for the message to be sent
 def get_consumer_mail(order_id):
     order = Orders.query.filter_by(order_id=order_id).first()
     if order:
         consumer = Consumer.query.get(order.consumer_id)
         return [consumer.email]
     return []
+
 

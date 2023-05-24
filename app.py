@@ -51,7 +51,6 @@ def load_user(id):
         return Consumer.query.get(int(id))
     # if the user's email doesn't exist in the consumer table, check the producer table too
     else:
-        # user = Producer.query.filter_by(email=email).first()
         return Producer.query.get(int(id))
 
 
