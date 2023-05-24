@@ -55,10 +55,6 @@ def load_user(email):
         return user.id
 
 
-with app.app_context():
-    load_user('jd@jdwetherspoons.com')
-
-
 @app.route('/about_us')
 def about_us():
     return render_template('main/about_us.html')
