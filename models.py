@@ -1,7 +1,7 @@
 from app import db, app
+from flask_login import UserMixin
 
-
-class Consumer(db.Model):
+class Consumer(db.Model, UserMixin):
     __tablename__ = 'consumers'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), nullable=False, unique=True)

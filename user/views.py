@@ -96,21 +96,6 @@ def login():
     return render_template('users/login.html', form=form)
 
 
-
-# view user account
-@users_blueprint.route('/account')
-@login_required
-def account():
-    # Shows the account details of the user
-    return render_template('users/account.html',
-                           id=current_user.id,
-                           email=current_user.email,
-                           firstname=current_user.firstname,
-                           lastname=current_user.lastname,
-                           phone=current_user.phone,
-                           postcode=current_user.postcode)
-
-
 @users_blueprint.route('/logout')
 @login_required
 def logout():
