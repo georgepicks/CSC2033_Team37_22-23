@@ -1,8 +1,6 @@
 from flask_wtf import FlaskForm
-
 from wtforms import StringField, SubmitField, PasswordField, RadioField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError, Regexp
-
 import re
 
 
@@ -21,7 +19,6 @@ def validate_password(self, data_field):
         raise ValidationError(
             "Password should contain 1 uppercase letter, lowercase letters, one digit "
             "and should be at least 6 characters with one special character")
-
 
 
 # Define phone validate function
