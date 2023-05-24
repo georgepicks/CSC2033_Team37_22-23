@@ -13,14 +13,41 @@
                 <div class="container">
                     {{ form.csrf_token() }}
                     {{ form.email(class="input", placeholder="Email") }}
+                        {% for error in form.email.errors %}
+                            {{ error }}
+                        {% endfor %}
                     {{ form.producer_name(class="input", placeholder="Name") }}
+                        {% for error in form.producer_name.errors %}
+                            {{ error }}
+                        {% endfor %}
                     {{ form.phone(class="input", placeholder="Phone") }}
+                        {% for error in form.phone.errors %}
+                            {{ error }}
+                        {% endfor %}
                     {{ form.password(class="input", placeholder="Password") }}
+                        {% for error in form.password.errors %}
+                            {{ error }}
+                        {% endfor %}
                     {{ form.confirm_password(class="input", placeholder="Confirm Password") }}
+                        {% for error in form.confirm_password.errors %}
+                            {{ error }}
+                        {% endfor %}
                     {{ form.address1(class="input", placeholder="Address Line 1") }}
+                        {% for error in form.address1.errors %}
+                            {{ error }}
+                        {% endfor %}
                     {{ form.address2(class="input", placeholder="Address Line 2") }}
+                        {% for error in form.address2.errors %}
+                            {{ error }}
+                        {% endfor %}
                     {{ form.address3(class="input", placeholder="Address Line 3") }}
+                        {% for error in form.address3.errors %}
+                            {{ error }}
+                        {% endfor %}
                     {{ form.postcode(class="input", placeholder="Postcode") }}
+                        {% for error in form.postcode.errors %}
+                            {{ error }}
+                        {% endfor %}
                     {{ form.submit(class="button") }}
                 </div>
             </form>
