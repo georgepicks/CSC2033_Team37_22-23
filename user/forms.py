@@ -25,7 +25,7 @@ def validate_password(self, data_field):
 def validate_phone(self,data_field):
     i = re.compile(r'(?=\d\d\d\d\d\d\d\d\d\d\d)')
     if not i.match(data_field.data):
-        raise ValidationError("Phone number must be of the format XXXX-XXX-XXX")
+        raise ValidationError("Phone number must have 11 digits")
 
 
 def validate_postcode(self, data_field):
