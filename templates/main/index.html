@@ -5,28 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zero-Hunger App</title>
     <link rel="stylesheet" href="../../static/IndexStyle.css">
+    <link rel="shortcut icon" type="image/x-icon" href="../../static/images/TeamLogoNoBackground.png" />
 </head>
 <body>
     <header>
         <div class="logo">Leftovers</div>
         <nav>
-            <a href="{{ url_for('users.register') }}">Sign up</a>
             <a href="{{ url_for('users.login') }}">Log in</a>
         </nav>
     </header>
     <section class="hero">
-        <img src="../../templates/static/Food.png" alt="Food" class="hero-image"/>
+        <img src="../../static/images/food.PNG" alt="Food" class="hero-image"/>
         <h1>Fight Hunger, Share Leftovers</h1>
         <p>Join our mission to end hunger by sharing your leftover food with those in need.</p>
         <div class="cta-buttons">
-            <a href="{{ url_for('users.register') }}" class="cta-supplier">Become a Supplier</a>
-            <a href="{{ url_for('users.register') }}" class="cta-receiver">Find Food as a Receiver</a>
+            <a href="{{ url_for('producer.register') }}" class="cta-supplier">Become a Supplier</a>
+            <a href="{{ url_for('consumer.register') }}" class="cta-receiver">Find Food as a Receiver</a>
         </div>
     </section>
     <footer>
         <nav>
-            <a href="{{ url_for('users.login') }}">">About Us</a>
-            <a href="{{ url_for('users.login') }}">>Contact Us</a>
+            <a href="{{ url_for('about_us') }}">About Us</a>
+            <a href="{{ url_for('contact_us') }}">Contact Us</a>
         </nav>
     </footer>
 </body>
