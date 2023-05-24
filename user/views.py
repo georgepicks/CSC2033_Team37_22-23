@@ -26,7 +26,7 @@ def login():
             user = Producer.query.filter_by(email=form.email.data).first()
             # if condition checking if the encrypted password is similar to database, if the user exists and the
             # verification key entered is false
-            if not user or not bcrypt.checkpw(form.password.data.encode('utf-8'), user.password):
+            if not user:
                 logging.warning('SECURITY - Failed login attempt [%s, %s]', form.email.data, request.remote_addr)
                 # logging warning returns the login is failed and to try again
 
@@ -47,9 +47,6 @@ def login():
             else:
                 # user login is initiated
                 login_user(user)
-                # current login user is matched to the last login user
-                user.last_login = user.current_login
-                user.current_login = datetime.now()
                 db.session.add(user)
                 db.session.commit()
                 # Data is recorded in lottery.log each time login action takes place
@@ -61,7 +58,7 @@ def login():
             user = Consumer.query.filter_by(email=form.email.data).first()
             # if condition checking if the encrypted password is similar to database, if the user exists and the
             # verification key entered is false
-            if not user or not bcrypt.checkpw(form.password.data.encode('utf-8'), user.password):
+            if not user:
                 logging.warning('SECURITY - Failed login attempt [%s, %s]', form.email.data, request.remote_addr)
                 # logging warning returns the login is failed and to try again
 
@@ -82,14 +79,11 @@ def login():
             else:
                 # user login is initiated
                 login_user(user)
-                # current login user is matched to the last login user
-                user.last_login = user.current_login
-                user.current_login = datetime.now()
                 db.session.add(user)
                 db.session.commit()
                 # Data is recorded in lottery.log each time login action takes place
                 logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
-                return render_template('')
+                return render_template('consumer/feed.html')
 
         else:
             return 'invalid User'
