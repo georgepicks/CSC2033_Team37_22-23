@@ -44,7 +44,6 @@ def register():
     return render_template('users/ConsumerRegister.html', form=form)
 
 
-
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def generate_dashboard():
