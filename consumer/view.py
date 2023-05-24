@@ -152,7 +152,6 @@ def order_details(order_id):
 
 
 # Function to place an order
-
 @app.route('/place_order-order', methods=['GET', 'POST'])
 @login_required
 def place_order(consumer_id, producer_id, items):
@@ -212,8 +211,6 @@ def find_producers(distance_range, filter):
 
 
 # view user account
-
-
 @consumer_blueprint.route('/account')
 @login_required
 def account():
