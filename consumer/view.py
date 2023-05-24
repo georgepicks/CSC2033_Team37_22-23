@@ -6,11 +6,12 @@ from app import app, db
 from datetime import datetime
 from user import views
 from user.forms import ConsumerRegisterForm
+import logging
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
 
-@consumer_blueprint.route('/register', methods=['GET', 'POST'])
+@consumer_blueprint.route('/ConsumerRegister', methods=['GET', 'POST'])
 def register():
     # create signup form object
     form = ConsumerRegisterForm()
@@ -39,7 +40,7 @@ def register():
 
         # sends user to login page
         logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
-        return redirect(url_for('users/login.html'))
+        return render_template('users/login.html', form=form)
     # if request method is GET or form not valid re-render signup page
     return render_template('users/ConsumerRegister.html', form=form)
 
