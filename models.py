@@ -21,7 +21,7 @@ class Consumer(db.Model, UserMixin):
         self.phone = phone
 
 
-class Producer(db.Model):
+class Producer(db.Model, UserMixin):
     __tablename__ = 'producers'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
@@ -61,7 +61,7 @@ class InventoryItems(db.Model):
         self.dietary = dietary
 
 
-class Orders(db.Model):
+class Orders(db.Model, UserMixin):
     __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
     producer_id = db.Column(db.Integer, db.ForeignKey(Producer.id), nullable=False)

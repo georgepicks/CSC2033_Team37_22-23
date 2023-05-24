@@ -15,8 +15,10 @@ def register():
 
     # if request method is POST or form is valid
     if form.validate_on_submit():
+
         user = Producer.query.filter_by(email=form.email.data).first()
         # if this returns a user, then the email already exists in the database
+
 
         # if email already exists redirect user back to signup page with error message so user can try again
         if user:
@@ -40,7 +42,6 @@ def register():
         # sends user to login page
         logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
         return render_template('users/login.html', form=form)
-        # return redirect('users/login.html')
 
     # if request method is GET or form not valid re-render signup page
     return render_template('users/ProducerRegister.html', form=form)
@@ -65,7 +66,7 @@ def edit_inventory(id):
         db.session.commit()
         return redirect(url_for('inventory'))
     else:
-        return render_template('edit_item.hyml', item=item)
+        return render_template('edit_item.html', item=item)
 
 
 # Function to add an item to the inventory

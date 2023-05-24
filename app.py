@@ -47,11 +47,10 @@ app.register_blueprint(pages_blueprint)
 def load_user(id):
     # if user exists in consumer table, return it's ID
     if Consumer.query.get(int(id)):
-
+        # user = Consumer.query.filter_by(email=email).first()
         return Consumer.query.get(int(id))
     # if the user's email doesn't exist in the consumer table, check the producer table too
     else:
-
         return Producer.query.get(int(id))
 
 
