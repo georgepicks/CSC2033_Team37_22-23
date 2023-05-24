@@ -1,6 +1,5 @@
-from _curses import flash
 import pgeocode
-from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify, flash
 from flask_login import login_required, current_user
 from models import Consumer, InventoryItems, OrderItems, Orders, Producer
 from app import app, db
@@ -26,7 +25,7 @@ def register():
             flash('Email address already exists')
             return render_template('users/ConsumerRegister.html', form=form)
 
-        # create a new user with the form data
+        # create a new user with the form data according to a consumer
         new_user = Consumer(email=form.email.data,
                             firstname=form.firstname.data,
                             lastname=form.lastname.data,
@@ -223,3 +222,4 @@ def account():
                            lastname=current_user.lastname,
                            phone=current_user.phone,
                            postcode=current_user.postcode)
+
