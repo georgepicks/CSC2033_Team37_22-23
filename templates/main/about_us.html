@@ -7,14 +7,21 @@
     <link rel="stylesheet" href="../../static/OtherPagesStyle.css">
 </head>
 <body>
-    <header>
-        <div class="logo">Leftovers</div>
-        <nav>
-            <a href="">header buttons</a>
-            <a href="">header buttons</a>
-            <a href="">header buttons</a>
-        </nav>
-    </header>
+<header>
+    <div class="logo">Leftovers</div>
+    <nav>
+    <!-- if user is authenticated and producer: -->
+        {% if current_user.is_authenticated %}
+            <!-- url for producer dash -->
+            <a href="{{ url_for('producer.account') }}">Account</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+      <!-- else if user is authenticated and consumer: -->
+            <!-- url for consumer dash, consumer account, logout, -->
+        {% else %}
+            <a href="{{ url_for('index') }}">Home</a>
+        {% endif %}
+    </nav>
+</header>
     <section class="content">
         <img src="../../static/images/Logo.png" alt="Logo" class="content-image"/>
         <h1>About Us</h1>
