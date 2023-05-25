@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, request, Blueprint, flash
 from flask_login import login_required, current_user
-from models import InventoryItems, Producer, OrderItems
+from models import InventoryItems, Producer, OrderItems, Orders
 from app import app, db
 from user.forms import ProducerRegisterForm
 import logging
@@ -8,15 +8,17 @@ import logging
 producer_blueprint = Blueprint('producer', __name__, template_folder='templates')
 
 
-@producer_blueprint.route('/register', methods=['GET', 'POST'])
+@producer_blueprint.route('/ProducerRegister', methods=['GET', 'POST'])
 def register():
     # create signup form object
     form = ProducerRegisterForm()
 
     # if request method is POST or form is valid
     if form.validate_on_submit():
+
         user = Producer.query.filter_by(email=form.email.data).first()
-        # if this returns a user, then the email already exists in database
+        # if this returns a user, then the email already exists in the database
+
 
         # if email already exists redirect user back to signup page with error message so user can try again
         if user:
@@ -39,7 +41,8 @@ def register():
 
         # sends user to login page
         logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
-        return redirect(url_for('users/login.html'))
+        return render_template('users/login.html', form=form)
+
     # if request method is GET or form not valid re-render signup page
     return render_template('users/ProducerRegister.html', form=form)
 
@@ -86,9 +89,9 @@ def add_item():
 @login_required
 def orders():
     cursor = db.cursor()
-
+    # orders = Orders.query.filter(Orders.producer_id.ilike(id).all)
     # Retrieve all orders from the database
-    select_query = "SELECT * FROM Orders"
+    select_query = "SELECT * FROM Orders where Orders.producer_id = InventoryItems.producer_id"
     cursor.execute(select_query)
     orders = cursor.fetchall()
 
@@ -117,7 +120,6 @@ def accept_order(order_id, inventory):
 
 
 # Function to remove an item from the inventory by the producer
-
 @app.route('/orders')
 @login_required
 def remove_item(item_id):
