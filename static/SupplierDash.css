@@ -225,8 +225,8 @@ footer {
     width: 100%;
 }
 .edit-card-image {
-    width: 100px;  /* adjust as needed */
-    height: 100px; /* adjust as needed */
+    width: 100px;
+    height: 100px;
     object-fit: cover;
 }
 .edit-card {
@@ -234,12 +234,29 @@ footer {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    border: 1px solid #ddd; /* add this line */
-    border-radius: 5px; /* add this line if you want rounded corners */
-    padding: 10px; /* add this line to give some space between the border and the content */
-    /* rest of your styles... */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+
 }
 .submit-btn:hover {
     background-color: #4CAF50;
-    color: white;
+    color:white;
+}
+.add-item-button {
+    background-color: #FFE7AA;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.add-item-button:hover {
+    background-color: #4CAF50;
+    color:white
 }
