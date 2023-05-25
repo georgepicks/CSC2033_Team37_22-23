@@ -45,8 +45,22 @@ function filterSuppliers() {
     }
 }
 
-function filterItem(){
-    var test = 1
+function filterItem() {
+    var input, filter, inventory, itemCards, itemName;
+    input = document.getElementById('SearchInput');
+    filter = input.value.toUpperCase();
+    inventory = document.getElementsByClassName('InventoryContainer')[0];
+    itemCards = inventory.getElementsByClassName('InventoryCard');
+
+    for (var i = 0; i < itemCards.length; i++) {
+        itemName = itemCards[i].getElementsByClassName('ItemName')[0];
+
+        if (itemName.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            itemCards[i].style.display = '';
+        } else {
+            itemCards[i].style.display = 'none';
+        }
+    }
 }
 
 function redirectToSupplier(supplierId) {
