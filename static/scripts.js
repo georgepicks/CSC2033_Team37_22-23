@@ -100,8 +100,8 @@ function removeFromBasket(itemId) {
 
 function addToOrder(itemId) {
   var card = document.getElementById(itemId);
-  var itemName = card.querySelector(".item-name").textContent;
-  var basket = document.getElementById("basket-list");
+  var itemName = card.querySelector(".ItemName").textContent;
+  var basket = document.getElementById("BasketList");
   var basketItem = document.createElement("li");
   basketItem.id = "basket-" + itemId;
   basketItem.innerHTML = `
