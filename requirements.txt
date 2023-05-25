@@ -11,3 +11,4 @@ datetime
 pymysql
 flask_mail
 email_validator
+python-dotenv
