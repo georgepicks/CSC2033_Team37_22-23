@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Item</title>
+    <link rel="stylesheet" href="../../static/SupplierDash.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Leftovers</div>
+        <nav>
+            <a href="{{ url_for('supplier_inventory')}}">Your Inventory</a>
+            <a href="{{ url_for('account') }}">Account</a>
+            <a href="{{ url_for('index')}}">Log out</a>
+        </nav>
+    </header>
+    <section class="dashboard">
+        <div id="ui-container">
+            <h1 class="title">Edit Item in Inventory</h1>
+            <div class="edit-cards-container">
+                <h2>Current Item Details</h2>
+                <div class="edit-card">
+                    <img class="edit-card-image" src="https://source.unsplash.com/600x600/?{{ item.item }}" alt="Food">
+                    <div class="edit-card-content">
+                        <p class="item-title">{{ item.item }}</p>
+                        <p class="item-quantity">{{ item.quantity }}</p>
+                    </div>
+                </div>
+            </div>
+                <h2>Edit Item</h2>
+            <!-- form to edit item -->
+                <form method="POST" action="/edit_item/{{ item.id }}">
+                    <div class="container">
+                        <h1>Edit Item</h1>
+                        <form method="POST" action="/edit_item/{{ item.id }}">
+                            <label for="name">Item Name</label>
+                            <input id="name" type="text" name="name" value="{{ item.name }}" required>
+                            <label for="quantity">Quantity</label>
+                            <input id="quantity" type="number" name="quantity" value="{{ item.quantity }}" required>
+                            <button type="submit" class="submit-btn">Save Changes</button>
+                        </form>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <nav>
+            <a href="{{ url_for('about_us') }}">About Us</a>
+            <a href="{{ url_for('contact') }}">Contact Us</a>
+        </nav>
+    </footer>
+</body>
+</html>
