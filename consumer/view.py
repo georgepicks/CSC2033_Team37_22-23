@@ -55,6 +55,29 @@ def generate_dashboard():
     return render_template("")
 
 
+@consumer_blueprint.route('/feed', methods=['GET', 'POST'])
+def feed():
+    suppliers = []  # Create an empty list to store supplier information
+
+    # Retrieve all producers from the database
+    producers = Producer.query.all()
+
+    # Iterate over each supplier and extract the required information
+    for producer in producers:
+        producer_data = {
+            'id': producer.id,
+            'name': producer.producer_name,
+            'address1': producer.address_1,
+            'address2': producer.address_2,
+            'address3': producer.address_3,
+            'postcode': producer.postcode
+        }
+
+        suppliers.append(producer_data)
+        print(suppliers)
+    return render_template('consumer/feed.html', suppliers=suppliers)
+
+
 # Function to search for an item in the inventory
 @app.route('/', methods=['GET', 'POST'])
 @login_required

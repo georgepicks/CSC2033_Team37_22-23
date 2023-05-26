@@ -10,8 +10,10 @@
             {% for supplier in suppliers %}
                 <div class="supplier" onclick="redirectToSupplier('{{ supplier.id }}')" style="background-image: url('{{ supplier.image }}')">
                     <h3>{{ supplier.name }}</h3>
-                    <p>{{ supplier.address }}</p>
-                    <p class="allergens">{{ supplier.allergens }}</p>
+                    <p>{{ supplier.address1 }}</p>
+                    <p>{{ supplier.address2 }}</p>
+                    <p>{{ supplier.address3 }}</p>
+                    <p>{{ supplier.postcode }}</p>
                 </div>
             {% endfor %}
         </div>

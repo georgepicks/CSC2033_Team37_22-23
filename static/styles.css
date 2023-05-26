@@ -1,3 +1,12 @@
+
+
+
+
+
+
+
+
+
 body {
   display: flex;
   flex-direction: column;
@@ -71,20 +80,19 @@ body {
 }
 
 .HomeLink {
-  left: 93%;
+  left: 89%;
 }
 
 .LoginLink {
-  left: 96.5%;
+  left: 95%;
 }
 
 .LeftoversText {
-  top: calc(2% + 3px);
-  left: calc(4% - 5px);
-  font-size: 1.5rem;
-  color: #ffffff;
+  top: 2%;
+  left: 10%;
   transform: translateX(-50%);
     font-weight: bold;
+    font-size: 1.5rem;
 }
 
 .center {
@@ -135,16 +143,16 @@ button[type="submit"] {
 .AboutUs, .contact {
   position: absolute;
   bottom: 2%;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: #FFFFFF
 }
 
 .AboutUs {
-  left: 1%;
+  left: 30px;
 }
 
 .contact {
-  left: 6%;
+  left: 180px;
 }
 
 .HeroBody {
@@ -209,8 +217,7 @@ button[type="submit"] {
     flex-wrap: wrap;
     justify-content: flex-start;
     text-align: center;
-    color: #FFFFFF;
-    text-shadow: 0 0 3px #000000, 0 0 5px #000000;
+    color: #000000;
 }
 
 .supplier {
@@ -223,6 +230,7 @@ button[type="submit"] {
     box-sizing: border-box;
     background-size: cover;
     background-position: center;
+    background-color: #FFE7AA;
 }
 
 .supplier:hover {
@@ -244,8 +252,7 @@ button[type="submit"] {
     flex-wrap: wrap;
     justify-content: flex-start;
     text-align: center;
-    color: #FFFFFF;
-    text-shadow: 0 0 3px #000000, 0 0 5px #000000;
+    color: #000000;
     gap: 10px;
 }
 
@@ -274,7 +281,7 @@ button[type="submit"] {
 }
 
 .InventoryCard.selected {
-    background-color: #e0e0e0;
+    background-color: #FFFFFF;
 }
 
 .AddToOrderButton {
@@ -314,10 +321,10 @@ button[type="submit"] {
     font-size: 20px;
 }
 
-.remove-item {
-  cursor: pointer;
+.RemoveItem {
   color: red;
-  margin-left: 5px;
+  cursor: pointer;
+    margin-left: 10px;
 }
 
 #info{

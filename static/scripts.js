@@ -15,28 +15,22 @@
               //  console.error("Error:", error);
            // });
 
-function toggleDropdown() {
-    var dropdownContent = document.getElementById("dropdownContent");
-    dropdownContent.classList.toggle("show");
-}
-
-
 function filterSuppliers() {
-    var input, filter, suppliers, supplier, name, address, allergens;
-    input = document.getElementById('search-input');
+    var input, filter, suppliers, supplier, name, address1, postcode;
+    input = document.getElementById('SearchInput');
     filter = input.value.toUpperCase();
     suppliers = document.getElementById('suppliers');
     supplier = suppliers.getElementsByClassName('supplier');
 
     for (var i = 0; i < supplier.length; i++) {
         name = supplier[i].getElementsByTagName('h3')[0];
-        address = supplier[i].getElementsByTagName('p')[0];
-        allergens = supplier[i].getElementsByClassName('allergens')[0];
+        address1 =supplier[i].getElementsByTagName('p')[0];
+        postcode =supplier[i].getElementsByTagName('p')[3];
 
         if (
             name.innerHTML.toUpperCase().indexOf(filter) > -1 ||
-            address.innerHTML.toUpperCase().indexOf(filter) > -1 ||
-            allergens.innerHTML.toUpperCase().indexOf(filter) > -1
+            address1.innerHTML.toUpperCase().indexOf(filter) > -1 ||
+            postcode.innerHTML.toUpperCase().indexOf(filter) > -1
         ) {
             supplier[i].style.display = '';
         } else {
@@ -45,26 +39,8 @@ function filterSuppliers() {
     }
 }
 
-function filterItem() {
-    var input, filter, inventory, itemCards, itemName;
-    input = document.getElementById('SearchInput');
-    filter = input.value.toUpperCase();
-    inventory = document.getElementsByClassName('InventoryContainer')[0];
-    itemCards = inventory.getElementsByClassName('InventoryCard');
-
-    for (var i = 0; i < itemCards.length; i++) {
-        itemName = itemCards[i].getElementsByClassName('ItemName')[0];
-
-        if (itemName.innerHTML.toUpperCase().indexOf(filter) > -1) {
-            itemCards[i].style.display = '';
-        } else {
-            itemCards[i].style.display = 'none';
-        }
-    }
-}
-
 function redirectToSupplier(supplierId) {
-    var supplierUrl = 'http://127.0.0.1:5000/order' + supplierId;
+    var supplierUrl = 'http://127.0.0.1:5000/order';
     window.location.href = supplierUrl;
 }
 
@@ -100,8 +76,8 @@ function removeFromBasket(itemId) {
 
 function addToOrder(itemId) {
   var card = document.getElementById(itemId);
-  var itemName = card.querySelector(".ItemName").textContent;
-  var basket = document.getElementById("BasketList");
+  var itemName = card.querySelector(".item-name").textContent;
+  var basket = document.getElementById("basket-list");
   var basketItem = document.createElement("li");
   basketItem.id = "basket-" + itemId;
   basketItem.innerHTML = `
