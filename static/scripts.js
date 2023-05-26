@@ -1,42 +1,19 @@
-//fetch("https://example.com/api/businesses") // Replace with your backend endpoint to retrieve business data-
-            //.then(response => response.json())
-            //.then(data => {
-               // data.forEach(business => {
-                    //createCard(
-                       // business.url,
-                        //business.imageUrl,
-                        //business.title,
-                       // business.location,
-                       // business.allergen
-                   // );
-                //});
-           // })
-           // .catch(error => {
-              //  console.error("Error:", error);
-           // });
-
-function toggleDropdown() {
-    var dropdownContent = document.getElementById("dropdownContent");
-    dropdownContent.classList.toggle("show");
-}
-
-
 function filterSuppliers() {
-    var input, filter, suppliers, supplier, name, address, allergens;
-    input = document.getElementById('search-input');
+    var input, filter, suppliers, supplier, name, address1, postcode;
+    input = document.getElementById('SearchInput');
     filter = input.value.toUpperCase();
     suppliers = document.getElementById('suppliers');
     supplier = suppliers.getElementsByClassName('supplier');
 
     for (var i = 0; i < supplier.length; i++) {
         name = supplier[i].getElementsByTagName('h3')[0];
-        address = supplier[i].getElementsByTagName('p')[0];
-        allergens = supplier[i].getElementsByClassName('allergens')[0];
+        address1 =supplier[i].getElementsByTagName('p')[0];
+        postcode =supplier[i].getElementsByTagName('p')[3];
 
         if (
             name.innerHTML.toUpperCase().indexOf(filter) > -1 ||
-            address.innerHTML.toUpperCase().indexOf(filter) > -1 ||
-            allergens.innerHTML.toUpperCase().indexOf(filter) > -1
+            address1.innerHTML.toUpperCase().indexOf(filter) > -1 ||
+            postcode.innerHTML.toUpperCase().indexOf(filter) > -1
         ) {
             supplier[i].style.display = '';
         } else {
@@ -45,37 +22,33 @@ function filterSuppliers() {
     }
 }
 
-function filterItem(){
-    var test = 1
+function filterItems() {
+  var input, filter, inventory, name, dietary;
+  input = document.getElementById('SearchInput');
+  filter = input.value.toUpperCase();
+  inventory = document.getElementsByClassName('InventoryCard');
+
+  for (var i = 0; i < inventory.length; i++) {
+    name = inventory[i].getElementsByClassName('item-name')[0];
+    dietary = inventory[i].getElementsByClassName('item_dietary')[0];
+
+    if (
+      name.innerHTML.toUpperCase().indexOf(filter) > -1 ||
+      dietary.innerHTML.toUpperCase().indexOf(filter) > -1
+    ) {
+      inventory[i].style.display = '';
+    } else {
+      inventory[i].style.display = 'none';
+    }
+  }
 }
+
 
 function redirectToSupplier(supplierId) {
-    var supplierUrl = 'http://127.0.0.1:5000/order' + supplierId;
-    window.location.href = supplierUrl;
+    window.location.href = "http://127.0.0.1:5000/order?supplier_id=" + supplierId
 }
 
-function toggleSelected(itemId) {
-    var card = document.getElementById(itemId);
-    card.classList.toggle("selected");
-    var checkbox = card.querySelector("input[type='checkbox']");
-    checkbox.checked = !checkbox.checked;
 
-    var basket = document.getElementById("basket");
-    var itemName = card.querySelector(".item-name").textContent;
-    var basketItem = document.createElement("li");
-    basketItem.textContent = itemName;
-    if (card.classList.contains("selected")) {
-        basket.appendChild(basketItem);
-    } else {
-        var items = basket.getElementsByTagName("li");
-        for (var i = 0; i < items.length; i++) {
-            if (items[i].textContent === basketItem.textContent) {
-                basket.removeChild(items[i]);
-                break;
-            }
-        }
-    }
-}
 function removeFromBasket(itemId) {
   var basketItem = document.getElementById(itemId);
   basketItem.style.opacity = 0; // Apply fade-out effect
@@ -86,13 +59,58 @@ function removeFromBasket(itemId) {
 
 function addToOrder(itemId) {
   var card = document.getElementById(itemId);
-  var itemName = card.querySelector(".item-name").textContent;
-  var basket = document.getElementById("basket-list");
-  var basketItem = document.createElement("li");
-  basketItem.id = "basket-" + itemId;
-  basketItem.innerHTML = `
-    <span>${itemName}</span>
-    <span class="remove-item" onclick="removeFromBasket('basket-${itemId}')">x</span>
-  `;
-  basket.appendChild(basketItem);
+  var itemName = card.querySelector(".item-name").textContent; // Updated class name
+  var itemQuantity = parseInt(card.querySelector(".item-quantity").textContent.split(":")[1].trim());
+  var basket = document.getElementById("BasketList");
+  var basketItems = basket.getElementsByClassName("basket-item");
+  var existingItem = null;
+
+  // Check if the item already exists in the basket
+  for (var i = 0; i < basketItems.length; i++) {
+    var name = basketItems[i].querySelector(".basket-item-name").textContent;
+    if (name === itemName) {
+      existingItem = basketItems[i];
+      break;
+    }
+  }
+
+  if (existingItem) {
+    // If the item already exists, increment the quantity counter
+    var quantityElement = existingItem.querySelector(".basket-item-quantity");
+    var quantity = parseInt(quantityElement.textContent);
+    if (quantity < itemQuantity) {
+      quantity++;
+      quantityElement.textContent = quantity;
+    } else {
+      alert("You cannot add more than the available quantity.");
+    }
+  } else {
+    // If the item doesn't exist, add a new item with quantity 1
+    var basketItem = document.createElement("li");
+    basketItem.className = "basket-item";
+    basketItem.innerHTML = `
+      <span class="basket-item-name">${itemName}</span>
+      <span class="basket-item-quantity"> 1</span>
+      <span class="RemoveItem" onclick="removeFromBasket('basket-${itemId}')">x</span>
+    `;
+    basket.appendChild(basketItem);
+  }
+}
+
+function showAlert(message) {
+  var alertBox = document.createElement("div");
+  alertBox.className = "alert-box";
+  alertBox.textContent = message;
+  document.body.appendChild(alertBox);
+
+  // Position the alert in the middle of the screen
+  var windowHeight = window.innerHeight;
+  var alertHeight = alertBox.offsetHeight;
+  var topOffset = (windowHeight - alertHeight) / 2;
+  alertBox.style.top = topOffset + "px";
+
+  // Remove the alert after a certain duration (e.g., 3 seconds)
+  setTimeout(function () {
+    alertBox.remove();
+  }, 3000);
 }

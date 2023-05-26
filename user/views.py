@@ -56,7 +56,7 @@ def login():
                 db.session.commit()
                 # Data is recorded in lottery.log each time login action takes place
                 logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
-                return render_template('')
+                return render_template('producer/supplier_dash.html', id=current_user.id)
 
         # checks if the user mail logged in is a consumer mail
         elif Consumer.query.filter_by(email=form.email.data).first() is not None:
@@ -92,9 +92,8 @@ def login():
                 feed = find_producers(1000)
                 # Data is recorded in lottery.log each time login action takes place
                 logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
-
+                feed = find_producers(1000)
                 return render_template('consumer/feed.html', suppliers=feed)
-
         else:
             return 'Invalid User'
     # returns login if all the functions fail

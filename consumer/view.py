@@ -11,7 +11,8 @@ import logging
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
 
-@consumer_blueprint.route('/ConsumerRegister', methods=['GET', 'POST'])
+
+@consumer_blueprint.route('/consumer/register', methods=['GET', 'POST'])
 def register():
     # create signup form object
     form = ConsumerRegisterForm()
@@ -45,14 +46,59 @@ def register():
     return render_template('users/ConsumerRegister.html', form=form)
 
 
-@app.route('/feed', methods=['GET', 'POST'])
+@consumer_blueprint.route('/feed', methods=['GET', 'POST'])
 @login_required
-def dashboard():
-    # need to change to allow consumers to select a max distance
-    placeholder = 1000
-    # get list of producers within user-specified range alongside their distance from consumer
-    producers = find_producers(placeholder)
-    return render_template("consumer/feed.html", suppliers=producers)
+def feed():
+    suppliers = []  # Create an empty list to store supplier information
+
+    # Retrieve all producers from the database
+    producers = Producer.query.all()
+
+    # Iterate over each supplier and extract the required information
+    for producer in producers:
+        producer_data = {
+            'id': producer.id,
+            'name': producer.producer_name,
+            'address1': producer.address_1,
+            'address2': producer.address_2,
+            'address3': producer.address_3,
+            'postcode': producer.postcode
+        }
+        suppliers.append(producer_data)
+
+    return render_template('consumer/feed.html', suppliers=suppliers)
+
+
+@consumer_blueprint.route('/order', methods=['GET', 'POST'])
+@login_required
+def order_generate():
+    supplier_id = request.args.get('supplier_id')
+
+    supplier = Producer.query.filter_by(id=supplier_id).first()
+
+    name = supplier.producer_name
+    address1 = supplier.address_1
+    postcode = supplier.postcode
+
+    items = []
+
+    item_list = InventoryItems.query.filter_by(producer=supplier_id).all()
+
+    for item in item_list:
+        item_data = {
+            'id': item.id,
+            'item': item.item,
+            'quantity': item.quantity,
+            'producer': item.producer,
+            'dietary': item.dietary
+        }
+
+        items.append(item_data)
+
+        print(items)
+
+    return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address=address1,
+                           supplier_postcode=postcode)
 
 
 # Function to search for an item in the inventory
@@ -133,7 +179,7 @@ def edit_order(order_id):
 
         if order:
             cursor.close()
-            return render_template('edit_order.html', order=order)
+            return render_template('edit_item.html', order=order)
         else:
             cursor.close()
             return 'Order not found'
@@ -196,29 +242,34 @@ def cancel_order():
 
 @app.route('/')
 def find_producers(distance_range):
-    geodistance = pgeocode.GeoDistance('gb')
-    nearby_producers = {}
-    # query all producers
-    producers = Producer.query.all()
-    # ------------ need to add distance functionality in later ----------------
-    #for i in producers:
-        # calculate distance between all producers and current user
-    #    distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
-    #    if distance < distance_range:
-    #        # key = producer, value = distance
-    #        nearby_producers.update({i: distance})
-    # sorts producers by distance from low to high
-    # sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
-    #return sorted_producers
-    return producers
+    # if user has not yet specified a distance
+    if distance_range == 0:
+        producers = Producer.query.all()
+        return producers
+    else:
+        geodistance = pgeocode.GeoDistance('gb')
+        nearby_producers = {}
+        # query all producers
+        producers = Producer.query.all()
+        # ------------ need to add distance functionality in later ----------------
+        for i in producers:
+            # calculate distance between all producers and current user
+            distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
+            if distance < distance_range:
+                # key = producer, value = distance
+                nearby_producers.update({i: distance})
+        # sorts producers by distance from low to high
+        sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
+        return sorted_producers
+
 
 
 # view user account
-@consumer_blueprint.route('/account')
+@consumer_blueprint.route('/consumer_account')
 @login_required
-def account():
-    # Shows the account details of the user
-    return render_template('users/account.html',
+def consumer_account():
+    # Shows the account details of the consumer
+    return render_template('users/consumer_acc.html',
                            id=current_user.id,
                            email=current_user.email,
                            firstname=current_user.firstname,

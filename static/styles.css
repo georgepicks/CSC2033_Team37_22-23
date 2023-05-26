@@ -41,7 +41,7 @@ body {
     left: 86%;
     width: 14%;
     height: 500px;
-    background-color: #59a956;
+    background-color: #4CAF50;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -63,27 +63,45 @@ body {
     margin-bottom: 5px;
 }
 
-.HomeLink, .LoginLink, .LeftoversText {
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   position: absolute;
-  top: 20px;
-  font-size: 20px;
+  top: 1.75%;
+  right: 2%;
+  font-size: 1.2rem;
   color: #FFFFFF;
+  margin: 0;
 }
 
-.HomeLink {
-  left: 89%;
+.HomeLink,
+.LoginLink,
+.DiscoverLink,
+.AccountLink,
+.LogoutLink{
+  color: #FFFFFF;
+  margin: 0;
+  text-decoration: none;
 }
 
-.LoginLink {
-  left: 95%;
+.HomeLink:hover,
+.LoginLink:hover,
+.DiscoverLink:hover,
+.AccountLink:hover,
+.LogoutLink:hover{
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .LeftoversText {
-  top: 2%;
-  left: 10%;
-  font-size: 40px;
-  color: #ffffff;
+  position: absolute;
+  color: #FFFFFF;
+  top: 1.5%;
+  left: 3%;
   transform: translateX(-50%);
+  font-weight: bold;
+  font-size: 1.5rem;
 }
 
 .center {
@@ -110,16 +128,15 @@ input[type="text"], input[type="password"], select, textarea {
   background-color: #FFE7AA;
 }
 
-button[type="submit"] {
-  position: fixed;
-  top: 10px;
-  left: 90%;
-  transform: translateX(-50%);
-  padding: 30px 32px;
-  text-align: center;
-  display: inline-block;
-  margin: 4px 2px;
+.button {
+  cursor: pointer;
+  padding: 12px;
+  border: 1px solid #ccc;
   border-radius: 4px;
+  resize: vertical;
+  margin-bottom: 10px;
+  color: #FFFFFF;
+  background-color: #4CAF50;
 }
 
 .image {
@@ -133,25 +150,17 @@ button[type="submit"] {
 
 .AboutUs, .contact {
   position: absolute;
-  bottom: 2%;
-  font-size: 25px;
+  bottom: 1.5%;
+  font-size: 1.2rem;
   color: #FFFFFF
 }
 
 .AboutUs {
-  left: 30px;
+  left: 1.5%;
 }
 
 .contact {
-  left: 180px;
-}
-
-.HeroBody {
-  flex-grow: 1;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  left: 6%;
 }
 
 .TestButton {
@@ -161,17 +170,11 @@ button[type="submit"] {
   left: 500px;
 }
 
-.test_button_2 {
-  position: absolute;
-  top: 30px;
-  font-size: 30px;
-  left: 600px;
-}
 
 #UiContainer {
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  margin-bottom: 20px;
 }
 
 .SearchContainer {
@@ -181,20 +184,6 @@ button[type="submit"] {
   margin-bottom: 50px;
 }
 
-.SignInLink, .SignInText {
-  position: absolute;
-  top: 80%;
-  color: #000000;
-}
-
-.SignInLink {
-  left: 54%;
-  text-decoration: underline;
-}
-
-.SignInText{
-  left: 40%;
-}
 
 .clicked {
   background-color: #f7f7f7;
@@ -202,14 +191,13 @@ button[type="submit"] {
 }
 
 #suppliers {
-    max-height: 400px;
-    overflow-y: auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    text-align: center;
-    color: #FFFFFF;
-    text-shadow: 0 0 3px #000000, 0 0 5px #000000;
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  text-align: center;
+  color: #000000;
 }
 
 .supplier {
@@ -222,10 +210,11 @@ button[type="submit"] {
     box-sizing: border-box;
     background-size: cover;
     background-position: center;
+    background-color: #FFE7AA;
 }
 
 .supplier:hover {
-    cursor: pointer;
+  cursor: pointer;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transform: translateY(-10px);
   transition: all 0.3s ease;
@@ -237,29 +226,28 @@ button[type="submit"] {
 
 .InventoryContainer {
     width: 50%;
-    max-height: 400px;
+    height: 400px;
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     text-align: center;
-    color: #FFFFFF;
-    text-shadow: 0 0 3px #000000, 0 0 5px #000000;
+    color: #000000;
     gap: 10px;
 }
 
 .InventoryCard {
-    width: 10%;
+    width: 15%;
+    height: 150px;
     margin-bottom: 10px;
     border: 1px solid #000000;
     padding: 10px;
-    text-align: center;
 }
 
 .InventoryCard:hover {
     cursor: pointer;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    transform: translateY(-10px);
+    background-color: #FFE7AA;
     transition: all 0.3s ease;
 }
 
@@ -272,8 +260,12 @@ button[type="submit"] {
     margin-bottom: 10px;
 }
 
+.InventoryCard .item_dietary{
+    margin-bottom: 5px;
+}
+
 .InventoryCard.selected {
-    background-color: #e0e0e0;
+    background-color: #FFFFFF;
 }
 
 .AddToOrderButton {
@@ -309,7 +301,7 @@ button[type="submit"] {
 #BasketList li {
   display: flex;
   align-items: center;
-  transition: opacity 0.5s ease; /* Add CSS transition */
+  transition: opacity 0.5s ease;
     font-size: 20px;
 }
 
@@ -320,10 +312,12 @@ button[type="submit"] {
 }
 
 #info{
-    position: absolute;
     text-align: center;
-    top: 14%;
     font-size: 40px;
+}
+
+#info h3{
+    text-decoration: underline;
 }
 
 .OrderButton {
@@ -343,3 +337,9 @@ button[type="submit"] {
 #basket h4 {
   margin-bottom: 1px;
 }
+
+.basket-item-quantity{
+    margin-left: 10px;
+}
+
+
