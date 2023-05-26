@@ -10,14 +10,15 @@
     <header>
         <div class="logo">Leftovers</div>
         <nav>
-            <a href="{{ url_for('producer.account') }}">Account</a>
-            <a href="{{ url_for('index')}}">Log out</a>
+            <a href="{{ url_for('producer.supplier_dash')}}">Dashboard</a>
+            <a href="{{ url_for('producer.producer_account') }}">Account</a>
+            <a href="{{ url_for('users.logout')}}">Log out</a>
         </nav>
     </header>
     <div class = "inventory-buttons">
         <h1>Your Inventory</h1>
-        <button id="add-item-button">Add an Item</button>
-        <button id="view-orders-button">View Reserved Orders</button>
+        <a href="{{ url_for('add_item') }}"><button id="add-item-button">Add an Item</button></a>
+        <a href="{{ url_for('orders') }}"><button id="view-orders-button">View Reserved Orders</button></a>
     </div>
     <div id="cards-container">
         {% for item in items %}
@@ -25,7 +26,8 @@
                 <img src="https://source.unsplash.com/600x600/? {{ item.item }}" alt="Food">
                 <p class="item-title">{{ item.item }}</p>
                 <p class="item-quantity"> {{ item.quantity }}</p>
-                <form method="POST" action="/edit_item/{{ item.id }}">
+
+                <form method="POST" action="{{ url_for('edit_inventory', id=item.id) }}">
                     <button type="submit" class="edit-button">Edit</button>
                 </form>
                 <form method="POST" action="/inventory/remove/{{ item.id }}">
