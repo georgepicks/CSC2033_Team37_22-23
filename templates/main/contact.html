@@ -10,13 +10,15 @@
 <header>
     <div class="logo">Leftovers</div>
     <nav>
-  <!-- if user is authenticated and producer: -->
         {% if current_user.is_authenticated %}
-            <!-- url for producer dash -->
-            <a href="{{ url_for('producer.account') }}">Account</a>
-            <a href="{{ url_for('users.logout') }}">Logout</a>
-      <!-- else if user is authenticated and consumer: -->
-            <!-- url for consumer dash, consumer account, logout, -->
+            {% if current_user.__class__.__name__ == 'Producer' %}
+                <a href="{{ url_for('producer.supplier_dash') }}">Log out</a>
+                <a href="{{ url_for('producer.producer_account') }}">Account</a>
+                <a href="{{ url_for('users.logout') }}">Log out</a>
+            {% else %}
+                <a href="{{ url_for('consumer.consumer_account') }}">Account</a>
+                <a href="{{ url_for('users.logout') }}">Log out</a>
+            {% endif %}
         {% else %}
             <a href="{{ url_for('index') }}">Home</a>
         {% endif %}
