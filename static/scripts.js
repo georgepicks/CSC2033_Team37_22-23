@@ -74,6 +74,8 @@ function removeFromBasket(itemId) {
   }, 500); // Adjust the duration (in milliseconds) of the fade-out effect
 }
 
+
+
 function addToOrder(itemId) {
   var card = document.getElementById(itemId);
   var itemName = card.querySelector(".item-name").textContent; // Updated class name
@@ -112,4 +114,22 @@ function addToOrder(itemId) {
     `;
     basket.appendChild(basketItem);
   }
+}
+
+function showAlert(message) {
+  var alertBox = document.createElement("div");
+  alertBox.className = "alert-box";
+  alertBox.textContent = message;
+  document.body.appendChild(alertBox);
+
+  // Position the alert in the middle of the screen
+  var windowHeight = window.innerHeight;
+  var alertHeight = alertBox.offsetHeight;
+  var topOffset = (windowHeight - alertHeight) / 2;
+  alertBox.style.top = topOffset + "px";
+
+  // Remove the alert after a certain duration (e.g., 3 seconds)
+  setTimeout(function () {
+    alertBox.remove();
+  }, 3000);
 }

@@ -340,3 +340,7 @@ button[type="submit"] {
 #basket h4 {
   margin-bottom: 1px;
 }
+
+.basket-item-quantity{
+    margin-left: 10px;
+}
