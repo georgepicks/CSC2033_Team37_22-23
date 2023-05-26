@@ -3,75 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zero-Hunger App</title>
+    <title>Supplier Dashboard</title>
     <link rel="stylesheet" href="../../static/SupplierDash.css">
 </head>
 <body>
     <header>
         <div class="logo">Leftovers</div>
         <nav>
-            <a href="{{ url_for('account') }}">About Us</a>
-            <a href="{{ url_for('index')}}">Log out</a>
+            <a href="{{ url_for('producer.account') }}">Account</a>
+            <a href="{{ url_for('users.logout')}}">Log out</a>
         </nav>
     </header>
-    <section class="dashboard">
-        <div id="ui-container">
-            <h1 class="title">Food Supplier Dashboard</h1>
-            <div class="dashboard-container">
-                <div class="column-1">
-                    <h2>Your Inventory</h2>
-                    <div class="item-list">
-                        <!-- These items are to be loaded in dynamically -->
-                        {% for item in items %}
-                            <div class="item">
-                                <img src="https://source.unsplash.com/600x600/?{{ item.item }}" alt="Food">
-                                <p class="item-title">{{ item.item }}</p>
-                                <p class="item-quantity"> {{ item.quantity }}</p>
-                                <form method="POST" action="/edit_item/{{ item.id }}">
-                                    <button type="submit" class="edit-button">Edit</button>
-                                </form>
-                                <form method="POST" action="/inventory/remove/{{ item.id }}">
-                                    <button type="submit" class="delete-button">Delete</button>
-                                </form>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="column-2">
-                    <h2>Reserved Orders</h2>
-                    <!-- These items need to be loaded in dynamically -->
-                    <div class="order-list">
-                        {% for order in orders %}
-                            {% for order_item in order.items %}
-                                <div class="order">
-                                    <p class="order-item">{{ order_item.item }}</p>
-                                    <p class="order-user">{{ order.producer_id }}</p>
-                                </div>
-                            {% endfor %}
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="column-3">
-                    <h2>Add Item to Inventory</h2>
-                    <form method="POST" action="/add_item">
-                        {{ form.csrf_token() }}
-                        <label>
-                            <input type="text" name="name" placeholder="Item Name">
-                        </label>
-                        <label>
-                            <input type="number" name="quantity" placeholder="Quantity">
-                        </label>
-                        <button type="submit">Submit</button>
-                        {{ form.submit() }}
-                    </form>
-                </div>
-            </div>
+    <section>
+        <div class = "dash-buttons">
+            <h1>Dashboard</h1>
+            <a href="{{ url_for('add_item') }}"><button id="add-item-button">Add an Item</button></a>
+            <a href="{{ url_for('orders') }}"><button id="view-orders-button">View Reserved Orders</button></a>
+            <a href="{{ url_for('inventory') }}"><button id="inventory-button">Your Inventory</button></a>
         </div>
     </section>
     <footer>
         <nav>
             <a href="{{ url_for('about_us') }}">About Us</a>
-            <a href="{{ url_for('contact') }}">Contact Us</a>
+            <a href="{{ url_for('contact_us') }}">Contact Us</a>
         </nav>
     </footer>
 </body>

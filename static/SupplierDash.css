@@ -59,6 +59,7 @@ body {
   color: black;
   border: none;
   cursor: pointer;
+    align-items: center;
 }
 
 .edit-button:hover {
@@ -70,7 +71,7 @@ body {
     color: white;
 }
 form {
-  display: flex;
+  /*display: flex; */
   flex-direction: column;
 }
 
@@ -137,6 +138,7 @@ button[type="submit"] {
 .item img {
   width: 100px;
   height: auto;
+  margin-right: 20px;
 }
 .item {
   display: flex;
@@ -144,9 +146,6 @@ button[type="submit"] {
   justify-content: space-between;
 }
 
-.item img {
-  margin-right: 20px;
-}
 
 #cards-container {
     display: flex;
@@ -171,7 +170,7 @@ button[type="submit"] {
     object-fit: cover;
 }
 
-#add-item-button, #view-orders-button {
+#add-item-button, #view-orders-button, #inventory-button{
     margin: 5px;
     padding: 10px 20px;
     font-size: 16px;
@@ -181,7 +180,7 @@ button[type="submit"] {
     cursor: pointer;
 }
 
-#add-item-button:hover, #view-orders-button:hover {
+#add-item-button:hover, #view-orders-button:hover, #inventory-button:hover {
     background-color: #4CAF50;
     color:white;
 }
@@ -260,3 +259,18 @@ footer {
     background-color: #4CAF50;
     color:white
 }
+.orders-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.dash-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top: 2rem;
+}
+
+
