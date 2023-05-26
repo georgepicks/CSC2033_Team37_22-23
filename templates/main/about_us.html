@@ -13,7 +13,7 @@
     <!-- if user is authenticated and producer: -->
         {% if current_user.is_authenticated %}
             <!-- url for producer dash -->
-            <a href="{{ url_for('producer.account') }}">Account</a>
+            <a href="{{ url_for('producer.producer_account') }}">Account</a>
             <a href="{{ url_for('users.logout') }}">Logout</a>
       <!-- else if user is authenticated and consumer: -->
             <!-- url for consumer dash, consumer account, logout, -->
