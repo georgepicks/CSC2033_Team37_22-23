@@ -57,6 +57,7 @@ def dashboard():
 
 
 @consumer_blueprint.route('/feed', methods=['GET', 'POST'])
+@login_required
 def feed():
     suppliers = []  # Create an empty list to store supplier information
 
@@ -79,6 +80,7 @@ def feed():
 
 
 @consumer_blueprint.route('/order', methods=['GET', 'POST'])
+@login_required
 def order_generate():
     supplier_id = request.args.get('supplier_id')
 
