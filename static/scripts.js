@@ -1,20 +1,3 @@
-//fetch("https://example.com/api/businesses") // Replace with your backend endpoint to retrieve business data-
-            //.then(response => response.json())
-            //.then(data => {
-               // data.forEach(business => {
-                    //createCard(
-                       // business.url,
-                        //business.imageUrl,
-                        //business.title,
-                       // business.location,
-                       // business.allergen
-                   // );
-                //});
-           // })
-           // .catch(error => {
-              //  console.error("Error:", error);
-           // });
-
 function filterSuppliers() {
     var input, filter, suppliers, supplier, name, address1, postcode;
     input = document.getElementById('SearchInput');
@@ -73,8 +56,6 @@ function removeFromBasket(itemId) {
     basketItem.remove(); // Remove the item from the DOM after the fade-out
   }, 500); // Adjust the duration (in milliseconds) of the fade-out effect
 }
-
-
 
 function addToOrder(itemId) {
   var card = document.getElementById(itemId);
