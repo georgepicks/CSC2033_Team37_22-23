@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
-from flask import Flask
+from flask_login import current_user
 
 pymysql.install_as_MySQLdb()
 
@@ -27,7 +27,7 @@ login_manager.init_app(app)
 
 @app.route('/')
 def index():
-    return render_template('main/index.html')
+    return render_template('main/index.html',  current_user=current_user)
 
 
 # BLUEPRINTS
@@ -35,14 +35,12 @@ def index():
 from user.views import users_blueprint
 from producer.view import producer_blueprint
 from consumer.view import consumer_blueprint
-from pages.view import pages_blueprint
+
 
 # # register blueprints with app
 app.register_blueprint(users_blueprint)
 app.register_blueprint(producer_blueprint)
 app.register_blueprint(consumer_blueprint)
-app.register_blueprint(pages_blueprint)
-
 
 
 @login_manager.user_loader
@@ -50,16 +48,15 @@ def load_user(email):
     # if user exists in consumer table, return it's ID
     if Consumer.query.filter_by(email=email).first():
         user = Consumer.query.filter_by(email=email).first()
-        return user.id
+        return user
     # if the user's email doesn't exist in the consumer table, check the producer table too
     else:
         user = Producer.query.filter_by(email=email).first()
-        return user.id
+        return user
 
 
 with app.app_context():
     load_user('jd@jdwetherspoons.com')
-
 
 
 @app.route('/about_us')
