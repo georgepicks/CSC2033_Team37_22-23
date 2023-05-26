@@ -7,8 +7,6 @@
     <div class="center">
         <div class="column is-5 is-offset-4">
             <h3 class="PageText">Register</h3>
-            <div class="SignInText">Already have an account?</div>
-            <a href="{{ url_for('users.login') }}"> <div class="SignInLink">Sign in</div></a>
             <form method="POST">
                 <div class="container">
                     {{ form.csrf_token() }}
@@ -22,6 +20,8 @@
                     {{ form.address3(class="input", placeholder="Address Line 3") }}
                     {{ form.postcode(class="input", placeholder="Postcode") }}
                     {{ form.submit(class="button") }}
+                    <p>Already have an account?</p>
+                    <a href="{{ url_for('users.login') }}">Sign in</a>
                 </div>
             </form>
         </div>

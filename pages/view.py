@@ -15,7 +15,6 @@ def order():
             {'item': 'Item 4', 'quantity': 18},
             {'item': 'Item 4', 'quantity': 20},
             {'item': 'Item 4', 'quantity': 18}
-
         ]
     }
     return render_template('consumer/order.html', supplier=supplier)

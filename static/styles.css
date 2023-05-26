@@ -190,20 +190,6 @@ button[type="submit"] {
   margin-bottom: 50px;
 }
 
-.SignInLink, .SignInText {
-  position: absolute;
-  top: 80%;
-  color: #000000;
-}
-
-.SignInLink {
-  left: 54%;
-  text-decoration: underline;
-}
-
-.SignInText{
-  left: 40%;
-}
 
 .clicked {
   background-color: #f7f7f7;

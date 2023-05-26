@@ -72,10 +72,32 @@ def feed():
             'address3': producer.address_3,
             'postcode': producer.postcode
         }
-
         suppliers.append(producer_data)
-        print(suppliers)
     return render_template('consumer/feed.html', suppliers=suppliers)
+
+
+@consumer_blueprint.route('/order', methods=['GET', 'POST'])
+def order_generate():
+    supplier_id = request.args.get('supplier_id')
+
+    items = []
+
+    item_list = InventoryItems.query.filter_by(producer=supplier_id).all()
+
+    for item in item_list:
+        item_data = {
+            'id': item.id,
+            'item': item.item,
+            'quantity': item.quantity,
+            'producer': item.producer,
+            'dietary': item.dietary
+        }
+
+        items.append(item_data)
+
+        print(items)
+
+    return render_template('consumer/order.html', items=items)
 
 
 # Function to search for an item in the inventory

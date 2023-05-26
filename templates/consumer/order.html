@@ -3,8 +3,6 @@
 {% block content %}
 
     <title>Order Page</title>
-    <h3>{{ supplier.name }}</h3>
-    <p>{{ supplier.address }}</p>
 
     <div id="info">
         <h3>Name placeholder</h3>
@@ -26,7 +24,7 @@
     </div>
 
     <div class="InventoryContainer">
-        {% for item in supplier.inventory %}
+        {% for item in items %}
         <div class="InventoryCard" id="item-{{ loop.index }}" onclick="addToOrder('item-{{ loop.index }}')">
             <div class="ItemName">{{ item.item }}</div>
             <div class="ItemQuantity">Quantity: {{ item.quantity }}</div>

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+
    <div id="UiContainer">
        <div id="SearchBar">
            <label for="SearchInput"></label><input type="text" id="SearchInput" placeholder="Search suppliers by name, location or allergens..." onkeyup="filterSuppliers()">
@@ -8,7 +9,7 @@
 
         <div id="suppliers">
             {% for supplier in suppliers %}
-                <div class="supplier" onclick="redirectToSupplier('{{ supplier.id }}')" style="background-image: url('{{ supplier.image }}')">
+                <div class="supplier" onclick="redirectToSupplier('{{ supplier.id }}')">
                     <h3>{{ supplier.name }}</h3>
                     <p>{{ supplier.address1 }}</p>
                     <p>{{ supplier.address2 }}</p>

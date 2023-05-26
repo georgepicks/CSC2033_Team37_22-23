@@ -40,32 +40,10 @@ function filterSuppliers() {
 }
 
 function redirectToSupplier(supplierId) {
-    var supplierUrl = 'http://127.0.0.1:5000/order';
-    window.location.href = supplierUrl;
+    window.location.href = "http://127.0.0.1:5000/order?supplier_id=" + supplierId
 }
 
-function toggleSelected(itemId) {
-    var card = document.getElementById(itemId);
-    card.classList.toggle("selected");
-    var checkbox = card.querySelector("input[type='checkbox']");
-    checkbox.checked = !checkbox.checked;
 
-    var basket = document.getElementById("basket");
-    var itemName = card.querySelector(".item-name").textContent;
-    var basketItem = document.createElement("li");
-    basketItem.textContent = itemName;
-    if (card.classList.contains("selected")) {
-        basket.appendChild(basketItem);
-    } else {
-        var items = basket.getElementsByTagName("li");
-        for (var i = 0; i < items.length; i++) {
-            if (items[i].textContent === basketItem.textContent) {
-                basket.removeChild(items[i]);
-                break;
-            }
-        }
-    }
-}
 function removeFromBasket(itemId) {
   var basketItem = document.getElementById(itemId);
   basketItem.style.opacity = 0; // Apply fade-out effect
@@ -76,13 +54,13 @@ function removeFromBasket(itemId) {
 
 function addToOrder(itemId) {
   var card = document.getElementById(itemId);
-  var itemName = card.querySelector(".item-name").textContent;
-  var basket = document.getElementById("basket-list");
+  var itemName = card.querySelector(".ItemName").textContent;
+  var basket = document.getElementById("BasketList");
   var basketItem = document.createElement("li");
   basketItem.id = "basket-" + itemId;
   basketItem.innerHTML = `
-    <span>${itemName}</span>
-    <span class="remove-item" onclick="removeFromBasket('basket-${itemId}')">x</span>
-  `;
+  <span>${itemName}</span>
+  <span class="RemoveItem" onclick="removeFromBasket('basket-${itemId}')">x</span>
+`;
   basket.appendChild(basketItem);
 }
