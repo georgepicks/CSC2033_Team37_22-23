@@ -10,9 +10,9 @@
     <header>
         <div class="logo">Leftovers</div>
         <nav>
-            <a href="{{ url_for('supplier_inventory')}}">Your Inventory</a>
-            <a href="{{ url_for('account') }}">Account</a>
-            <a href="{{ url_for('index')}}">Log out</a>
+            <a href="{{ url_for('producer.supplier_dash')}}">Dashboard</a>
+            <a href="{{ url_for('producer.account') }}">Account</a>
+            <a href="{{ url_for('users.logout')}}">Log out</a>
         </nav>
     </header>
     <section class="dashboard">
@@ -22,9 +22,16 @@
                 <h2>New Item</h2>
                 <form method="POST" action="/supplier_additem">
                     <div class="container">
-                        <input type="text" name="name" class="input" placeholder="Item Name">
-                        <input type="number" name="quantity" class="input" placeholder="Quantity">
-                        <input type="submit" class="add-item-button" value="Add Item">
+                        <label>
+                            <input type="text" name="name" class="input" placeholder="Item Name">
+                        </label>
+                        <label>
+                            <input type="number" name="quantity" class="input" placeholder="Quantity">
+                        </label>
+                        <label>
+                            <input type="text" name="dietary" class="input" placeholder="Dietary">
+                        </label>
+                            <input type="submit" class="add-item-button" value="Add Item">
                     </div>
                 </form>
             </div>
@@ -33,7 +40,7 @@
     <footer>
         <nav>
             <a href="{{ url_for('about_us') }}">About Us</a>
-            <a href="{{ url_for('contact') }}">Contact Us</a>
+            <a href="{{ url_for('contact_us') }}">Contact Us</a>
         </nav>
     </footer>
 </body>
