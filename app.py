@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
 import os
+from dotenv import load_dotenv
 
 pymysql.install_as_MySQLdb()
 
@@ -11,12 +12,13 @@ app.secret_key = 'your_secret_key'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Get and validate password from secure environment variable
+load_dotenv()
 db_password = os.environ.get('DB_PASSWORD')
 if not db_password:
     raise ValueError('Database password not found')
 
 # Connect to database
-db_uri = f'mariadb:///csc2033_team37:{db_password}@cs-db.ncl.ac.uk:3306/csc2033_team37'
+db_uri = f'mariadb://csc2033_team37:{db_password}@cs-db.ncl.ac.uk/csc2033_team37'
 engine = create_engine(db_uri)
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 db = SQLAlchemy(app)
