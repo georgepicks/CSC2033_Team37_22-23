@@ -1,5 +1,6 @@
 from app import db, app
 from flask_login import UserMixin
+import bcrypt
 
 class Consumer(db.Model, UserMixin):
     __tablename__ = 'consumers'
@@ -16,12 +17,12 @@ class Consumer(db.Model, UserMixin):
         self.email = email
         self.firstname = firstname
         self.lastname = lastname
-        self.password = password
+        self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         self.postcode = postcode
         self.phone = phone
 
 
-class Producer(db.Model, UserMixin):
+class Producer(db.Model):
     __tablename__ = 'producers'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
@@ -38,7 +39,7 @@ class Producer(db.Model, UserMixin):
     def __init__(self, email, producer_name, password, phone, postcode, address_1, address_2, address_3):
         self.email = email
         self.producer_name = producer_name,
-        self.password = password
+        self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         self.phone = phone
         self.postcode = postcode
         self.address_1 = address_1
@@ -61,7 +62,7 @@ class InventoryItems(db.Model):
         self.dietary = dietary
 
 
-class Orders(db.Model, UserMixin):
+class Orders(db.Model):
     __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
     producer_id = db.Column(db.Integer, db.ForeignKey(Producer.id), nullable=False)
