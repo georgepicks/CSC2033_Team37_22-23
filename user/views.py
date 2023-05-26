@@ -83,7 +83,7 @@ def login():
                 db.session.commit()
                 # Data is recorded in lottery.log each time login action takes place
                 logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
-                return render_template('consumer/feed.html')
+                return render_template('consumer/feed.html', form=form)
 
         else:
             return 'invalid User'

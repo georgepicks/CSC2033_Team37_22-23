@@ -45,14 +45,14 @@ def register():
     return render_template('users/ConsumerRegister.html', form=form)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/feed', methods=['GET', 'POST'])
 @login_required
-def generate_dashboard():
+def dashboard():
     # need to change to allow consumers to select a max distance
     placeholder = 1000
     # get list of producers within user-specified range alongside their distance from consumer
     producers = find_producers(placeholder)
-    return render_template("")
+    return render_template("consumer/feed.html", suppliers=producers)
 
 
 # Function to search for an item in the inventory
@@ -195,20 +195,22 @@ def cancel_order():
 
 
 @app.route('/')
-def find_producers(distance_range, filter):
+def find_producers(distance_range):
     geodistance = pgeocode.GeoDistance('gb')
     nearby_producers = {}
     # query all producers
     producers = Producer.query.all()
-    for i in producers:
+    # ------------ need to add distance functionality in later ----------------
+    #for i in producers:
         # calculate distance between all producers and current user
-        distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
-        if distance < distance_range:
-            # key = producer, value = distance
-            nearby_producers.update({i: distance})
+    #    distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
+    #    if distance < distance_range:
+    #        # key = producer, value = distance
+    #        nearby_producers.update({i: distance})
     # sorts producers by distance from low to high
-    sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
-    return sorted_producers
+    # sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
+    #return sorted_producers
+    return producers
 
 
 # view user account
