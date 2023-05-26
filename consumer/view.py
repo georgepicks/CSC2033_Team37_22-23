@@ -80,6 +80,12 @@ def feed():
 def order_generate():
     supplier_id = request.args.get('supplier_id')
 
+    supplier = Producer.query.filter_by(id=supplier_id).first()
+
+    name = supplier.producer_name
+    address1 = supplier.address_1
+    postcode = supplier.postcode
+
     items = []
 
     item_list = InventoryItems.query.filter_by(producer=supplier_id).all()
@@ -97,7 +103,7 @@ def order_generate():
 
         print(items)
 
-    return render_template('consumer/order.html', items=items)
+    return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address=address1, supplier_postcode=postcode)
 
 
 # Function to search for an item in the inventory
