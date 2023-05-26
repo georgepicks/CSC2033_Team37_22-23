@@ -1,14 +1,15 @@
-from _curses import flash
 import pgeocode
-from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify, flash
 from flask_login import login_required, current_user
 from models import Consumer, InventoryItems, OrderItems, Orders, Producer
 from app import app, db
 from datetime import datetime
 from user import views
 from user.forms import ConsumerRegisterForm
+import logging
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
+
 
 
 @consumer_blueprint.route('/consumer/register', methods=['GET', 'POST'])
@@ -26,7 +27,7 @@ def register():
             flash('Email address already exists')
             return render_template('users/ConsumerRegister.html', form=form)
 
-        # create a new user with the form data
+        # create a new user with the form data according to a consumer
         new_user = Consumer(email=form.email.data,
                             firstname=form.firstname.data,
                             lastname=form.lastname.data,
@@ -40,19 +41,19 @@ def register():
 
         # sends user to login page
         logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
-        return redirect(url_for('users/login.html'))
+        return render_template('users/login.html', form=form)
     # if request method is GET or form not valid re-render signup page
     return render_template('users/ConsumerRegister.html', form=form)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/feed', methods=['GET', 'POST'])
 @login_required
-def generate_dashboard():
+def dashboard():
     # need to change to allow consumers to select a max distance
     placeholder = 1000
     # get list of producers within user-specified range alongside their distance from consumer
     producers = find_producers(placeholder)
-    return render_template("")
+    return render_template("consumer/feed.html", suppliers=producers)
 
 
 @consumer_blueprint.route('/feed', methods=['GET', 'POST'])
@@ -247,20 +248,22 @@ def cancel_order():
 
 
 @app.route('/')
-def find_producers(distance_range, filter):
+def find_producers(distance_range):
     geodistance = pgeocode.GeoDistance('gb')
     nearby_producers = {}
     # query all producers
     producers = Producer.query.all()
-    for i in producers:
+    # ------------ need to add distance functionality in later ----------------
+    #for i in producers:
         # calculate distance between all producers and current user
-        distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
-        if distance < distance_range:
-            # key = producer, value = distance
-            nearby_producers.update({i: distance})
+    #    distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
+    #    if distance < distance_range:
+    #        # key = producer, value = distance
+    #        nearby_producers.update({i: distance})
     # sorts producers by distance from low to high
-    sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
-    return sorted_producers
+    # sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
+    #return sorted_producers
+    return producers
 
 
 # view user account
@@ -275,3 +278,4 @@ def account():
                            lastname=current_user.lastname,
                            phone=current_user.phone,
                            postcode=current_user.postcode)
+

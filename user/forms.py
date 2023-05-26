@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField
-from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
+from wtforms import StringField, SubmitField, PasswordField, RadioField
+from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError, Regexp
 import re
 
 
@@ -21,15 +21,13 @@ def validate_password(self, data_field):
             "and should be at least 6 characters with one special character")
 
 
-# define phone validate function
-def validate_phone(self, data_field):
-    i = re.compile(r'(?=\d\d\d\d-\d\d\d-\d\d\d\d)')
+# Define phone validate function
+def validate_phone(self,data_field):
+    i = re.compile(r'(?=\d\d\d\d\d\d\d\d\d\d\d)')
     if not i.match(data_field.data):
-        raise ValidationError("Phone number must be of the format XXXX-XXX-XXX")
+        raise ValidationError("Phone number must have 11 digits")
 
 
-
-# Define postcode validate function
 def validate_postcode(self, data_field):
     c = re.compile(r'^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?\s?[0-9][A-Za-z]{2}$')
     if not c.match(data_field.data):

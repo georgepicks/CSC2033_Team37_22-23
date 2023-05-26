@@ -11,7 +11,13 @@
                 <div class="container">
                     {{ form.csrf_token() }}
                     {{ form.email(class="input", placeholder="Email") }}
+                        {% for error in form.email.errors %}
+                            {{ error }}
+                        {% endfor %}
                     {{ form.password(class="input", placeholder="Password") }}
+                        {% for error in form.password.errors %}
+                            {{ error }}
+                        {% endfor %}
                     {{ form.submit(class="button") }}
                 </div>
             </form>

@@ -3,17 +3,25 @@ from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
 from flask_login import current_user
+import os
+from dotenv import load_dotenv
 
 pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-
-
-# initialise database
-engine = create_engine('mariadb:///csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk:3306/csc2033_team37')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mariadb://csc2033_team37:BikeRode4out@cs-db.ncl.ac.uk/csc2033_team37'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Get and validate password from secure environment variable
+load_dotenv()
+db_password = os.environ.get('DB_PASSWORD')
+if not db_password:
+    raise ValueError('Database password not found')
+
+# Connect to database
+db_uri = f'mariadb://csc2033_team37:{db_password}@cs-db.ncl.ac.uk/csc2033_team37'
+engine = create_engine(db_uri)
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 db = SQLAlchemy(app)
 
 # imports LoginManageer
@@ -43,19 +51,15 @@ app.register_blueprint(consumer_blueprint)
 
 
 @login_manager.user_loader
-def load_user(email):
+def load_user(user_id):
     # if user exists in consumer table, return it's ID
-    if Consumer.query.filter_by(email=email).first():
-        user = Consumer.query.filter_by(email=email).first()
-        return user
+    if Consumer.query.get(int(user_id)):
+        # user = Consumer.query.filter_by(email=email).first()
+        return Consumer.query.get(int(user_id))
     # if the user's email doesn't exist in the consumer table, check the producer table too
     else:
-        user = Producer.query.filter_by(email=email).first()
-        return user
-
-
-with app.app_context():
-    load_user('jd@jdwetherspoons.com')
+        # user = Producer.query.filter_by(email=email).first()
+        return Producer.query.get(int(user_id))
 
 
 @app.route('/about_us')
