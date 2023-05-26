@@ -74,6 +74,7 @@ def feed():
             'postcode': producer.postcode
         }
         suppliers.append(producer_data)
+
     return render_template('consumer/feed.html', suppliers=suppliers)
 
 

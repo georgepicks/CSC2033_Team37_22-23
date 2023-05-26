@@ -26,14 +26,6 @@
     <a href="{{ url_for('consumer.feed') }}"><div class="TestButton">Feed</div></a>
 
 
-    {% if current_user.is_authenticated %}
-        <div class="nav-links">
-            <a href="{{ url_for('consumer.feed') }}"><div class="DiscoverLink">Discover</div></a>
-            <a href="{{ url_for('consumer.feed') }}"><div class="AccountLink">Account</div></a>
-            <a href="{{ url_for('consumer.feed') }}"><div class="LogoutLink">Log out</div></a>
-        </div>
-    {% endif %}
-
     {% block content %}
     {% endblock %}
 </body>
