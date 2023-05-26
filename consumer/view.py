@@ -46,16 +46,6 @@ def register():
     return render_template('users/ConsumerRegister.html', form=form)
 
 
-@app.route('/feed', methods=['GET', 'POST'])
-@login_required
-def dashboard():
-    # need to change to allow consumers to select a max distance
-    placeholder = 1000
-    # get list of producers within user-specified range alongside their distance from consumer
-    producers = find_producers(placeholder)
-    return render_template("consumer/feed.html", suppliers=producers)
-
-
 @consumer_blueprint.route('/feed', methods=['GET', 'POST'])
 def feed():
     suppliers = []  # Create an empty list to store supplier information
