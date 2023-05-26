@@ -1,0 +1,35 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-Hunger App</title>
+    <link rel="stylesheet" href="../../static/AccountStyle.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Leftovers</div>
+        <nav>
+
+            <!-- dash for consumer -->
+            <a href="{{ url_for('users.logout')}}">Log out</a>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Account Information</h1>
+        <div class="account-info">
+            <h1>Welcome, {{ firstname }} {{ lastname }}</h1>
+            <p> ID: {{ id }}</p>
+            <p>Email: {{ email }}</p>
+            <p>Postcode: {{ postcode }}</p>
+            <p>Phone: {{ phone }}</p>
+        </div>
+    </div>
+    <footer>
+        <nav>
+            <a href="{{ url_for('about_us') }}">About Us</a>
+            <a href="{{ url_for('contact_us') }}">Contact Us</a>
+        </nav>
+    </footer>
+</body>
+</html>
