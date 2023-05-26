@@ -51,7 +51,7 @@ def login():
                 db.session.commit()
                 # Data is recorded in lottery.log each time login action takes place
                 logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
-                return render_template('')
+                return render_template('producer/supplier_dash.html', id=current_user.id)
 
         # checks if the user mail logged in is a consumer mail
         elif Consumer.query.filter_by(email=form.email.data).first():

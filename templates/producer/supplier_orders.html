@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Reserved Orders</title>
+    <link rel="stylesheet" href="../../static/SupplierDash.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Leftovers</div>
+        <nav>
+            <a href="{{ url_for('producer.supplier_inventory') }}">Your Inventory</a>
+            <a href="{{ url_for('producer.producer_account') }}">Account</a>
+            <a href="{{ url_for('users.logout')}}">Log out</a>
+        </nav>
+    </header>
+    <div class="inventory-buttons">
+        <h1>Your Reserved Orders</h1>
+    </div>
+    <div id="cards-container">
+        {% for order in orders %}
+            <div class="card">
+                <p><strong>Order ID:</strong> {{ order.id }}</p>
+                <p><strong>Consumer:</strong> {{ order.consumer_id }}</p>
+                <p><strong>Item:</strong> {{ order.item }}</p>
+                <p><strong>Date:</strong> {{ order.order_time }}</p>
+            </div>
+        {% endfor %}
+    </div>
+    <footer>
+        <nav>
+            <a href="{{ url_for('about_us') }}">About Us</a>
+            <a href="{{ url_for('contact_us') }}">Contact Us</a>
+        </nav>
+    </footer>
+</body>
+</html>

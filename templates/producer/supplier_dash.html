@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Dashboard</title>
+    <link rel="stylesheet" href="../../static/SupplierDash.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Leftovers</div>
+        <nav>
+            <a href="{{ url_for('producer.producer_account') }}">Account</a>
+            <a href="{{ url_for('users.logout')}}">Log out</a>
+        </nav>
+    </header>
+    <section>
+        <div class = "dash-buttons">
+            <h1>Dashboard</h1>
+            <a href="{{ url_for('add_item') }}"><button id="add-item-button">Add an Item</button></a>
+            <a href="{{ url_for('orders') }}"><button id="view-orders-button">View Reserved Orders</button></a>
+            <a href="{{ url_for('inventory') }}"><button id="inventory-button">Your Inventory</button></a>
+        </div>
+    </section>
+    <footer>
+        <nav>
+            <a href="{{ url_for('about_us') }}">About Us</a>
+            <a href="{{ url_for('contact_us') }}">Contact Us</a>
+        </nav>
+    </footer>
+</body>
+</html>

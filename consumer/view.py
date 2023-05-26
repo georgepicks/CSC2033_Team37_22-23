@@ -179,7 +179,7 @@ def edit_order(order_id):
 
         if order:
             cursor.close()
-            return render_template('edit_order.html', order=order)
+            return render_template('edit_item.html', order=order)
         else:
             cursor.close()
             return 'Order not found'
@@ -265,11 +265,11 @@ def find_producers(distance_range):
 
 
 # view user account
-@consumer_blueprint.route('/account')
+@consumer_blueprint.route('/consumer_account')
 @login_required
-def account():
-    # Shows the account details of the user
-    return render_template('users/account.html',
+def consumer_account():
+    # Shows the account details of the consumer
+    return render_template('users/consumer_acc.html',
                            id=current_user.id,
                            email=current_user.email,
                            firstname=current_user.firstname,

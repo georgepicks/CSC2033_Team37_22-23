@@ -1,0 +1,109 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #4CAF50;
+}
+
+header .logo {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 1rem;
+    font-size: 1.2rem;
+}
+
+.hero {
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    background-color: #f4f4f4;
+    padding-top: 6rem;
+}
+
+.hero h1 {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.cta-supplier {
+    margin-right: 2rem; /* Add this to increase the distance between the buttons */
+}
+
+.cta-supplier, .cta-receiver {
+    border: 2px solid black;
+    padding: 10px 15px;
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.3s ease;
+    margin-bottom: 6rem;
+    margin-top: 1rem; /* Add this to reduce the space between buttons and p */
+}
+
+
+.cta-supplier:hover, .cta-receiver:hover {
+    background-color: black;
+    color: white;
+}
+
+
+.cta-buttons a {
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    background-color: #FFE7AA;
+    padding: 0.5rem 2rem;
+    border-radius: 5px;
+    margin: 0 0.5rem; /* 0 0.5 */
+    transition: background-color 0.3s;
+}
+
+.cta-buttons a:hover {
+    background-color: #4CAF50;
+}
+
+footer {
+    background-color: #4CAF50;
+    padding: 1rem;
+}
+
+footer nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 0.5rem;
+}
+
+footer nav a:hover {
+    text-decoration: underline;
+}
+
+.hero-image {
+    max-width: 130px; /* Adjust the size as needed */
+    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+}

@@ -4,37 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zero-Hunger App</title>
-    <link rel="stylesheet" href="../../static/OtherPagesStyle.css">
+    <link rel="stylesheet" href="../static/OtherPagesStyle.css">
 </head>
 <body>
-<header>
-    <div class="logo">Leftovers</div>
-    <nav>
-    <!-- if user is authenticated and producer: -->
-        {% if current_user.is_authenticated %}
-            <!-- url for producer dash -->
-            <a href="{{ url_for('producer.producer_account') }}">Account</a>
-            <a href="{{ url_for('users.logout') }}">Logout</a>
-      <!-- else if user is authenticated and consumer: -->
-            <!-- url for consumer dash, consumer account, logout, -->
-        {% else %}
-            <a href="{{ url_for('index') }}">Home</a>
-        {% endif %}
-    </nav>
-</header>
+    <header>
+        <div class="logo">Leftovers</div>
+        <nav>
+            <a href="register.html">Discover</a>
+            <a href="account.html">Account</a>
+            <a href="index.html">Log out</a>
+        </nav>
+    </header>
     <section class="content">
-        <img src="../../static/images/Logo.png" alt="Logo" class="content-image"/>
+        <img src="../static/images/Logo.png" alt="Logo" class="content-image"/>
         <h1>About Us</h1>
         <p>We are a dedicated group of Computer Science students from Newcastle University, committed to making a positive difference in the world. Our project, "Leftovers", is aimed at tackling one of the most pressing challenges of our time - hunger.</p>
         <p>Aligned with the United Nations' goal of Zero Hunger, our web application provides a platform for sharing leftovers. Our goal is to reduce food waste and ensure that no one in our community goes to bed hungry.</p>
         <p>Users can register as suppliers, enabling them to post their spare food for others to use. Alternatively, users can register as consumers, allowing them to access these leftovers free of charge. By doing this, we hope to create a cycle of sharing and caring in our community.</p>
         <h2>Why It Matters</h2>
         <p>Around the world, over 690 million people suffer from hunger, and 1.3 billion tonnes of food is wasted every year. These numbers are staggering, but we believe that with small steps, we can make a big difference. By reducing food waste and sharing what we have, we can work towards a future where everyone has enough to eat.</p>
-        <img src="../../static/images/UN%20goal%202.jpeg" alt="UN Goal" class="content-image2"/>
+        <img src="../static/images/UN%20goal%202.jpeg" alt="UN Goal" class="content-image2"/>
     </section>
     <footer>
         <nav>
-            <a href="{{ url_for('contact_us') }}">Contact Us</a>
+            <a href="contact.html">Contact Us</a>
         </nav>
     </footer>
 </body>
