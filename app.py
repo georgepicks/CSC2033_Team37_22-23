@@ -8,7 +8,6 @@ pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-# define login manager
 
 
 # initialise database

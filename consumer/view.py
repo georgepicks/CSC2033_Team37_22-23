@@ -11,7 +11,7 @@ from user.forms import ConsumerRegisterForm
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
 
-@consumer_blueprint.route('/register', methods=['GET', 'POST'])
+@consumer_blueprint.route('/consumer/register', methods=['GET', 'POST'])
 def register():
     # create signup form object
     form = ConsumerRegisterForm()
