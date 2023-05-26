@@ -48,8 +48,8 @@ class Producer(db.Model, UserMixin):
 
 class InventoryItems(db.Model):
     __tablename__ = 'inventory_items'
-    id = db.Column(db.Integer, primary_key=True)
-    item = db.Column(db.String(100), nullable=False, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    item = db.Column(db.String(100), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     producer = db.Column(db.Integer, db.ForeignKey(Producer.id), nullable=False)
     dietary = db.Column(db.String(100), nullable=False, default="None")
@@ -63,7 +63,7 @@ class InventoryItems(db.Model):
 
 class Orders(db.Model, UserMixin):
     __tablename__ = 'orders'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     producer_id = db.Column(db.Integer, db.ForeignKey(Producer.id), nullable=False)
     consumer_id = db.Column(db.Integer, db.ForeignKey(Consumer.id), nullable=False)
     order_time = db.Column(db.DateTime, nullable=False)
@@ -76,9 +76,9 @@ class Orders(db.Model, UserMixin):
 
 
 class OrderItems(db.Model):
-    __tablename__ = 'order items'
+    __tablename__ = 'order_items'
     id = db.Column(db.Integer, primary_key=True)
-    item = db.Column(db.String(100), nullable=False, primary_key=True)
+    item = db.Column(db.String(100), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     order_id = db.Column(db.Integer, db.ForeignKey(Orders.id))
 
