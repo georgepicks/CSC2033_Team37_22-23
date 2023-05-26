@@ -77,12 +77,39 @@ function removeFromBasket(itemId) {
 function addToOrder(itemId) {
   var card = document.getElementById(itemId);
   var itemName = card.querySelector(".item-name").textContent; // Updated class name
+  var itemQuantity = parseInt(card.querySelector(".item-quantity").textContent.split(":")[1].trim());
   var basket = document.getElementById("BasketList");
-  var basketItem = document.createElement("li");
-  basketItem.id = "basket-" + itemId;
-  basketItem.innerHTML = `
-    <span>${itemName}</span>
-    <span class="RemoveItem" onclick="removeFromBasket('basket-${itemId}')">x</span>
-  `;
-  basket.appendChild(basketItem);
+  var basketItems = basket.getElementsByClassName("basket-item");
+  var existingItem = null;
+
+  // Check if the item already exists in the basket
+  for (var i = 0; i < basketItems.length; i++) {
+    var name = basketItems[i].querySelector(".basket-item-name").textContent;
+    if (name === itemName) {
+      existingItem = basketItems[i];
+      break;
+    }
+  }
+
+  if (existingItem) {
+    // If the item already exists, increment the quantity counter
+    var quantityElement = existingItem.querySelector(".basket-item-quantity");
+    var quantity = parseInt(quantityElement.textContent);
+    if (quantity < itemQuantity) {
+      quantity++;
+      quantityElement.textContent = quantity;
+    } else {
+      alert("You cannot add more than the available quantity.");
+    }
+  } else {
+    // If the item doesn't exist, add a new item with quantity 1
+    var basketItem = document.createElement("li");
+    basketItem.className = "basket-item";
+    basketItem.innerHTML = `
+      <span class="basket-item-name">${itemName}</span>
+      <span class="basket-item-quantity"> 1</span>
+      <span class="RemoveItem" onclick="removeFromBasket('basket-${itemId}')">x</span>
+    `;
+    basket.appendChild(basketItem);
+  }
 }
