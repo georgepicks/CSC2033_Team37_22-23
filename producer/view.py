@@ -8,7 +8,8 @@ import logging
 producer_blueprint = Blueprint('producer', __name__, template_folder='templates')
 
 
-@producer_blueprint.route('/ProducerRegister', methods=['GET', 'POST'])
+
+@producer_blueprint.route('/producer/register', methods=['GET', 'POST'])
 def register():
     # create signup form object
     form = ProducerRegisterForm()

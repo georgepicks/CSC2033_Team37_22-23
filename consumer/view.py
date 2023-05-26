@@ -11,7 +11,8 @@ import logging
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
 
-@consumer_blueprint.route('/ConsumerRegister', methods=['GET', 'POST'])
+
+@consumer_blueprint.route('/consumer/register', methods=['GET', 'POST'])
 def register():
     # create signup form object
     form = ConsumerRegisterForm()
@@ -53,6 +54,58 @@ def dashboard():
     # get list of producers within user-specified range alongside their distance from consumer
     producers = find_producers(placeholder)
     return render_template("consumer/feed.html", suppliers=producers)
+
+
+@consumer_blueprint.route('/feed', methods=['GET', 'POST'])
+def feed():
+    suppliers = []  # Create an empty list to store supplier information
+
+    # Retrieve all producers from the database
+    producers = Producer.query.all()
+
+    # Iterate over each supplier and extract the required information
+    for producer in producers:
+        producer_data = {
+            'id': producer.id,
+            'name': producer.producer_name,
+            'address1': producer.address_1,
+            'address2': producer.address_2,
+            'address3': producer.address_3,
+            'postcode': producer.postcode
+        }
+        suppliers.append(producer_data)
+    return render_template('consumer/feed.html', suppliers=suppliers)
+
+
+@consumer_blueprint.route('/order', methods=['GET', 'POST'])
+def order_generate():
+    supplier_id = request.args.get('supplier_id')
+
+    supplier = Producer.query.filter_by(id=supplier_id).first()
+
+    name = supplier.producer_name
+    address1 = supplier.address_1
+    postcode = supplier.postcode
+
+    items = []
+
+    item_list = InventoryItems.query.filter_by(producer=supplier_id).all()
+
+    for item in item_list:
+        item_data = {
+            'id': item.id,
+            'item': item.item,
+            'quantity': item.quantity,
+            'producer': item.producer,
+            'dietary': item.dietary
+        }
+
+        items.append(item_data)
+
+        print(items)
+
+    return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address=address1,
+                           supplier_postcode=postcode)
 
 
 # Function to search for an item in the inventory

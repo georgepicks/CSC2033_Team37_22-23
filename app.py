@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
+from flask_login import current_user
 import os
 from dotenv import load_dotenv
 
@@ -27,29 +28,26 @@ db = SQLAlchemy(app)
 from flask_login import LoginManager, current_user
 from models import Consumer, Producer
 
-
-@app.route('/')
-def index():
-    return render_template('main/index.html')
-
-
-# define login manager
 login_manager = LoginManager()
 login_manager.login_view = 'users.login'
 login_manager.init_app(app)
+
+@app.route('/')
+def index():
+    return render_template('main/index.html',  current_user=current_user)
+
 
 # BLUEPRINTS
 # import blueprints
 from user.views import users_blueprint
 from producer.view import producer_blueprint
 from consumer.view import consumer_blueprint
-from pages.view import pages_blueprint
+
 
 # # register blueprints with app
 app.register_blueprint(users_blueprint)
 app.register_blueprint(producer_blueprint)
 app.register_blueprint(consumer_blueprint)
-app.register_blueprint(pages_blueprint)
 
 
 @login_manager.user_loader
@@ -73,7 +71,7 @@ def about_us():
 def contact_us():
     return render_template('main/contact.html')
 
-
+"""
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template("errors/error404.html"), 404
@@ -87,7 +85,7 @@ def server_error(error):
 @app.errorhandler(403)
 def forbidden_action(error):
     return render_template("errors/error403.html"), 403
-
+"""
 
 if __name__ == '__main__':
     app.run()

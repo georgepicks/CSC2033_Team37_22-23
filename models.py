@@ -47,7 +47,7 @@ class Producer(db.Model, UserMixin):
 
 
 class InventoryItems(db.Model):
-    __tablename__ = 'inventory items'
+    __tablename__ = 'inventory_items'
     id = db.Column(db.Integer, primary_key=True)
     item = db.Column(db.String(100), nullable=False, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
