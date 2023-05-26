@@ -39,6 +39,28 @@ function filterSuppliers() {
     }
 }
 
+function filterItems() {
+  var input, filter, inventory, name, dietary;
+  input = document.getElementById('SearchInput');
+  filter = input.value.toUpperCase();
+  inventory = document.getElementsByClassName('InventoryCard');
+
+  for (var i = 0; i < inventory.length; i++) {
+    name = inventory[i].getElementsByClassName('item-name')[0];
+    dietary = inventory[i].getElementsByClassName('item_dietary')[0];
+
+    if (
+      name.innerHTML.toUpperCase().indexOf(filter) > -1 ||
+      dietary.innerHTML.toUpperCase().indexOf(filter) > -1
+    ) {
+      inventory[i].style.display = '';
+    } else {
+      inventory[i].style.display = 'none';
+    }
+  }
+}
+
+
 function redirectToSupplier(supplierId) {
     window.location.href = "http://127.0.0.1:5000/order?supplier_id=" + supplierId
 }
@@ -54,13 +76,13 @@ function removeFromBasket(itemId) {
 
 function addToOrder(itemId) {
   var card = document.getElementById(itemId);
-  var itemName = card.querySelector(".ItemName").textContent;
+  var itemName = card.querySelector(".item-name").textContent; // Updated class name
   var basket = document.getElementById("BasketList");
   var basketItem = document.createElement("li");
   basketItem.id = "basket-" + itemId;
   basketItem.innerHTML = `
-  <span>${itemName}</span>
-  <span class="RemoveItem" onclick="removeFromBasket('basket-${itemId}')">x</span>
-`;
+    <span>${itemName}</span>
+    <span class="RemoveItem" onclick="removeFromBasket('basket-${itemId}')">x</span>
+  `;
   basket.appendChild(basketItem);
 }

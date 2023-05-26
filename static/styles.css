@@ -232,7 +232,7 @@ button[type="submit"] {
 
 .InventoryContainer {
     width: 50%;
-    max-height: 400px;
+    height: 400px;
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
@@ -243,17 +243,17 @@ button[type="submit"] {
 }
 
 .InventoryCard {
-    width: 10%;
+    width: 15%;
+    height: 150px;
     margin-bottom: 10px;
     border: 1px solid #000000;
     padding: 10px;
-    text-align: center;
 }
 
 .InventoryCard:hover {
     cursor: pointer;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    transform: translateY(-10px);
+    background-color: #FFE7AA;
     transition: all 0.3s ease;
 }
 
@@ -264,6 +264,10 @@ button[type="submit"] {
 
 .InventoryCard .item-quantity {
     margin-bottom: 10px;
+}
+
+.InventoryCard .item_dietary{
+    margin-bottom: 5px;
 }
 
 .InventoryCard.selected {
@@ -314,10 +318,9 @@ button[type="submit"] {
 }
 
 #info{
-    position: absolute;
     text-align: center;
-    top: 14%;
     font-size: 40px;
+    margin-bottom: 20px;
 }
 
 .OrderButton {
