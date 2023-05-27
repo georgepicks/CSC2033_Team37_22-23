@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, session, Markup, request
+ import Blueprint, render_template, flash, redirect, url_for, session, Markup, request
 from models import Orders, Producer, Consumer
 from app import db
 from user.forms import LoginForm
@@ -100,18 +100,18 @@ def send_email(subject, recipients, body):
 
 
 # Message for the producer that is sent through email
-def send_mail_notification_producer(consumer_id, order_id):
+def send_mail_notification_producer(order_id):
     subject = 'New Order Notification'
-    recipients = get_producer_email(consumer_id)
+    recipients = get_producer_email(order_id)
     body = f"You have received a new order from a consumer. Order ID: {order_id}"
     send_email(subject, recipients, body)
     return 'Email sent successfully!'
 
 
 # Function to retrieve relevant producer mail for the message to be sent
-def get_producer_email(consumer_id):
+def get_producer_email(order_id):
     # order is retrieved in reference to the customer_id
-    order = Orders.query.filter_by(consumer_id=consumer_id).first()
+    order = Orders.query.filter_by(id=order_id).first()
     if order:
         producer = Producer.query.get(order.producer_id)
         return [producer.email]
@@ -133,11 +133,10 @@ def get_consumer_mail(order_id):
         return [consumer.email]
     return []
 
-def cancel_mail(consumer_id, order_id):
+def cancel_mail(order_id):
     subject = 'New Order Notification'
-    recipients = get_producer_email(consumer_id)
+    recipients = get_producer_email(order_id)
     body = f"The order,  Order ID: {order_id} is cancelled"
     send_email(subject, recipients, body)
     return 'Email sent successfully!'
-
 
