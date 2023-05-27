@@ -266,6 +266,7 @@ def find_producers(distance_range):
 # view user account
 @consumer_blueprint.route('/consumer_account')
 @login_required
+d
 def consumer_account():
     # Shows the account details of the consumer
     return render_template('users/consumer_acc.html',
@@ -274,4 +275,4 @@ def consumer_account():
                            firstname=current_user.firstname,
                            lastname=current_user.lastname,
                            phone=current_user.phone,
-                           pos
+                           postcode=current_user.postcode)
