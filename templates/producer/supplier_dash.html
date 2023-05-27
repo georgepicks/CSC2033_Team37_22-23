@@ -15,11 +15,20 @@
         </nav>
     </header>
     <section>
-        <div class = "dash-buttons">
+        <div class="dash-buttons">
             <h1>Dashboard</h1>
-            <a href="{{ url_for('add_item') }}"><button id="add-item-button">Add an Item</button></a>
-            <a href="{{ url_for('orders') }}"><button id="view-orders-button">View Reserved Orders</button></a>
-            <a href="{{ url_for('inventory') }}"><button id="inventory-button">Your Inventory</button></a>
+            <div class="button-detail">
+                <a href="{{ url_for('add_item') }}"><button id="add-item-dash">Add an Item</button></a>
+                <span class="detail">Here you can add an item to your inventory</span>
+            </div>
+            <div class="button-detail">
+                <a href="{{ url_for('orders') }}"><button id="view-orders-dash">View Reserved Orders</button></a>
+                <span class="detail">Here you can view your items that have been reserved by a receiver</span>
+            </div>
+            <div class="button-detail">
+                <a href="{{ url_for('inventory') }}"><button id="inventory-dash">Your Inventory</button></a>
+                <span class="detail">Here you can view,delete,and update items in your inventory</span>
+            </div>
         </div>
     </section>
     <footer>
