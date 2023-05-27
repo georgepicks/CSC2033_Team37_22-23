@@ -48,11 +48,8 @@ def login():
                 # user login is initiated
                 login_user(user)
                 # current login user is matched to the last login user
-                # user.last_login = user.current_login
-                # user.current_login = datetime.now()
                 db.session.add(user)
                 db.session.commit()
-                # Data is recorded in lottery.log each time login action takes place
                 return render_template('producer/supplier_dash.html', id=current_user.id)
 
         # checks if the user mail logged in is a consumer mail
@@ -60,10 +57,7 @@ def login():
             user = Consumer.query.filter_by(email=form.email.data).first()
             # if condition checking if the encrypted password is similar to database, if the user exists and the
             # verification key entered is false
-            if not user :
-                logging.warning('SECURITY - Failed login attempt [%s, %s]', form.email.data, request.remote_addr)
-                # logging warning returns the login is failed and to try again
-
+            if not user or not bcrypt.checkpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')):
                 # Session incremented after each invalid login
                 session['authentication_attempts'] += 1
 
@@ -81,14 +75,8 @@ def login():
             else:
                 # user login is initiated
                 login_user(user)
-                # # current login user is matched to the last login user
                 feed = find_producers(1000)
-                db.session.add(user)
-                db.session.commit()
-                # Data is recorded in lottery.log each time login action takes place
-                logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
                 return render_template('consumer/feed.html', suppliers=feed)
-
         else:
             return 'invalid User'
     # returns login if all the functions fail
@@ -98,8 +86,6 @@ def login():
 @users_blueprint.route('/logout')
 @login_required
 def logout():
-    # Data is recorded in lottery.log each time a user logs out of the program
-    logging.warning('SECURITY - Log out [%s, %s, %s]', current_user.id, current_user.email, request.remote_addr)
     #Function for the user to log out
     logout_user()
     #the user is redirected to index page after logout
