@@ -3,13 +3,14 @@ from models import Orders, Producer, Consumer
 from app import db
 from user.forms import LoginForm
 import bcrypt
-from flask_login import login_user, current_user, logout_user, login_required, UserMixin
+from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 import logging
 from flask_mail import Message, Mail
 from consumer.view import find_producers
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
+
 
 # defining a login function
 @users_blueprint.route('/login', methods=['GET', 'POST'])
@@ -27,6 +28,7 @@ def login():
             # if condition checking if the encrypted password is similar to database, if the user exists and the
             # verification key entered is false
             if user and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')):
+
 
                 login_user(user)
                 # current login user is matched to the last login user
@@ -52,12 +54,15 @@ def login():
             user = Consumer.query.filter_by(email=form.email.data).first()
             # if condition checking if the encrypted password is similar to database, if the user exists and the
             # verification key entered is false
+
+
             if user and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')):
                 # user login is initiated
                 login_user(user)
                 db.session.add(user)
                 db.session.commit()
                 feed = find_producers(0)
+
                 return render_template('consumer/feed.html', suppliers=feed)
             session['authentication_attempts'] = session.get('authentication_attempts', 0) + 1
 
@@ -111,6 +116,7 @@ def get_producer_email(order_id):
         return [producer.email]
     return []
 
+
 # Message for the consumer that is sent through email
 def send_mail_notification_consumer( order_id):
     subject = 'New Order Notification'
@@ -118,6 +124,7 @@ def send_mail_notification_consumer( order_id):
     body = f"Your order have been received, Order ID: {order_id}"
     send_email(subject, recipients, body)
     return 'Email sent successfully!'
+
 
 #Function to retrieve relevant consumer mail for the message to be sent
 def get_consumer_mail(order_id):
@@ -127,10 +134,38 @@ def get_consumer_mail(order_id):
         return [consumer.email]
     return []
 
+  
 def cancel_mail(order_id):
+
     subject = 'New Order Notification'
     recipients = get_producer_email(order_id)
     body = f"The order,  Order ID: {order_id} is cancelled"
     send_email(subject, recipients, body)
     return 'Email sent successfully!'
+
+
+@users_blueprint.route('/account')
+@login_required
+def account():
+    # if Producer.query.filter_by(email=current_user.email).first():
+    if isinstance(current_user, Producer):
+        print("user = producer")
+        return render_template('users/account.html',
+                           id=current_user.id,
+                           email=current_user.email,
+                           producer_name=current_user.producer_name,
+                           phone=current_user.phone,
+                           postcode=current_user.postcode,
+                           address_1=current_user.address_1,
+                           address_2=current_user.address_2,
+                           address_3=current_user.address_3)
+    else:
+        print("user = consumer")
+        return render_template('users/account.html',
+                        id=current_user.id,
+                        email=current_user.email,
+                        firstname=current_user.firstname,
+                        lastname=current_user.lastname,
+                        postcode=current_user.postcode,
+                        phone=current_user.phone)
 

@@ -18,7 +18,7 @@
     {% if current_user.is_authenticated %}
         <div class="nav-links">
             <a href="{{ url_for('consumer.feed') }}"><div class="DiscoverLink">Discover</div></a>
-            <a href="{{ url_for('consumer.feed') }}"><div class="AccountLink">Account</div></a>
+            <a href="{{ url_for('users.account') }}"><div class="AccountLink">Account</div></a>
             <a href="{{ url_for('users.logout') }}"><div class="LogoutLink">Log out</div></a>
         </div>
     {% else %}
@@ -36,5 +36,16 @@
     {% block content %}
     {% endblock %}
 </body>
+<div class="flash-messages">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flash-messages-list">
+                    {% for message in messages %}
+                        <li class="{{ message[1] }}">{{ message[0] }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
 
 </html>
