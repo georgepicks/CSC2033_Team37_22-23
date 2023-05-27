@@ -165,18 +165,18 @@ def remove_item_route(item_id):
 
 
 # view user account
-@producer_blueprint.route('/producer_account')
-@login_required
-def producer_account():
-    return render_template('users/producer_acc.html',
-                           id=current_user.id,
-                           email=current_user.email,
-                           producer_name=current_user.producer_name,
-                           phone=current_user.phone,
-                           postcode=current_user.postcode,
-                           address_1=current_user.address_1,
-                           address_2=current_user.address_2,
-                           address_3=current_user.address_3)
+#@producer_blueprint.route('/users/account')
+#@login_required
+#def producer_account():
+#    return render_template('users/producer_acc.html',
+#                           id=current_user.id,
+#                           email=current_user.email,
+#                           producer_name=current_user.producer_name,
+#                           phone=current_user.phone,
+#                           postcode=current_user.postcode,
+#                           address_1=current_user.address_1,
+#                           address_2=current_user.address_2,
+#                           address_3=current_user.address_3)
 
 
 @producer_blueprint.route('/supplier_dash')

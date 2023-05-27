@@ -3,13 +3,14 @@ from models import Orders, Producer, Consumer
 from app import db
 from user.forms import LoginForm
 import bcrypt
-from flask_login import login_user, current_user, logout_user, login_required, UserMixin
+from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime
 import logging
 from flask_mail import Message, Mail
 from consumer.view import find_producers
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
+
 
 # defining a login function
 @users_blueprint.route('/login', methods=['GET', 'POST'])
@@ -40,7 +41,7 @@ def login():
                     session['authentication_attempts'] = 0
 
                     # invalid user is redirected to register page since user login is invalid
-                    return redirect(url_for('users.ProducerRegister.html'))
+                    return redirect(url_for('users/ProducerRegister.html'))
 
                 flash('Please check your login details and try again,{} login attempts remaining'.format(
                     5 - session.get('authentication_attempts')))
@@ -56,11 +57,11 @@ def login():
                 return render_template('producer/supplier_dash.html', id=current_user.id)
 
         # checks if the user mail logged in is a consumer mail
-        elif Consumer.query.filter_by(email=form.email.data).first():
+        elif Consumer.query.filter_by(email=form.email.data).first() is not None:
             user = Consumer.query.filter_by(email=form.email.data).first()
             # if condition checking if the encrypted password is similar to database, if the user exists and the
             # verification key entered is false
-            if not user :
+            if not user or not bcrypt.checkpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')):
                 logging.warning('SECURITY - Failed login attempt [%s, %s]', form.email.data, request.remote_addr)
                 # logging warning returns the login is failed and to try again
 
@@ -82,9 +83,10 @@ def login():
                 # user login is initiated
                 login_user(user)
                 # # current login user is matched to the last login user
-                feed = find_producers(1000)
                 db.session.add(user)
                 db.session.commit()
+                # 0 is default and means no distance filter
+                feed = find_producers(0)
                 # Data is recorded in lottery.log each time login action takes place
                 logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
                 return render_template('consumer/feed.html', suppliers=feed)
@@ -131,6 +133,7 @@ def get_producer_email(consumer_id):
         return [producer.email]
     return []
 
+
 # Message for the consumer that is sent through email
 def send_mail_notification_consumer( order_id):
     subject = 'New Order Notification'
@@ -138,6 +141,7 @@ def send_mail_notification_consumer( order_id):
     body = f"Your order have been received, Order ID: {order_id}"
     send_email(subject, recipients, body)
     return 'Email sent successfully!'
+
 
 #Function to retrieve relevant consumer mail for the message to be sent
 def get_consumer_mail(order_id):
@@ -147,6 +151,7 @@ def get_consumer_mail(order_id):
         return [consumer.email]
     return []
 
+
 def cancel_mail(consumer_id, order_id):
     subject = 'New Order Notification'
     recipients = get_producer_email(consumer_id)
@@ -154,4 +159,27 @@ def cancel_mail(consumer_id, order_id):
     send_email(subject, recipients, body)
     return 'Email sent successfully!'
 
-
+@users_blueprint.route('/account')
+@login_required
+def account():
+    # if Producer.query.filter_by(email=current_user.email).first():
+    if isinstance(current_user, Producer):
+        print("user = producer")
+        return render_template('users/account.html',
+                           id=current_user.id,
+                           email=current_user.email,
+                           producer_name=current_user.producer_name,
+                           phone=current_user.phone,
+                           postcode=current_user.postcode,
+                           address_1=current_user.address_1,
+                           address_2=current_user.address_2,
+                           address_3=current_user.address_3)
+    else:
+        print("user = consumer")
+        return render_template('users/account.html',
+                        id=current_user.id,
+                        email=current_user.email,
+                        firstname=current_user.firstname,
+                        lastname=current_user.lastname,
+                        postcode=current_user.postcode,
+                        phone=current_user.phone)
