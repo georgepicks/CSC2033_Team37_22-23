@@ -202,16 +202,23 @@ def place_order(consumer_id, producer_id, items):
 # Function to cancel an order made within a timeframe
 @app.route('/cancel-order', methods=['POST'])
 @login_required
-def cancel_order():
-    # calls for cancellation deadline time
-    cancellation_deadline = session.get('cancellation_deadline')
-    if cancellation_deadline and datetime.now() < cancellation_deadline:
-        # Perform cancellation logic
-        session.pop('selected_products', None)
-        session.pop('cancellation_deadline', None)
-        flash('Order is cancelled')
+def cancel_order(order_id):
+    # Retrieve the order with the given order ID from the database
+    order = Orders.query.get(order_id)
+
+    if order:
+        cancellation_deadline = session.get('cancellation_deadline')
+        if cancellation_deadline and datetime.now() < cancellation_deadline:
+            # Perform cancellation logic
+            db.session.delete(order)  # Delete the order from the database
+            db.session.commit()
+            session.pop('selected_products', None)
+            session.pop('cancellation_deadline', None)
+            flash('Order is cancelled')
+        else:
+            flash('Cancellation period has expired.')
     else:
-        flash('Cancellation period has expired.')
+        flash('Order not found.')
 
     return redirect(url_for('order'))
 
