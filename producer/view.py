@@ -54,17 +54,18 @@ def inventory():
 
 
 # Function to edit inventory table, authentication for relevant producer only
-@app.route('/edit_item/<int:id>', methods=['GET', 'POST'])
+@producer_blueprint.route('/edit_item/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_inventory(id):
     item = InventoryItems.query.get_or_404(id)
     if request.method == 'POST':
-        item.item = request.form['name']
-        item.quantity = request.form['quantity']
+        item.item = request.form.get('name')
+        item.quantity = request.form.get('quantity')
         db.session.commit()
-        return redirect(url_for('producer.supplier_inventory'))
+        return redirect(url_for('inventory'))
     else:
         return render_template('producer/edit_item.html', item=item)
+
 
 
 # @app.route('/edit_item/<int:id>', methods=['GET', 'POST'])
