@@ -8,7 +8,6 @@ import logging
 producer_blueprint = Blueprint('producer', __name__, template_folder='templates')
 
 
-
 @producer_blueprint.route('/producer/register', methods=['GET', 'POST'])
 def register():
     # create signup form object
@@ -109,45 +108,12 @@ def add_item():
         return render_template('producer/supplier_additem.html')
 
 
-# @app.route('/supplier_additem', methods=['GET', 'POST'])
-# @login_required
-# def add_item():
-# if request.method == 'POST':
-# item = request.form['name']
-# quantity = request.form['quantity']
-# dietary = request.form['dietary']
-# producer = current_user.id  # Assuming the logged in user is the producer
-# inventory_item = InventoryItems(item=item, quantity=quantity, producer=producer, dietary=dietary)
-##db.session.commit()
-# return redirect(url_for('inventory'))
-# else:
-# return render_template('producer/supplier_additem.html')
-
-
-# @app.route('/supplier_additem', methods=['GET', 'POST'])
-# @login_required
-# def add_item():
-# if request.method == 'POST':
-# name = request.form['name']
-# quantity = request.form['quantity']
-# item = InventoryItems(item=name, quantity=quantity)
-# db.session.add(item)
-# db.session.commit()
-# return redirect(url_for('supplier_inventory'))
-# else:
-# return render_template('producer/supplier_additem.html')
-
-
 # Function that shows the proper order from the consumer to the produxer
 @app.route('/supplier_orders')
 @login_required
 def orders():
-    cursor = db.cursor()
-    # orders = Orders.query.filter(Orders.producer_id.ilike(id).all)
-    # Retrieve all orders from the database
-    select_query = "SELECT * FROM Orders where Orders.producer_id = InventoryItems.producer_id"
-    cursor.execute(select_query)
-    orders = cursor.fetchall()
+    id = current_user.id
+    orders = Orders.query.filter(Orders.producer_id.ilike(id)).all()
 
     # Pass the orders to the template for rendering
     return render_template('producer/supplier_orders.html', orders=orders)
@@ -216,4 +182,4 @@ def producer_account():
 @producer_blueprint.route('/supplier_dash')
 @login_required
 def supplier_dash():
-    return render_template('produ
+    return render_template('producer/supplier_dash.html')

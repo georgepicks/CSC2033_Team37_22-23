@@ -10,7 +10,7 @@
     <header>
         <div class="logo">Leftovers</div>
         <nav>
-            <a href="{{ url_for('producer.supplier_inventory') }}">Your Inventory</a>
+            <a href="{{ url_for('producer.supplier_dash') }}">Dashboard</a>
             <a href="{{ url_for('producer.producer_account') }}">Account</a>
             <a href="{{ url_for('users.logout')}}">Log out</a>
         </nav>
@@ -19,14 +19,18 @@
         <h1>Your Reserved Orders</h1>
     </div>
     <div id="cards-container">
-        {% for order in orders %}
-            <div class="card">
-                <p><strong>Order ID:</strong> {{ order.id }}</p>
-                <p><strong>Consumer:</strong> {{ order.consumer_id }}</p>
-                <p><strong>Item:</strong> {{ order.item }}</p>
-                <p><strong>Date:</strong> {{ order.order_time }}</p>
-            </div>
-        {% endfor %}
+    {% for order in orders %}
+        <div class="card">
+            {% for item in order.items %}
+                <img src="https://source.unsplash.com/600x600/? {{ item.item }}" alt="Food">
+                <p><strong>Item:</strong> {{ item.item }}</p>
+                <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+            {% endfor %}
+            <p><strong>Order ID:</strong> {{ order.id }}</p>
+            <p><strong>Consumer:</strong> {{ order.consumer_id }}</p>
+            <p><strong>Date:</strong> {{ order.order_time }}</p>
+        </div>
+    {% endfor %}
     </div>
     <footer>
         <nav>
