@@ -41,7 +41,7 @@ def register():
 
         # sends user to login page
         logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
-        return render_template('users/login.html', form=form)
+        return redirect(url_for('users.login'))
 
     # if request method is GET or form not valid re-render signup page
     return render_template('users/ProducerRegister.html', form=form)
@@ -216,4 +216,4 @@ def producer_account():
 @producer_blueprint.route('/supplier_dash')
 @login_required
 def supplier_dash():
-    return render_template('producer/supplier_dash.html')
+    return render_template('produ

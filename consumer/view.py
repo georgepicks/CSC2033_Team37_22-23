@@ -25,7 +25,7 @@ def register():
         # if email already exists redirect user back to signup page with error message so user can try again
         if user:
             flash('Email address already exists')
-            return render_template('users/ConsumerRegister.html', form=form)
+            return render_template('users/login.html', form=form)
 
         # create a new user with the form data according to a consumer
         new_user = Consumer(email=form.email.data,
@@ -40,8 +40,7 @@ def register():
         db.session.commit()
 
         # sends user to login page
-        logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
-        return render_template('users/login.html', form=form)
+        return redirect(url_for('users.login'))
     # if request method is GET or form not valid re-render signup page
     return render_template('users/ConsumerRegister.html', form=form)
 
@@ -267,6 +266,7 @@ def find_producers(distance_range):
 # view user account
 @consumer_blueprint.route('/consumer_account')
 @login_required
+d
 def consumer_account():
     # Shows the account details of the consumer
     return render_template('users/consumer_acc.html',
@@ -276,4 +276,3 @@ def consumer_account():
                            lastname=current_user.lastname,
                            phone=current_user.phone,
                            postcode=current_user.postcode)
-
