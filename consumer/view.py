@@ -194,7 +194,7 @@ def place_order(consumer_id, producer_id, items):
         db.session.add(order_item)
 
     db.session.commit()
-    views.send_mail_notification_producer(consumer_id, order_id)
+    views.send_mail_notification_producer(order_id)
 
     return order_id
 
@@ -215,6 +215,7 @@ def cancel_order(order_id):
             session.pop('selected_products', None)
             session.pop('cancellation_deadline', None)
             flash('Order is cancelled')
+            views.cancel_mail(order_id)
         else:
             flash('Cancellation period has expired.')
     else:
