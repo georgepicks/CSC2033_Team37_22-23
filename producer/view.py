@@ -106,41 +106,12 @@ def add_item():
         return render_template('producer/supplier_additem.html')
 
 
-# @app.route('/supplier_additem', methods=['GET', 'POST'])
-# @login_required
-# def add_item():
-# if request.method == 'POST':
-# item = request.form['name']
-# quantity = request.form['quantity']
-# dietary = request.form['dietary']
-# producer = current_user.id  # Assuming the logged in user is the producer
-# inventory_item = InventoryItems(item=item, quantity=quantity, producer=producer, dietary=dietary)
-##db.session.commit()
-# return redirect(url_for('inventory'))
-# else:
-# return render_template('producer/supplier_additem.html')
-
-
-# @app.route('/supplier_additem', methods=['GET', 'POST'])
-# @login_required
-# def add_item():
-# if request.method == 'POST':
-# name = request.form['name']
-# quantity = request.form['quantity']
-# item = InventoryItems(item=name, quantity=quantity)
-# db.session.add(item)
-# db.session.commit()
-# return redirect(url_for('supplier_inventory'))
-# else:
-# return render_template('producer/supplier_additem.html')
-
-
 # Function that shows the proper order from the consumer to the produxer
 @app.route('/supplier_orders')
 @login_required
 def orders():
-    user_id = current_user.id
-    order = Orders.query.filter(Orders.producer_id.ilike(user_id)).all()
+    id = current_user.id
+    orders = Orders.query.filter(Orders.producer_id.ilike(id)).all()
 
     return render_template('producer/supplier_orders.html', order=order)
 
