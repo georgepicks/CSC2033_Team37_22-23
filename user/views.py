@@ -7,6 +7,7 @@ from flask_login import login_user, current_user, logout_user, login_required, U
 from datetime import datetime
 import logging
 from flask_mail import Message, Mail
+from consumer.view import find_producers
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
@@ -81,12 +82,12 @@ def login():
                 # user login is initiated
                 login_user(user)
                 # # current login user is matched to the last login user
-
+                feed = find_producers(1000)
                 db.session.add(user)
                 db.session.commit()
                 # Data is recorded in lottery.log each time login action takes place
                 logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
-                return render_template('consumer/feed.html')
+                return render_template('consumer/feed.html', suppliers=feed)
 
         else:
             return 'invalid User'
