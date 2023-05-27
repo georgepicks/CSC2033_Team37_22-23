@@ -3,10 +3,9 @@ from flask_login import login_required, current_user
 from models import InventoryItems, Producer, OrderItems, Orders
 from app import app, db
 from user.forms import ProducerRegisterForm
-import logging
+from user.views import send_mail_notification_consumer
 
 producer_blueprint = Blueprint('producer', __name__, template_folder='templates')
-
 
 @producer_blueprint.route('/producer/register', methods=['GET', 'POST'])
 def register():
@@ -39,7 +38,6 @@ def register():
         db.session.commit()
 
         # sends user to login page
-        logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
         return redirect(url_for('users.login'))
 
     # if request method is GET or form not valid re-render signup page
@@ -115,22 +113,22 @@ def orders():
     id = current_user.id
     orders = Orders.query.filter(Orders.producer_id.ilike(id)).all()
 
-    # Pass the orders to the template for rendering
-    return render_template('producer/supplier_orders.html', orders=orders)
+    return render_template('producer/supplier_orders.html', order=order)
 
 
 # Function that allows the producer to accept an order by the consumer
 @app.route('/')
 @login_required
-def accept_order(order_id, inventory):
+def accept_order(order_id):
     # If an item is accepted as an order, then reduce its quantity in the inventory
-    for item in inventory:
+    for item in current_user.inventory():
         if item['id'] == order_id:
             if item['quantity'] > 0:
                 item['quantity'] -= 1
                 flash('Order accepted')
             elif item['quantity'] == OrderItems.quantity:
                 inventory.remove(item)
+                send_mail_notification_consumer(order_id)
                 return True
             else:
                 flash('Insufficient quantity')
