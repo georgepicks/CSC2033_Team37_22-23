@@ -55,7 +55,9 @@ def login():
             if user and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')):
                 # user login is initiated
                 login_user(user)
-                feed = find_producers(1000)
+                db.session.add(user)
+                db.session.commit()
+                feed = find_producers(0)
                 return render_template('consumer/feed.html', suppliers=feed)
             session['authentication_attempts'] = session.get('authentication_attempts', 0) + 1
 
