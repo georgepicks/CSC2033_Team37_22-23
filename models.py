@@ -76,7 +76,7 @@ class Orders(db.Model, UserMixin):
 
 
 class OrderItems(db.Model):
-    __tablename__ = 'order items'
+    __tablename__ = 'order_items'
     id = db.Column(db.Integer, primary_key=True)
     item = db.Column(db.String(100), nullable=False, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)

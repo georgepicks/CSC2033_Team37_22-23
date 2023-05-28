@@ -125,10 +125,16 @@ def place_order():
     # Retrieves the order_id for the newly created order
     order_id = order.id
 
+    items = request.form.getlist('item[]')
+    quantities = request.form.getlist('quantity[]')
+
+
+    print(items)
+    print(quantities)
 
 
     # Creates instances of OrderItems for each item in the order
-    for item, quantity in items.items():
+    for item, quantity in zip(items, quantities):
         order_item = OrderItems(item=item, quantity=quantity, order_id=order_id)
         db.session.add(order_item)
 

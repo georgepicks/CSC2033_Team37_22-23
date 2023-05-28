@@ -59,7 +59,7 @@ function removeFromBasket(itemId) {
 
 function addToOrder(itemId) {
   var card = document.getElementById(itemId);
-  var itemName = card.querySelector(".item-name").textContent; // Updated class name
+  var itemName = card.querySelector(".item-name").textContent;
   var itemQuantity = parseInt(card.querySelector(".item-quantity").textContent.split(":")[1].trim());
   var basket = document.getElementById("BasketList");
   var basketItems = basket.getElementsByClassName("basket-item");
@@ -90,8 +90,10 @@ function addToOrder(itemId) {
     basketItem.className = "basket-item";
     basketItem.innerHTML = `
       <span class="basket-item-name">${itemName}</span>
-      <span class="basket-item-quantity"> 1</span>
+      <span class="basket-item-quantity">1</span>
       <span class="RemoveItem" onclick="removeFromBasket('basket-${itemId}')">x</span>
+      <input type="hidden" name="item[]" value="${itemName}">
+      <input type="hidden" name="quantity[]" value="1">
     `;
     basket.appendChild(basketItem);
   }
