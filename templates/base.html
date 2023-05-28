@@ -18,6 +18,7 @@
     {% if current_user.is_authenticated %}
         <div class="nav-links">
             <a href="{{ url_for('consumer.feed') }}"><div class="DiscoverLink">Discover</div></a>
+            <a href="{{ url_for('index') }}"><div class="OrdersLink">Orders</div></a>
             <a href="{{ url_for('consumer.feed') }}"><div class="AccountLink">Account</div></a>
             <a href="{{ url_for('users.logout') }}"><div class="LogoutLink">Log out</div></a>
         </div>

@@ -78,16 +78,18 @@ body {
 .HomeLink,
 .LoginLink,
 .DiscoverLink,
+.OrdersLink,
 .AccountLink,
 .LogoutLink{
   color: #FFFFFF;
-  margin: 0;
+  margin: 5px;
   text-decoration: none;
 }
 
 .HomeLink:hover,
 .LoginLink:hover,
 .DiscoverLink:hover,
+.OrdersLink,
 .AccountLink:hover,
 .LogoutLink:hover{
   cursor: pointer;
@@ -162,14 +164,6 @@ input[type="text"], input[type="password"], select, textarea {
 .contact {
   left: 6%;
 }
-
-.TestButton {
-  position: absolute;
-  top: 30px;
-  font-size: 30px;
-  left: 500px;
-}
-
 
 #UiContainer {
   width: 100%;
@@ -345,4 +339,9 @@ input[type="text"], input[type="password"], select, textarea {
     margin-left: 10px;
 }
 
+
+.OrderConfirm{
+    font-size: 60px;
+    text-align: center;
+}
 

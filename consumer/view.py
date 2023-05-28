@@ -138,10 +138,15 @@ def place_order():
         order_item = OrderItems(item=item, quantity=quantity, order_id=order_id)
         db.session.add(order_item)
 
+        # Subtract the quantity from the inventory
+        inventory_item = InventoryItems.query.filter_by(producer=producer_id, item=item).first()
+        if inventory_item:
+            inventory_item.quantity -= int(quantity)
+
     db.session.commit()
     #views.send_mail_notification(consumer_id, order_id)
 
-    return render_template("consumer/order_confirm.html")
+    return render_template("consumer/order_confirm.html", order_id=order_id)
 
 
 # Function to search for an item in the inventory
@@ -238,7 +243,7 @@ def order_details(order_id):
     order = cursor.fetchone()
 
     if order:
-        return render_template('order_details.html', order=order)
+        return render_template('consumer/consumer_orders.html', order=order)
 
 
 # Function to cancel an order made within a timeframe
