@@ -118,10 +118,8 @@ def place_order():
     order = Orders(producer_id=producer_id, consumer_id=consumer_id, order_time=order_time)
     db.session.add(order)
     db.session.commit()
-
     # Retrieves the order_id for the newly created order
     order_id = order.id
-
     items = request.form.getlist('item[]')
     quantities = request.form.getlist('quantity[]')
 
@@ -139,7 +137,6 @@ def place_order():
                 db.session.delete(inventory_item)
             else:
                 db.session.add(inventory_item)
-
     db.session.commit()
     #views.send_mail_notification(consumer_id, order_id)
     return render_template("consumer/order_confirm.html", order_id=order_id)
