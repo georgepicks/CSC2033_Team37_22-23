@@ -63,6 +63,7 @@ def edit_inventory(id):
     if request.method == 'POST':
         item.item = request.form.get('name')
         item.quantity = request.form.get('quantity')
+        item.dietary = request.form.get('dietary')
         db.session.commit()
         return redirect(url_for('inventory'))
     else:
@@ -109,7 +110,7 @@ def add_item():
         return render_template('producer/supplier_additem.html')
 
 
-# Function that shows the proper order from the consumer to the produxer
+# Function that shows the proper order from the consumer to the producer
 @app.route('/supplier_orders')
 @login_required
 def orders():
