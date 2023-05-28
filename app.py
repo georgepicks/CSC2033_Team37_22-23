@@ -52,13 +52,10 @@ app.register_blueprint(consumer_blueprint)
 
 @login_manager.user_loader
 def load_user(user_id):
-    # if user exists in consumer table, return it's ID
-    if Consumer.query.get(int(user_id)):
-        # user = Consumer.query.filter_by(email=email).first()
+    # producer IDs increment from 1000 onward, consumer IDs increment from 0
+    if int(user_id) < 1000:
         return Consumer.query.get(int(user_id))
-    # if the user's email doesn't exist in the consumer table, check the producer table too
     else:
-        # user = Producer.query.filter_by(email=email).first()
         return Producer.query.get(int(user_id))
 
 

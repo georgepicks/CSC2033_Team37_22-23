@@ -1,4 +1,4 @@
- import Blueprint, render_template, flash, redirect, url_for, session, Markup, request
+from flask import Blueprint, render_template, flash, redirect, url_for, session, Markup, request
 from models import Orders, Producer, Consumer
 from app import db
 from user.forms import LoginForm
@@ -34,7 +34,6 @@ def login():
                 # current login user is matched to the last login user
                 db.session.add(user)
                 db.session.commit()
-
                 return render_template('producer/supplier_dash.html', id=current_user.id)
 
             session['authentication_attempts'] = session.get('authentication_attempts', 0) + 1
@@ -62,7 +61,6 @@ def login():
                 db.session.add(user)
                 db.session.commit()
                 feed = find_producers(0)
-
                 return render_template('consumer/feed.html', suppliers=feed)
             session['authentication_attempts'] = session.get('authentication_attempts', 0) + 1
 
@@ -149,7 +147,6 @@ def cancel_mail(order_id):
 def account():
     # if Producer.query.filter_by(email=current_user.email).first():
     if isinstance(current_user, Producer):
-        print("user = producer")
         return render_template('users/account.html',
                            id=current_user.id,
                            email=current_user.email,
@@ -160,7 +157,6 @@ def account():
                            address_2=current_user.address_2,
                            address_3=current_user.address_3)
     else:
-        print("user = consumer")
         return render_template('users/account.html',
                         id=current_user.id,
                         email=current_user.email,
