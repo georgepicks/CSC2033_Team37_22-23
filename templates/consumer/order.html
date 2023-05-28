@@ -5,8 +5,12 @@
 
     <div id="info">
         <h3>{{ supplier_name }}</h3>
-        <p>{{ supplier_address }},
-        {{ supplier_postcode }}</p>
+        <p>
+            {{ supplier_address1 }},
+            {{ supplier_address2 }},
+            {{ supplier_address3 }},
+            {{ supplier_postcode }}
+        </p>
     </div>
 
     <div id="UiContainer">
@@ -14,23 +18,23 @@
             <label for="SearchInput"></label><input type="text" id="SearchInput" placeholder="Search for items" onkeyup="filterItems()">
         </div>
     </div>
-
-      <div class="RectangleSide">
-        <div id="basket">
-            <h4><u>Your Basket:</u></h4>
-            <ul id="BasketList"></ul>
-            <input type="submit" value="Submit Order" class="SubmitButton" id="SubmitBtn">
+    <form method="POST", action='/order'>
+        <div class="RectangleSide">
+            <div id="basket">
+                <h4><u>Your Basket:</u></h4>
+                <ul id="BasketList"></ul>
+                <input type="submit" value="Submit Order" class="SubmitButton" id="SubmitBtn">
+            </div>
         </div>
-    </div>
-
-    <div class="InventoryContainer">
-        {% for item in items %}
-        <div class="InventoryCard" id="item-{{ loop.index }}" onclick="addToOrder('item-{{ loop.index }}')">
-            <div class="item-name">{{ item.item }}</div>
-            <div class="item-quantity">Quantity: {{ item.quantity }}</div>
-            <div class="item_dietary">Allergens: {{ item.dietary }}</div>
-            <input type="hidden" name="item" value="{{ item.item }}">
+    </form>
+        <div class="InventoryContainer">
+            {% for item in items %}
+                <div class="InventoryCard" id="item-{{ loop.index }}" onclick="addToOrder('item-{{ loop.index }}')">
+                    <div class="item-name">{{ item.item }}</div>
+                    <div class="item-quantity">Quantity: {{ item.quantity }}</div>
+                    <div class="item_dietary">Allergens: {{ item.dietary }}</div>
+                    <input type="hidden" name="item" value="{{ item.item }}">
+                </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
 {% endblock %}

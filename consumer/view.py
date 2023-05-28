@@ -38,7 +38,7 @@ def register():
         db.session.commit()
 
         # sends user to login page
-        return redirect(url_for('users/login.html'))
+        return redirect(url_for('users.login'))
     # if request method is GET or form not valid re-render signup page
     return render_template('users/ConsumerRegister.html', form=form)
 
@@ -66,6 +66,8 @@ def feed():
     return render_template('consumer/feed.html', suppliers=suppliers)
 
 
+@app.route('/order', methods=['GET', 'POST'])
+@login_required
 def order_generate():
     supplier_id = request.args.get('supplier_id')
 
@@ -73,6 +75,8 @@ def order_generate():
 
     name = supplier.producer_name
     address1 = supplier.address_1
+    address2 = supplier.address_2
+    address3 = supplier.address_3
     postcode = supplier.postcode
 
     items = []
@@ -92,8 +96,8 @@ def order_generate():
 
         print(items)
 
-    return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address=address1,
-                           supplier_postcode=postcode)
+    return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address1=address1,
+                           supplier_address2=address2,supplier_address3=address3, supplier_postcode=postcode)
 
 
 # Function to search for an item in the inventory
