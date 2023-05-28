@@ -6,13 +6,11 @@ from app import app, db
 from datetime import datetime
 from user import views
 from user.forms import ConsumerRegisterForm
-import logging
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
 
-
-@consumer_blueprint.route('/consumer/register', methods=['GET', 'POST'])
+@consumer_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     # create signup form object
     form = ConsumerRegisterForm()
@@ -25,7 +23,7 @@ def register():
         # if email already exists redirect user back to signup page with error message so user can try again
         if user:
             flash('Email address already exists')
-            return render_template('users/login.html', form=form)
+            return render_template('users/ConsumerRegister.html', form=form)
 
         # create a new user with the form data according to a consumer
         new_user = Consumer(email=form.email.data,
@@ -40,7 +38,7 @@ def register():
         db.session.commit()
 
         # sends user to login page
-        return redirect(url_for('users.login'))
+        return redirect(url_for('users/login.html'))
     # if request method is GET or form not valid re-render signup page
     return render_template('users/ConsumerRegister.html', form=form)
 
@@ -68,8 +66,6 @@ def feed():
     return render_template('consumer/feed.html', suppliers=suppliers)
 
 
-@consumer_blueprint.route('/order', methods=['GET', 'POST'])
-@login_required
 def order_generate():
     supplier_id = request.args.get('supplier_id')
 
@@ -101,7 +97,7 @@ def order_generate():
 
 
 # Function to search for an item in the inventory
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/feed', methods=['GET', 'POST'])
 @login_required
 def search():
     if request.method == 'POST':
@@ -153,47 +149,28 @@ def search_results(query):
 @app.route('/order/edit/<int:order_id>', methods=['GET', 'POST'])
 @login_required
 def edit_order(order_id):
-    cursor = db.cursor()
-
+    order = OrderItems.query.get_or_404(order_id)
     if request.method == 'POST':
-        # Get the updated order information from the form
-        new_order_info = {
-            'item': request.form['item'],
-            'quantity': request.form['quantity'],
-        }
-
-        # Update the order in the database
-        update_query = "UPDATE OrderItems SET item=%s, quantity=%s WHERE order_id=%s"
-        cursor.execute(update_query, (new_order_info['item'], new_order_info['quantity'], order_id))
-        db.commit()
-
-        # Redirect to the order details page
-        cursor.close()
-        return redirect(url_for('Order_detail.html', order_id=order_id))
+        order.item = request.form['item']
+        order.quantity = request.form['quantity']
+        db.session.commit()
+        return redirect(url_for(''))
     else:
-        # Retrieve the order from the database
-        select_query = "SELECT * FROM OrderItems WHERE order_id=%s"
-        cursor.execute(select_query, (order_id,))
-        order = cursor.fetchone()
-
-        if order:
-            cursor.close()
-            return render_template('edit_item.html', order=order)
-        else:
-            cursor.close()
-            return 'Order not found'
+        return render_template('', order=order)
 
 
 # Shows the information about the order
 @app.route('/order/<int:order_id>')
 @login_required
 def order_details(order_id):
-    cursor = db.cursor()
-    select_query = "SELECT * FROM OrderItems WHERE order_id=%s"
-    cursor.execute(select_query, (order_id,))
-    order = cursor.fetchone()
-
-    if order:
+    order_info = OrderItems.query.filter(OrderItems.order_id.ilike(order_id)).all()
+    if order_info:
+        order = {
+            'id': OrderItems.id,
+            'item': OrderItems.item,
+            'quantity': OrderItems.quantity,
+            'order_id': OrderItems.order_id
+        }
         return render_template('order_details.html', order=order)
 
 
@@ -217,7 +194,7 @@ def place_order(consumer_id, producer_id, items):
         db.session.add(order_item)
 
     db.session.commit()
-    views.send_mail_notification(consumer_id, order_id)
+    views.send_mail_notification_producer(order_id)
 
     return order_id
 
@@ -225,16 +202,24 @@ def place_order(consumer_id, producer_id, items):
 # Function to cancel an order made within a timeframe
 @app.route('/cancel-order', methods=['POST'])
 @login_required
-def cancel_order():
-    # calls for cancellation deadline time
-    cancellation_deadline = session.get('cancellation_deadline')
-    if cancellation_deadline and datetime.now() < cancellation_deadline:
-        # Perform cancellation logic
-        session.pop('selected_products', None)
-        session.pop('cancellation_deadline', None)
-        flash('Order is cancelled')
+def cancel_order(order_id):
+    # Retrieve the order with the given order ID from the database
+    order = Orders.query.get(order_id)
+
+    if order:
+        cancellation_deadline = session.get('cancellation_deadline')
+        if cancellation_deadline and datetime.now() < cancellation_deadline:
+            # Perform cancellation logic
+            db.session.delete(order)  # Delete the order from the database
+            db.session.commit()
+            session.pop('selected_products', None)
+            session.pop('cancellation_deadline', None)
+            flash('Order is cancelled')
+            views.cancel_mail(order_id)
+        else:
+            flash('Cancellation period has expired.')
     else:
-        flash('Cancellation period has expired.')
+        flash('Order not found.')
 
     return redirect(url_for('order'))
 
@@ -262,17 +247,18 @@ def find_producers(distance_range):
         return sorted_producers
 
 
+@consumer_blueprint.route('/account')
+def edit_consumer_account(id):
+    consumer = Consumer.query.get_or_404(id)
+    if request.method == 'POST':
+        consumer.email= request.form['email']
+        consumer.firstname = request.form['firstname']
+        consumer.lastname = request.form['lastname']
+        consumer.phone = request.form['phone']
+        consumer.postcode = request.form['postcode']
+        db.session.commit()
+        return redirect(url_for('users.consumer_acc'))
+    else:
+        return render_template('', consumer=consumer)
 
-# view user account
-@consumer_blueprint.route('/consumer_account')
-@login_required
-d
-def consumer_account():
-    # Shows the account details of the consumer
-    return render_template('users/consumer_acc.html',
-                           id=current_user.id,
-                           email=current_user.email,
-                           firstname=current_user.firstname,
-                           lastname=current_user.lastname,
-                           phone=current_user.phone,
-                           postcode=current_user.postcode)
+
