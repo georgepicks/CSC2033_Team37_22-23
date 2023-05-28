@@ -142,7 +142,7 @@ def cancel_mail(order_id):
     return 'Email sent successfully!'
 
 
- @users_blueprint.route('/account')
+@users_blueprint.route('/account')
 @login_required
 def account():
     # if Producer.query.filter_by(email=current_user.email).first():
