@@ -269,6 +269,7 @@ def edit_consumer_account(id):
         consumer.lastname = request.form['lastname']
         consumer.phone = request.form['phone']
         consumer.postcode = request.form['postcode']
+        db.session.commit()
         return redirect(url_for('users.consumer_acc'))
     else:
         return render_template('', consumer=consumer)
