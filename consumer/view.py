@@ -241,18 +241,17 @@ def order_details():
 
     order_info = OrderItems.query.filter(OrderItems.order_id.in_(order_ids)).all()
 
-    for orders in order_info:
-        order = {
-            'id': orders.id,
-            'item': orders.item,
-            'quantity': orders.quantity,
-            'order_id': orders.order_id
+    for order in order_info:
+        order_dict = {
+            'id': order.id,
+            'item': order.item,
+            'quantity': order.quantity,
+            'order_id': order.order_id
         }
 
-        order_list.append(order)
-        print(order_list)
+        order_list.append(order_dict)
 
-    return render_template('consumer/consumer_orders.html', order=order_list)
+    return render_template('consumer/consumer_orders.html', orders_list=order_list)
 
 
 # Function to cancel an order made within a timeframe

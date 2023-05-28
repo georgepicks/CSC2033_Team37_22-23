@@ -346,3 +346,29 @@ input[type="text"], input[type="password"], select, textarea {
     text-align: center;
 }
 
+
+.order-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 900px; /* Adjust the maximum height as per your preference */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.order-card {
+    background-color: #FFE7AA;
+    padding: 10px;
+    border-radius: 5px;
+    width: 400px; /* Adjust the width as per your preference */
+}
+
+.order-id {
+    font-weight: bold;
+    font-size: 40px; /* Adjust the font size as per your preference */
+}
+
+.item-name,
+.item-quantity {
+    margin-top: 5px;
+    font-size: 30px; /* Adjust the font size as per your preference */
+}
