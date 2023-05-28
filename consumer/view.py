@@ -100,10 +100,7 @@ def order_generate():
             'producer': item.producer,
             'dietary': item.dietary
         }
-
         items.append(item_data)
-
-        print(items)
 
     return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address=address1,
                            supplier_postcode=postcode, supplier_id=supplier_id)
@@ -127,11 +124,6 @@ def place_order():
 
     items = request.form.getlist('item[]')
     quantities = request.form.getlist('quantity[]')
-
-
-    print(items)
-    print(quantities)
-
 
     # Creates instances of OrderItems for each item in the order
     for item, quantity in zip(items, quantities):
@@ -237,17 +229,30 @@ def edit_order(order_id):
             return 'Order not found'
 
 
-# Shows the information about the order
-@app.route('/order/<int:order_id>')
-@login_required
-def order_details(order_id):
-    cursor = db.cursor()
-    select_query = "SELECT * FROM OrderItems WHERE order_id=%s"
-    cursor.execute(select_query, (order_id,))
-    order = cursor.fetchone()
 
-    if order:
-        return render_template('consumer/consumer_orders.html', order=order)
+# Shows the information about the order
+@app.route('/order_details')
+@login_required
+def order_details():
+    consumer_id = current_user.id
+    orders = Orders.query.filter_by(consumer_id=consumer_id).all()
+    order_ids = [order.id for order in orders]
+    order_list = []
+
+    order_info = OrderItems.query.filter(OrderItems.order_id.in_(order_ids)).all()
+
+    for orders in order_info:
+        order = {
+            'id': orders.id,
+            'item': orders.item,
+            'quantity': orders.quantity,
+            'order_id': orders.order_id
+        }
+
+        order_list.append(order)
+        print(order_list)
+
+    return render_template('consumer/consumer_orders.html', order=order_list)
 
 
 # Function to cancel an order made within a timeframe

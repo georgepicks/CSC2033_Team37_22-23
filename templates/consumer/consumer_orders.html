@@ -4,4 +4,9 @@
 
     <title>Your Orders</title>
 
+    {% for order in orders_list %}
+        <div class="item-name">{{ order.id }}</div>
+        <div class="item-name">{{ order.item }}</div>
+        <div class="item-name">{{ order.quantity }}</div>
+    {% endfor %}
 {% endblock %}

@@ -99,6 +99,7 @@ def logout():
     # Data is recorded in lottery.log each time a user logs out of the program
     logging.warning('SECURITY - Log out [%s, %s, %s]', current_user.id, current_user.email, request.remote_addr)
     #Function for the user to log out
+    session.clear()
     logout_user()
     #the user is redirected to index page after logout
     return redirect(url_for('index'))

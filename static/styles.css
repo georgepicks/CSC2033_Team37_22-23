@@ -224,13 +224,14 @@ input[type="text"], input[type="password"], select, textarea {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
+    align-items: flex-start;
     text-align: center;
     color: #000000;
     gap: 10px;
 }
 
 .InventoryCard {
-    width: 30%;
+    flex-basis: calc(25% - 10px);  /* Adjust the width and gap as needed */
     height: 150px;
     margin-bottom: 10px;
     border: 1px solid #000000;
