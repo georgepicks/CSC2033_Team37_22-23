@@ -11,7 +11,7 @@
         <div class="logo">Leftovers</div>
         <nav>
             <a href="{{ url_for('producer.supplier_dash')}}">Dashboard</a>
-            <a href="{{ url_for('producer.producer_account') }}">Account</a>
+            <a href="{{ url_for('users.account') }}">Account</a>
             <a href="{{ url_for('users.logout')}}">Log out</a>
         </nav>
     </header>
@@ -27,7 +27,7 @@
                 <p class="item-title">{{ item.item }}</p>
                 <p class="item-quantity"> {{ item.quantity }}</p>
 
-                <form method="POST" action="{{ url_for('edit_inventory', id=item.id) }}">
+                <form method="GET" action="{{ url_for('producer.edit_inventory', id=item.id) }}">
                     <button type="submit" class="edit-button">Edit</button>
                 </form>
                 <form method="POST" action="/inventory/remove/{{ item.id }}">

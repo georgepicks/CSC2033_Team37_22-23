@@ -10,8 +10,11 @@
     <header>
         <div class="logo">Leftovers</div>
         <nav>
+
             <a href="{{ url_for('supplier_inventory')}}">Your Inventory</a>
-            <a href="{{ url_for('producer.producer_account') }}">Account</a>
+            <a href="{{ url_for('users.account') }}">Account</a>
+
+
             <a href="{{ url_for('users.logout')}}">Log out</a>
         </nav>
     </header>
@@ -31,7 +34,7 @@
             <!-- form to edit item -->
             <div class="container">
                 <h1>Edit Item</h1>
-                <form method="POST" action="{{ url_for('edit_inventory', id=item.id) }}">
+                <form method="POST" action="{{ url_for('producer.edit_inventory', id=item.id) }}">
                     <label for="name">Item Name</label>
                     <input id="name" type="text" name="name" value="{{ item.item }}" required>
                     <label for="quantity">Quantity</label>
@@ -44,7 +47,7 @@
     <footer>
         <nav>
             <a href="{{ url_for('about_us') }}">About Us</a>
-            <a href="{{ url_for('contact') }}">Contact Us</a>
+            <a href="{{ url_for('contact_us') }}">Contact Us</a>
         </nav>
     </footer>
 </body>

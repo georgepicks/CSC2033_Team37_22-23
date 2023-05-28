@@ -54,17 +54,18 @@ def inventory():
 
 
 # Function to edit inventory table, authentication for relevant producer only
-@app.route('/edit_item/<int:id>', methods=['GET', 'POST'])
+@producer_blueprint.route('/edit_item/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_inventory(id):
     item = InventoryItems.query.get_or_404(id)
     if request.method == 'POST':
-        item.item = request.form['name']
-        item.quantity = request.form['quantity']
+        item.item = request.form.get('name')
+        item.quantity = request.form.get('quantity')
         db.session.commit()
-        return redirect(url_for('producer.supplier_inventory'))
+        return redirect(url_for('inventory'))
     else:
         return render_template('producer/edit_item.html', item=item)
+
 
 
 # @app.route('/edit_item/<int:id>', methods=['GET', 'POST'])
@@ -163,18 +164,18 @@ def remove_item_route(item_id):
 
 
 # view user account
-@producer_blueprint.route('/producer_account')
-@login_required
-def producer_account():
-    return render_template('users/producer_acc.html',
-                           id=current_user.id,
-                           email=current_user.email,
-                           producer_name=current_user.producer_name,
-                           phone=current_user.phone,
-                           postcode=current_user.postcode,
-                           address_1=current_user.address_1,
-                           address_2=current_user.address_2,
-                           address_3=current_user.address_3)
+#@producer_blueprint.route('/users/account')
+#@login_required
+#def producer_account():
+#    return render_template('users/producer_acc.html',
+#                           id=current_user.id,
+#                           email=current_user.email,
+#                           producer_name=current_user.producer_name,
+#                           phone=current_user.phone,
+#                           postcode=current_user.postcode,
+#                           address_1=current_user.address_1,
+#                           address_2=current_user.address_2,
+#                           address_3=current_user.address_3)
 
 
 @producer_blueprint.route('/producer_account')

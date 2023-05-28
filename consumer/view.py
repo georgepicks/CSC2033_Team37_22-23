@@ -246,6 +246,7 @@ def find_producers(distance_range):
         sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
         return sorted_producers
 
+
     
 @consumer_blueprint.route('/consumer_account')
 @login_required
@@ -273,3 +274,5 @@ def edit_consumer_account(id):
         return redirect(url_for('users.consumer_acc'))
     else:
         return render_template('', consumer=consumer)
+
+
