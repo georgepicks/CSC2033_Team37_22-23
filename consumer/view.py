@@ -247,18 +247,20 @@ def find_producers(distance_range):
         return sorted_producers
 
 
-@consumer_blueprint.route('/account')
+@consumer_blueprint.route('/consumer_account/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit_consumer_account(id):
     consumer = Consumer.query.get_or_404(id)
     if request.method == 'POST':
-        consumer.email= request.form['email']
+        consumer.email = request.form['email']
         consumer.firstname = request.form['firstname']
         consumer.lastname = request.form['lastname']
         consumer.phone = request.form['phone']
         consumer.postcode = request.form['postcode']
         db.session.commit()
-        return redirect(url_for('users.consumer_acc'))
+        return redirect(url_for('users.account'))
     else:
-        return render_template('', consumer=consumer)
+        return render_template('users/edit_account.html', consumer=consumer)
+
 
 

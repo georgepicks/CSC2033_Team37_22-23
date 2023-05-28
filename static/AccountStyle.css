@@ -65,7 +65,7 @@ h1 {
     text-align: center;
     width: 700px;
     /*margin: 0 auto;*/
-    margin-top: 3rem;
+    margin-top: 1rem;
 }
 
 .account-info strong {
@@ -84,6 +84,23 @@ input[type="submit"] {
     background-color: #FFE7AA;
 }
 input[type="submit"]:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+.edit-button {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #FFE7AA;
+    color: black;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 2rem;
+}
+
+.edit-button:hover {
     background-color: #4CAF50;
     color: white;
 }

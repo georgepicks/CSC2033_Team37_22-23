@@ -115,7 +115,7 @@ def orders():
     id = current_user.id
     orders = Orders.query.filter(Orders.producer_id.ilike(id)).all()
 
-    return render_template('producer/supplier_orders.html', order=order)
+    return render_template('producer/supplier_orders.html', orders=orders)
 
 
 # Function that allows the producer to accept an order by the consumer
@@ -179,12 +179,12 @@ def remove_item_route(item_id):
 #                           address_3=current_user.address_3)
 
 
-@producer_blueprint.route('/producer_account')
+@producer_blueprint.route('/producer_account/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_producer_account(id):
     producer = Producer.query.get_or_404(id)
     if request.method == 'POST':
-        producer.email= request.form['email']
+        producer.email = request.form['email']
         producer.producer_name = request.form['producer_name']
         producer.phone = request.form['phone']
         producer.postcode = request.form['postcode']
@@ -192,9 +192,9 @@ def edit_producer_account(id):
         producer.address_2 = request.form['address_2']
         producer.address_3 = request.form['address_3']
         db.session.commit()
-        return redirect(url_for('users.producer_acc'))
+        return redirect(url_for('users.account'))
     else:
-        return render_template('', producer=producer)
+        return render_template('users/edit_account.html', producer=producer)
 
 
 @producer_blueprint.route('/supplier_dash')
