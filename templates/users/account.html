@@ -10,11 +10,11 @@
     <header>
         <div class="logo">Leftovers</div>
         <nav>
-            {% if current_user == 'Producer' %}
+            {% if current_user.__class__.__name__ == 'Producer' %}
                 <a href="{{ url_for('producer.supplier_dash')}}">Dashboard</a>
                 <a href="{{ url_for('users.logout')}}">Log out</a>
             {% else %}
-                <!-- consumer feed -->
+                <a href="{{ url_for('consumer.feed')}}">Dashboard</a>
                 <a href="{{ url_for('users.logout')}}">Log out</a>
             {% endif %}
         </nav>
@@ -31,12 +31,18 @@
                 <p>Address Line 2: {{ address_2 }}</p>
                 <p>Address Line 3: {{ address_3 }}</p>
                 <p>Postcode: {{ postcode }}</p>
+                <div>
+                    <a href="{{ url_for('producer.edit_producer_account', id=current_user.id) }}" class="edit-button">Edit Account</a>
+                </div>
             {% else %}
                 <h1>Welcome, {{ firstname }} {{ lastname }}</h1>
                 <p> ID: {{ id }}</p>
                 <p>Email: {{ email }}</p>
                 <p>Postcode: {{ postcode }}</p>
                 <p>Phone: {{ phone }}</p>
+                <div>
+                    <a href="{{ url_for('consumer.edit_consumer_account', id=current_user.id) }}" class="edit-button">Edit Account</a>
+                </div>
             {% endif %}
         </div>
     </div>
