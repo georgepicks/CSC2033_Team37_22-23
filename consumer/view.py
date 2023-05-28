@@ -246,10 +246,10 @@ def find_producers(distance_range):
         sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
         return sorted_producers
 
-# view user account
-@consumer_blueprint.route('/account')
+    
+@consumer_blueprint.route('/consumer_account')
 @login_required
-def account():
+def consumer_account():
     # Shows the account details of the user
     return render_template('users/account.html',
                            id=current_user.id,
@@ -258,3 +258,17 @@ def account():
                            lastname=current_user.lastname,
                            phone=current_user.phone,
                            postcode=current_user.postcode)
+
+
+@consumer_blueprint.route('/account')
+def edit_consumer_account(id):
+    consumer = Consumer.query.get_or_404(id)
+    if request.method == 'POST':
+        consumer.email= request.form['email']
+        consumer.firstname = request.form['firstname']
+        consumer.lastname = request.form['lastname']
+        consumer.phone = request.form['phone']
+        consumer.postcode = request.form['postcode']
+        return redirect(url_for('users.consumer_acc'))
+    else:
+        return render_template('', consumer=consumer)
