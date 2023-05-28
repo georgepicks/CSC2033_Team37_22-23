@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+
     <title>Order Page</title>
 
     <div id="info">
@@ -15,22 +16,30 @@
         </div>
     </div>
 
-      <div class="RectangleSide">
-        <div id="basket">
-            <h4><u>Your Basket:</u></h4>
-            <ul id="BasketList"></ul>
-            <input type="submit" value="Submit Order" class="SubmitButton" id="SubmitBtn">
-        </div>
-    </div>
 
-    <div class="InventoryContainer">
-        {% for item in items %}
-        <div class="InventoryCard" id="item-{{ loop.index }}" onclick="addToOrder('item-{{ loop.index }}')">
-            <div class="item-name">{{ item.item }}</div>
-            <div class="item-quantity">Quantity: {{ item.quantity }}</div>
-            <div class="item_dietary">Allergens: {{ item.dietary }}</div>
-            <input type="hidden" name="item" value="{{ item.item }}">
+    <form method="POST" action="{{ url_for('place_order') }}">
+        <div id="InventoryContainer">
+            {% for item in items %}
+                <div class="InventoryCard" id="item-{{ loop.index }}" onclick="addToOrder('item-{{ loop.index }}')">
+                    <div class="item-name">{{ item.item }}</div>
+                    <div class="item-quantity">Quantity: {{ item.quantity }}</div>
+                    <div class="item_dietary">Allergens: {{ item.dietary }}</div>
+                    <input type="hidden" name="item" value="{{ item.item }}">
+                    <input type="hidden" name="quantity" value="{{ item.quantity }}">
+                    <input type="hidden" name="supplier_id" value="{{ supplier_id }}">
+                    <input type="hidden" name="consumer_id" value="{{ consumer_id }}">
+                </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
+
+        <div class="RectangleSide">
+            <div class="basket">
+                <h4><u>Your Basket:</u></h4>
+                <ul id="BasketList"></ul>
+                <input type="submit" value="Submit Order" class="SubmitButton" id="SubmitBtn">
+            </div>
+        </div>
+    </form>
+
+
 {% endblock %}

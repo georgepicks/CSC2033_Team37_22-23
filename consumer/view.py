@@ -11,7 +11,6 @@ import logging
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
 
-
 @consumer_blueprint.route('/consumer/register', methods=['GET', 'POST'])
 def register():
     # create signup form object
@@ -83,7 +82,6 @@ def feed():
 @login_required
 def order_generate():
     supplier_id = request.args.get('supplier_id')
-
     supplier = Producer.query.filter_by(id=supplier_id).first()
 
     name = supplier.producer_name
@@ -108,7 +106,36 @@ def order_generate():
         print(items)
 
     return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address=address1,
-                           supplier_postcode=postcode)
+                           supplier_postcode=postcode, supplier_id=supplier_id)
+
+
+# Function to place an order
+@app.route('/place_order', methods=['GET', 'POST'])
+@login_required
+def place_order():
+    producer_id = request.form.get('supplier_id')
+    consumer_id = current_user.id
+    order_time = datetime.now()
+
+    # Creates an instance of the Orders model
+    order = Orders(producer_id=producer_id, consumer_id=consumer_id, order_time=order_time)
+    db.session.add(order)
+    db.session.commit()
+
+    # Retrieves the order_id for the newly created order
+    order_id = order.id
+
+
+
+    # Creates instances of OrderItems for each item in the order
+    for item, quantity in items.items():
+        order_item = OrderItems(item=item, quantity=quantity, order_id=order_id)
+        db.session.add(order_item)
+
+    db.session.commit()
+    #views.send_mail_notification(consumer_id, order_id)
+
+    return render_template("consumer/order_confirm.html")
 
 
 # Function to search for an item in the inventory
@@ -208,31 +235,6 @@ def order_details(order_id):
         return render_template('order_details.html', order=order)
 
 
-# Function to place an order
-@app.route('/place_order-order', methods=['GET', 'POST'])
-@login_required
-def place_order(consumer_id, producer_id, items):
-    order_time = datetime.now()
-
-    # Creates an instance of the Orders model
-    order = Orders(producer_id=producer_id, consumer_id=consumer_id, order_time=order_time)
-    db.session.add(order)
-    db.session.commit()
-
-    # Retrieves the order_id for the newly created order
-    order_id = order.order_id
-
-    # Creates instances of OrderItems for each item in the order
-    for item, quantity in items.items():
-        order_item = OrderItems(item=item, quantity=quantity, order_id=order_id)
-        db.session.add(order_item)
-
-    db.session.commit()
-    views.send_mail_notification(consumer_id, order_id)
-
-    return order_id
-
-
 # Function to cancel an order made within a timeframe
 @app.route('/cancel-order', methods=['POST'])
 @login_required
@@ -257,15 +259,15 @@ def find_producers(distance_range):
     # query all producers
     producers = Producer.query.all()
     # ------------ need to add distance functionality in later ----------------
-    #for i in producers:
-        # calculate distance between all producers and current user
+    # for i in producers:
+    # calculate distance between all producers and current user
     #    distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
     #    if distance < distance_range:
     #        # key = producer, value = distance
     #        nearby_producers.update({i: distance})
     # sorts producers by distance from low to high
     # sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
-    #return sorted_producers
+    # return sorted_producers
     return producers
 
 
@@ -281,4 +283,3 @@ def account():
                            lastname=current_user.lastname,
                            phone=current_user.phone,
                            postcode=current_user.postcode)
-

@@ -46,11 +46,12 @@ def login():
             else:
                 # user login is initiated
                 login_user(user)
+                session['user_id'] = current_user.id
                 db.session.add(user)
                 db.session.commit()
                 # Data is recorded in lottery.log each time login action takes place
                 logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
-                return render_template('')
+                return render_template('consumer/feed.html', form=form)
 
         # checks if the user mail logged in is a consumer mail
         elif Consumer.query.filter_by(email=form.email.data).first():
@@ -79,6 +80,7 @@ def login():
             else:
                 # user login is initiated
                 login_user(user)
+                session['user_id'] = current_user.id
                 db.session.add(user)
                 db.session.commit()
                 # Data is recorded in lottery.log each time login action takes place

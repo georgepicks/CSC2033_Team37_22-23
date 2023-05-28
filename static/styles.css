@@ -225,8 +225,7 @@ input[type="text"], input[type="password"], select, textarea {
 }
 
 .InventoryContainer {
-    width: 50%;
-    height: 400px;
+    max-height: 400px;
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
@@ -237,7 +236,7 @@ input[type="text"], input[type="password"], select, textarea {
 }
 
 .InventoryCard {
-    width: 15%;
+    width: 30%;
     height: 150px;
     margin-bottom: 10px;
     border: 1px solid #000000;
@@ -260,7 +259,7 @@ input[type="text"], input[type="password"], select, textarea {
     margin-bottom: 10px;
 }
 
-.InventoryCard .item_dietary{
+.InventoryCard .item_dietary {
     margin-bottom: 5px;
 }
 
@@ -276,19 +275,23 @@ input[type="text"], input[type="password"], select, textarea {
 
 .SubmitButton {
     border: 3px solid #fff;
-  background-color: #59a956;
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
+    background-color: #59a956;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .SubmitButton:hover {
-  background-color: #478e47;
+    background-color: #478e47;
 }
 
-#basket {
+.basket {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -334,7 +337,7 @@ input[type="text"], input[type="password"], select, textarea {
   background-color: #478e47;
 }
 
-#basket h4 {
+.basket h4 {
   margin-bottom: 1px;
 }
 
