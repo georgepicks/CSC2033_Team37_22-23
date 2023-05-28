@@ -143,9 +143,13 @@ def place_order():
         if inventory_item:
             inventory_item.quantity -= int(quantity)
 
+            if inventory_item.quantity <= 0:
+                db.session.delete(inventory_item)
+            else:
+                db.session.add(inventory_item)
+
     db.session.commit()
     #views.send_mail_notification(consumer_id, order_id)
-
     return render_template("consumer/order_confirm.html", order_id=order_id)
 
 
