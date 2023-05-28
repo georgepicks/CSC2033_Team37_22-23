@@ -60,9 +60,12 @@ h1 {
     margin-bottom: 20px;
 }
 
-.account-info p {
+.account-info {
     font-size: 1.1em;
-    margin-bottom: 10px;
+    text-align: center;
+    width: 700px;
+    /*margin: 0 auto;*/
+    margin-top: 3rem;
 }
 
 .account-info strong {
@@ -72,3 +75,16 @@ h1 {
 .account-info span {
     font-weight: normal;
 }
+
+input[type="submit"] {
+    display: block;
+    width: 100px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #FFE7AA;
+}
+input[type="submit"]:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+

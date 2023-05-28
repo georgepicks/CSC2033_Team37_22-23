@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-Hunger App - Edit Account</title>
+    <link rel="stylesheet" href="../../static/AccountStyle.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Leftovers</div>
+        <nav>
+            {% if current_user.__class__.__name__ == 'Producer' %}
+                <a href="{{ url_for('producer.supplier_dash')}}">Dashboard</a>
+                <a href="{{ url_for('users.logout')}}">Log out</a>
+            {% else %}
+                <a href="{{ url_for('consumer.feed')}}">Dashboard</a>
+                <a href="{{ url_for('users.logout')}}">Log out</a>
+            {% endif %}
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Edit Account Information</h1>
+        <div class="account-info">
+            {% if current_user.__class__.__name__ == 'Producer' %}
+                <form action="{{ url_for('update_account') }}" method="POST">
+                    <h1>Welcome, {{ producer_name }}</h1>
+                    <p>ID: {{ id }}</p>
+                    <label>Email:</label><br>
+                    <input type="email" name="email" value="{{ email }}" required><br>
+                    <label>Phone:</label><br>
+                    <input type="tel" name="phone" value="{{ phone }}" required><br>
+                    <label>Address Line 1:</label><br>
+                    <input type="text" name="address_1" value="{{ address_1 }}" required><br>
+                    <label>Address Line 2:</label><br>
+                    <input type="text" name="address_2" value="{{ address_2 }}"><br>
+                    <label>Address Line 3:</label><br>
+                    <input type="text" name="address_3" value="{{ address_3 }}"><br>
+                    <label>Postcode:</label><br>
+                    <input type="text" name="postcode" value="{{ postcode }}" required><br>
+                    <input type="submit" value="Submit">
+                </form>
+            {% else %}
+                <form action="{{ url_for('update_account') }}" method="POST">
+                    <h1>Welcome, {{ firstname }} {{ lastname }}</h1>
+                    <p>ID: {{ id }}</p>
+                    <label>Email:</label><br>
+                    <input type="email" name="email" value="{{ email }}" required><br>
+                    <label>First Name:</label><br>
+                    <input type="text" name="email" value="{{ firstname }}" required><br>
+                    <label>Last Name:</label><br>
+                    <input type="text" name="email" value="{{ lastname }}" required><br>
+                    <label>Phone:</label><br>
+                    <input type="tel" name="phone" value="{{ phone }}" required><br>
+                    <label>Postcode:</label><br>
+                    <input type="text" name="postcode" value="{{ postcode }}" required><br>
+                    <input type="submit" value="Submit">
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    <footer>
+        <nav>
+            <a href="{{ url_for('about_us') }}">About Us</a>
+            <a href="{{ url_for('contact_us') }}">Contact Us</a>
+        </nav>
+    </footer>
+</body>
+</html>

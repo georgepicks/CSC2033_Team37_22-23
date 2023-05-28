@@ -10,11 +10,11 @@
     <header>
         <div class="logo">Leftovers</div>
         <nav>
-            {% if current_user == 'Producer' %}
+            {% if current_user.__class__.__name__ == 'Producer' %}
                 <a href="{{ url_for('producer.supplier_dash')}}">Dashboard</a>
                 <a href="{{ url_for('users.logout')}}">Log out</a>
             {% else %}
-                <!-- consumer feed -->
+                <a href="{{ url_for('consumer.feed')}}">Dashboard</a>
                 <a href="{{ url_for('users.logout')}}">Log out</a>
             {% endif %}
         </nav>
