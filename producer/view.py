@@ -126,27 +126,29 @@ def orders():
     return render_template('producer/supplier_orders.html', orders=orders)
 
 
-@app.route('/')
+@app.route('/accept_order/<int:order_id>', methods=['POST'])
 @login_required
 def accept_order(order_id):
-    """
-    Allows the producer to accept a pending order
-    """
-    # If an item is accepted as an order, then reduce its quantity in the inventory
-    for item in current_user.inventory():
-        if item['id'] == order_id:
-            if item['quantity'] > 0:
-                item['quantity'] -= 1
-                flash('Order accepted')
-            elif item['quantity'] == OrderItems.quantity:
-                inventory.remove(item)
-                send_mail_notification_consumer(order_id)
-                return True
-            else:
-                flash('Insufficient quantity')
-            return redirect(url_for('dashboard'))
-    flash('Order not found')
-    return redirect(url_for('dashboard'))
+    # If an order is accepted, reduce the quantities of the corresponding inventory items
+    order = Orders.query.get(order_id)
+    if order:
+        for order_item in order.items:
+            inventory_item = InventoryItems.query.filter_by(item=order_item.item, producer=order.producer_id).first()
+            if inventory_item:
+                if inventory_item.quantity >= order_item.quantity:  # Check this instead of > 1
+                    inventory_item.quantity -= order_item.quantity
+                    if inventory_item.quantity == 0:
+                        db.session.delete(inventory_item)
+                    db.session.commit()
+                else:
+                    flash('Insufficient quantity for item {}'.format(order_item.item))
+                    return redirect(url_for('inventory'))
+        flash('Order accepted and removed from the list')
+        db.session.delete(order)
+        db.session.commit()
+    else:
+        flash('Order not found')
+    return redirect(url_for('inventory'))
 
 
 @app.route('/')
