@@ -1,10 +1,9 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, session, Markup, request
+from flask import Blueprint, render_template, flash, redirect, url_for, session
 from models import Orders, Producer, Consumer
 from app import db
 from user.forms import LoginForm
 import bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
-from datetime import datetime
 import logging
 from flask_mail import Message, Mail
 from consumer.view import find_producers
@@ -29,6 +28,12 @@ def login():
             # verification key entered is false
             if user and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')):
                 login_user(user)
+                session['user_id'] = current_user.id
+                db.session.add(user)
+                db.session.commit()
+                # Data is recorded in lottery.log each time login action takes place
+                logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
+                return render_template('consumer/feed.html', form=form)
                 # current login user is matched to the last login user
                 db.session.add(user)
                 db.session.commit()
@@ -55,6 +60,7 @@ def login():
             if user and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')):
                 # user login is initiated
                 login_user(user)
+                session['user_id'] = current_user.id
                 db.session.add(user)
                 db.session.commit()
                 feed = find_producers(0)
@@ -80,6 +86,8 @@ def login():
 @users_blueprint.route('/logout')
 @login_required
 def logout():
+    #Function for the user to log out
+    session.clear()
     # Function for the user to log out
     logout_user()
     # the user is redirected to index page after logout
@@ -114,12 +122,11 @@ get_producer_email(order_id) is a function that retrieves the producer mail ID, 
 at relevant events.
 """
 def get_producer_email(order_id):
-    # order is retrieved in reference to the customer_id
-    order = Orders.query.filter_by(id=order_id).first()
-    if order:
-        producer = Producer.query.get(order.producer_id)
-        return [producer.email]
-    return []
+    order = Orders.query.filter_by(Orders.producer_id, id=order_id)
+    if order :
+        producer = Producer.query.get(Producer.email).filter_by(Orders.producer_id)
+        return  producer
+    return None
 
 
 """
@@ -141,11 +148,11 @@ get_consumer_mail(order_id) is a function that retrieves the consumer mail ID, t
 at relevant events.
 '''
 def get_consumer_mail(order_id):
-    order = Orders.query.filter_by(order_id=order_id).first()
+    order = Orders.query.filter_by(Orders.consumer_id, id=order_id)
     if order:
-        consumer = Consumer.query.get(order.consumer_id)
-        return [consumer.email]
-    return []
+        consumer = Consumer.query.get(Consumer.email).filter_by(Orders.producer_id)
+        return consumer
+    return None
 
 
 '''
@@ -182,4 +189,3 @@ def account():
                                lastname=current_user.lastname,
                                postcode=current_user.postcode,
                                phone=current_user.phone)
-
