@@ -29,6 +29,12 @@ def login():
             # verification key entered is false
             if user and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')):
                 login_user(user)
+                session['user_id'] = current_user.id
+                db.session.add(user)
+                db.session.commit()
+                # Data is recorded in lottery.log each time login action takes place
+                logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
+                return render_template('consumer/feed.html', form=form)
                 # current login user is matched to the last login user
                 db.session.add(user)
                 db.session.commit()
@@ -55,6 +61,7 @@ def login():
             if user and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')):
                 # user login is initiated
                 login_user(user)
+                session['user_id'] = current_user.id
                 db.session.add(user)
                 db.session.commit()
                 feed = find_producers(0)
@@ -80,6 +87,10 @@ def login():
 @users_blueprint.route('/logout')
 @login_required
 def logout():
+    # Data is recorded in lottery.log each time a user logs out of the program
+    logging.warning('SECURITY - Log out [%s, %s, %s]', current_user.id, current_user.email, request.remote_addr)
+    #Function for the user to log out
+    session.clear()
     # Function for the user to log out
     logout_user()
     # the user is redirected to index page after logout
