@@ -1,10 +1,9 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, session, Markup, request
+from flask import Blueprint, render_template, flash, redirect, url_for, session
 from models import Orders, Producer, Consumer
 from app import db
 from user.forms import LoginForm
 import bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
-from datetime import datetime
 import logging
 from flask_mail import Message, Mail
 from consumer.view import find_producers
@@ -97,14 +96,21 @@ def logout():
     return redirect(url_for('index'))
 
 
-# Function to send mails to producers while an order is made
+"""
+send_email(subject, recipients, body) is a functions that records the message for a mail ans sends it 
+"""
 def send_email(subject, recipients, body):
     msg = Message(subject=subject, recipients=recipients)
     msg.body = body
     Mail.send(msg)
 
 
-# Message for the producer that is sent through email
+"""
+send_mail_notification_producer(order_id) is a function that is invoked when an order is placed, which further sends 
+a notification mail to the producer about the order. The function calls send_mail(subject, recipients, body) whcih does
+the operation of sending message via the server. The order_id constraint is used as a reference tp retrieve the producer mail 
+from the database through get_producer_mail(order_id).
+"""
 def send_mail_notification_producer(order_id):
     subject = 'New Order Notification'
     recipients = get_producer_email(order_id)
@@ -113,17 +119,24 @@ def send_mail_notification_producer(order_id):
     return 'Email sent successfully!'
 
 
-# Function to retrieve relevant producer mail for the message to be sent
+"""
+get_producer_email(order_id) is a function that retrieves the producer mail ID, to send the notification mails
+at relevant events.
+"""
 def get_producer_email(order_id):
-    # order is retrieved in reference to the customer_id
-    order = Orders.query.filter_by(id=order_id).first()
-    if order:
-        producer = Producer.query.get(order.producer_id)
-        return [producer.email]
-    return []
+    order = Orders.query.filter_by(Orders.producer_id, id=order_id)
+    if order :
+        producer = Producer.query.get(Producer.email).filter_by(Orders.producer_id)
+        return  producer
+    return None
 
 
-# Message for the consumer that is sent through email
+"""
+send_mail_notification_consumer(order_id) is used to send notification mail about the confirmation of an order
+to the user, the function formats the structure of the mail with subject, body and recipient, which is retrieved 
+through another function invoked get_consumer_mail(order_id) gets the relevant mail through filtering in reference to
+the order_id from the database.
+"""
 def send_mail_notification_consumer(order_id):
     subject = 'New Order Notification'
     recipients = get_consumer_mail(order_id)
@@ -132,15 +145,22 @@ def send_mail_notification_consumer(order_id):
     return 'Email sent successfully!'
 
 
-# Function to retrieve relevant consumer mail for the message to be sent
+'''
+get_consumer_mail(order_id) is a function that retrieves the consumer mail ID, to send the notification mails
+at relevant events.
+'''
 def get_consumer_mail(order_id):
-    order = Orders.query.filter_by(order_id=order_id).first()
+    order = Orders.query.filter_by(Orders.consumer_id, id=order_id)
     if order:
-        consumer = Consumer.query.get(order.consumer_id)
-        return [consumer.email]
-    return []
+        consumer = Consumer.query.get(Consumer.email).filter_by(Orders.producer_id)
+        return consumer
+    return None
 
 
+'''
+cancel_mail(order_id) is a formatted  mail function that has the content for notification once an order is 
+cancelled by a consumer within a timeframe.
+'''
 def cancel_mail(order_id):
     subject = 'New Order Notification'
     recipients = get_producer_email(order_id)
