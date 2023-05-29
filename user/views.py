@@ -1,3 +1,10 @@
+"""
+File: views.py
+Authors: Sreejith Sudhir Kalathil, Alexander MacMillan
+Description: This file provides features which are shared among both Consumer and Producer users, including login/logout
+functionality, and automated e-mails.
+"""
+
 from flask import Blueprint, render_template, flash, redirect, url_for, session, Markup, request
 from models import Orders, Producer, Consumer
 from app import db
@@ -11,8 +18,12 @@ from consumer.view import find_producers
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
-
-# defining a login function
+"""
+Login() is called when the user is redirected to the login page. It calls on the form in forms.py, then when the user
+submits their email and password combination, checks if this is a valid combination, if so the user is signed in using 
+flask's loginManager features in app.py. If the user inputs a non-existent email/password combination 5 times they're 
+redirected to their register page. 
+"""
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     # create login form object
@@ -142,10 +153,12 @@ def cancel_mail(order_id):
     return 'Email sent successfully!'
 
 
+"""
+Checks whether the user is a consumer or producer, then renders a page which shows them their details.
+"""
 @users_blueprint.route('/account')
 @login_required
 def account():
-    # if Producer.query.filter_by(email=current_user.email).first():
     if isinstance(current_user, Producer):
         return render_template('users/account.html',
                            id=current_user.id,
