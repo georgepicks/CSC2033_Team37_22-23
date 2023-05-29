@@ -11,7 +11,7 @@
         <div class="logo">Leftovers</div>
         <nav>
             <a href="{{ url_for('producer.supplier_dash') }}">Dashboard</a>
-            <a href="{{ url_for('useres.account') }}">Account</a>
+            <a href="{{ url_for('users.account') }}">Account</a>
             <a href="{{ url_for('users.logout')}}">Log out</a>
         </nav>
     </header>
@@ -25,6 +25,7 @@
                 <img src="https://source.unsplash.com/600x600/? {{ item.item }}" alt="Food">
                 <p><strong>Item:</strong> {{ item.item }}</p>
                 <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                <p><strong>Dietary:</strong> {{ item.dietary }}</p>
             {% endfor %}
             <p><strong>Order ID:</strong> {{ order.id }}</p>
             <p><strong>Consumer:</strong> {{ order.consumer_id }}</p>

@@ -38,7 +38,7 @@ class Producer(db.Model,UserMixin):
 
     def __init__(self, email, producer_name, password, phone, postcode, address_1, address_2, address_3):
         self.email = email
-        self.producer_name = producer_name,
+        self.producer_name = producer_name
         self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         self.phone = phone
         self.postcode = postcode
