@@ -1,3 +1,10 @@
+"""
+File: consumer/view.py
+Authors: Sreejith Sudhir Kalathil, George Pickard, Alexander MacMillan
+Description: Provides all the functionality specific to consumer users. This includes their specific register form, as
+well as displaying the feed, allowing them to filter or search for producers in the feed, and CREATE, UPDATE and
+DELETING orders.
+"""
 import pgeocode
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify, flash
 from flask_login import login_required, current_user
@@ -10,9 +17,12 @@ from user.forms import ConsumerRegisterForm
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
 
-
 @consumer_blueprint.route('/consumer/register', methods=['GET', 'POST'])
 def register():
+    """
+    Called when a user is redirected to consumer/register, calls upon the ConsumerRegisterForm() in forms.py, when user
+    submits it creates a new consumer in the consumer table then redirects them to log into their new account.
+    """
     # create signup form object
     form = ConsumerRegisterForm()
 
@@ -47,6 +57,10 @@ def register():
 @consumer_blueprint.route('/feed', methods=['GET', 'POST'])
 @login_required
 def feed():
+    """
+    Called when user redirects to /feed, collects all producers and displays them as buttons which consumer can click on to
+    proceed to /order
+    """
     suppliers = []  # Create an empty list to store supplier information
 
     # Retrieve all producers from the database
@@ -70,6 +84,10 @@ def feed():
 @app.route('/order', methods=['GET', 'POST'])
 @login_required
 def order_generate():
+    """
+    Called when the consumer selects a producer, displays information about the producer and all of the items they have
+    available in their inventory
+    """
     supplier_id = request.args.get('supplier_id')
     supplier = Producer.query.filter_by(id=supplier_id).first()
 
@@ -93,8 +111,9 @@ def order_generate():
         }
         items.append(item_data)
 
-    return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address=address1,
-                           supplier_postcode=postcode, supplier_id=supplier_id)
+
+    return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address1=address1,
+                           supplier_address2=address2, supplier_address3=address3, supplier_postcode=postcode)
 
 
 # Function to place an order
@@ -133,7 +152,7 @@ def place_order():
     return render_template("consumer/order_confirm.html", order_id=order_id)
 
 
-# Function to search for an item in the inventory
+
 @app.route('/feed', methods=['GET', 'POST'])
 @login_required
 def search():
@@ -182,10 +201,12 @@ def search_results(query):
     return render_template('search_results.html', query=query, results=results)
 
 
-# Function that allows the user to edit or make changes to the order before confirmation
 @app.route('/order/edit/<int:order_id>', methods=['GET', 'POST'])
 @login_required
 def edit_order(order_id):
+    """
+    Allows the user to edit or make changes to the order before confirmation
+    """
     order = OrderItems.query.get_or_404(order_id)
     if request.method == 'POST':
         order.item = request.form['item']
@@ -196,24 +217,7 @@ def edit_order(order_id):
         return render_template('', order=order)
 
 
-
-
 # Shows the information about the order
-@app.route('/order_details')
-@login_required
-def order_details(order_id):
-    order_info = OrderItems.query.filter(OrderItems.order_id.ilike(order_id)).all()
-    if order_info:
-        order = {
-            'id': OrderItems.id,
-            'item': OrderItems.item,
-            'quantity': OrderItems.quantity,
-            'order_id': OrderItems.order_id
-        }
-        return render_template('order_details.html', order=order)
-
-
-# Function to place an order
 @app.route('/place_order-order', methods=['GET', 'POST'])
 @login_required
 def order_details():
@@ -233,17 +237,19 @@ def order_details():
         }
         order_list.append(order_dict)
 
+
     db.session.commit()
-    views.send_mail_notification_producer(order_id)
 
 
     return render_template('consumer/consumer_orders.html', orders_list=order_list)
 
 
-# Function to cancel an order made within a timeframe
 @app.route('/cancel-order', methods=['POST'])
 @login_required
 def cancel_order(order_id):
+    """
+    If the cancellation deadline has not expired, enables the consumer to delete an Order object
+    """
     # Retrieve the order with the given order ID from the database
     order = Orders.query.get(order_id)
 
@@ -267,6 +273,11 @@ def cancel_order(order_id):
 
 @app.route('/')
 def find_producers(distance_range):
+    """
+    Called before loading the feed, by default just displays them all to the consumer, but if they add a maximum distance
+    filter, compares the producer's postcodes against that of the user, removes from the display the ones that are too far
+    away, and sorts the rest by distance from the consumer.
+    """
     # if user has not yet specified a distance
     if distance_range == 0:
         producers = Producer.query.all()
@@ -276,7 +287,6 @@ def find_producers(distance_range):
         nearby_producers = {}
         # query all producers
         producers = Producer.query.all()
-        # ------------ need to add distance functionality in later ----------------
         for i in producers:
             # calculate distance between all producers and current user
             distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
@@ -291,6 +301,9 @@ def find_producers(distance_range):
 @consumer_blueprint.route('/consumer_account/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_consumer_account(id):
+    """
+    Enables the consumer to edit their personal details
+    """
     consumer = Consumer.query.get_or_404(id)
     if request.method == 'POST':
         consumer.email = request.form['email']
@@ -302,3 +315,4 @@ def edit_consumer_account(id):
         return redirect(url_for('users.account'))
     else:
         return render_template('users/edit_account.html', consumer=consumer)
+
