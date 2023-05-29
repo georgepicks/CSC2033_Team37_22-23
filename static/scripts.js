@@ -43,11 +43,9 @@ function filterItems() {
   }
 }
 
-
 function redirectToSupplier(supplierId) {
     window.location.href = "http://127.0.0.1:5000/order?supplier_id=" + supplierId
 }
-
 
 function removeFromBasket(itemId) {
   var basketItem = document.getElementById(itemId);
@@ -88,6 +86,7 @@ function addToOrder(itemId) {
     // If the item doesn't exist, add a new item with quantity 1
     var basketItem = document.createElement("li");
     basketItem.className = "basket-item";
+    basketItem.id = "basket-" + itemId; // Set the ID of the basket item
     basketItem.innerHTML = `
       <span class="basket-item-name">${itemName}</span>
       <span class="basket-item-quantity">1</span>
@@ -97,22 +96,4 @@ function addToOrder(itemId) {
     `;
     basket.appendChild(basketItem);
   }
-}
-
-function showAlert(message) {
-  var alertBox = document.createElement("div");
-  alertBox.className = "alert-box";
-  alertBox.textContent = message;
-  document.body.appendChild(alertBox);
-
-  // Position the alert in the middle of the screen
-  var windowHeight = window.innerHeight;
-  var alertHeight = alertBox.offsetHeight;
-  var topOffset = (windowHeight - alertHeight) / 2;
-  alertBox.style.top = topOffset + "px";
-
-  // Remove the alert after a certain duration (e.g., 3 seconds)
-  setTimeout(function () {
-    alertBox.remove();
-  }, 3000);
 }

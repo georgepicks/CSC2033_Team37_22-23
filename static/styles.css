@@ -208,40 +208,51 @@ input[type="text"], input[type="password"], select, textarea {
 }
 
 .supplier:hover {
-  cursor: pointer;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  transform: translateY(-10px);
-  transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
 }
 
 #SearchBar {
     margin-bottom: 10px;
 }
 
-.InventoryContainer {
+
+form.order {
     max-height: 400px;
+    max-width: 60%;
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    align-items: flex-start;
     text-align: center;
     color: #000000;
-    gap: 10px;
 }
 
 .InventoryCard {
-    flex-basis: calc(25% - 10px);  /* Adjust the width and gap as needed */
-    height: 150px;
     margin-bottom: 10px;
     border: 1px solid #000000;
-    padding: 10px;
+    padding: 5px; /* Adjust padding as desired */
+    width: 15%; /* Adjust the card width as desired */
+    height: 15%;
+    /* Other styles for the card */
+    background-size: cover;
+    background-position: center;
+    margin-right: 10px;
+}
+
+.InventoryCard img {
+    max-width: 100%; /* Scale down the image to fit within the card */
+    max-height: 100%; /* Scale down the image to fit within the card */
+    object-fit: contain; /* Preserve the aspect ratio of the image */
+    border-bottom: 1px solid #ddd;
 }
 
 .InventoryCard:hover {
     cursor: pointer;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    background-color: #FFE7AA;
+    transform: translateY(-10px);
     transition: all 0.3s ease;
 }
 
@@ -254,12 +265,8 @@ input[type="text"], input[type="password"], select, textarea {
     margin-bottom: 10px;
 }
 
-.InventoryCard .item_dietary {
-    margin-bottom: 5px;
-}
-
 .InventoryCard.selected {
-    background-color: #FFFFFF;
+    background-color: #e0e0e0;
 }
 
 .AddToOrderButton {
