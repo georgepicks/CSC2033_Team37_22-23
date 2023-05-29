@@ -63,7 +63,6 @@ def feed():
             'postcode': producer.postcode
         }
         suppliers.append(producer_data)
-        print(suppliers)
 
     return render_template('consumer/feed.html', suppliers=suppliers)
 
@@ -171,6 +170,7 @@ def edit_order(order_id):
     else:
         return render_template('', order=order)
 
+
 # Function to place an order
 @app.route('/place_order-order', methods=['GET', 'POST'])
 @login_required
@@ -199,28 +199,36 @@ def order_details():
 
 
 # Function to cancel an order made within a timeframe
-@app.route('/cancel-order', methods=['POST'])
+@app.route('/cancel_order/<int:order_id>/<string:order_item>/<int:order_quantity>', methods=['POST'])
 @login_required
-def cancel_order(order_id):
+def cancel_order(order_id, order_item, order_quantity):
     # Retrieve the order with the given order ID from the database
     order = Orders.query.get(order_id)
-
+    inventory_item = InventoryItems.query.filter_by(item=order_item).first()
     if order:
-        cancellation_deadline = session.get('cancellation_deadline')
-        if cancellation_deadline and datetime.now() < cancellation_deadline:
-            # Perform cancellation logic
-            db.session.delete(order)  # Delete the order from the database
-            db.session.commit()
-            session.pop('selected_products', None)
-            session.pop('cancellation_deadline', None)
-            flash('Order is cancelled')
-            views.cancel_mail(order_id)
-        else:
-            flash('Cancellation period has expired.')
-    else:
-        flash('Order not found.')
+        # Retrieve the inventory item associated with the order
+        if inventory_item:
+            # Increment the quantity of the inventory item
+            inventory_item.quantity += order_quantity
+            db.session.add(inventory_item)
 
-    return redirect(url_for('order'))
+            item_ordered = OrderItems.query.filter_by(order_id=order_id).first()
+            if item_ordered and item_ordered.item == order_item:
+                db.session.delete(item_ordered)  # Delete the item_ordered object
+
+            db.session.delete(order)  # Delete the order object
+            db.session.commit()
+            flash('Order is cancelled')
+        else:
+            flash('Inventory item not found')
+
+    return redirect(url_for('consumer.order_cancelled'))
+
+
+@consumer_blueprint.route('/order_cancelled')
+@login_required
+def order_cancelled():
+    return render_template('consumer/order_cancelled.html')
 
 
 @app.route('/')

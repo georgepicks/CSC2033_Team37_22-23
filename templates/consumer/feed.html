@@ -4,12 +4,15 @@
 
    <div id="UiContainer">
        <div id="SearchBar">
+           <!--Allows users to search for suppliers based on supplier information; when the user has typed something this links to a javascript function that performs the search-->
            <label for="SearchInput"></label><input type="text" id="SearchInput" placeholder="Search suppliers by name, location or allergens..." onkeyup="filterSuppliers()">
         </div>
 
         <div id="suppliers">
             {% for supplier in suppliers %}
+                <!--When user's click on a supplier they are redirected to that supplier's order page by using their id-->
                 <div class="supplier" onclick="redirectToSupplier('{{ supplier.id }}')">
+                <!--Supplier information-->
                     <h3>{{ supplier.name }}</h3>
                     <p>{{ supplier.address1 }}</p>
                     <p>{{ supplier.address2 }}</p>
@@ -18,8 +21,5 @@
                 </div>
             {% endfor %}
         </div>
-
     </div>
-
-
 {% endblock %}
