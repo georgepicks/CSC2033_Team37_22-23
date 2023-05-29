@@ -18,14 +18,14 @@ from consumer.view import find_producers
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
-"""
-Login() is called when the user is redirected to the login page. It calls on the form in forms.py, then when the user
-submits their email and password combination, checks if this is a valid combination, if so the user is signed in using 
-flask's loginManager features in app.py. If the user inputs a non-existent email/password combination 5 times they're 
-redirected to their register page. 
-"""
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Login() is called when the user is redirected to the login page. It calls on the form in forms.py, then when the user
+    submits their email and password combination, checks if this is a valid combination, if so the user is signed in using
+    flask's loginManager features in app.py. If the user inputs a non-existent email/password combination 5 times they're
+    redirected to their register page.
+    """
     # create login form object
     form = LoginForm()
     # if request method is POST or form is valid
@@ -153,12 +153,12 @@ def cancel_mail(order_id):
     return 'Email sent successfully!'
 
 
-"""
-Checks whether the user is a consumer or producer, then renders a page which shows them their details.
-"""
 @users_blueprint.route('/account')
 @login_required
 def account():
+    """
+    Checks whether the user is a consumer or producer, then renders a page which shows them their details.
+    """
     if isinstance(current_user, Producer):
         return render_template('users/account.html',
                            id=current_user.id,
@@ -177,4 +177,3 @@ def account():
                         lastname=current_user.lastname,
                         postcode=current_user.postcode,
                         phone=current_user.phone)
-

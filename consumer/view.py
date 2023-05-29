@@ -16,12 +16,12 @@ from user.forms import ConsumerRegisterForm
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
-"""
-Called when a user is redirected to consumer/register, calls upon the ConsumerRegisterForm() in forms.py, when user 
-submits it creates a new consumer in the consumer table then redirects them to log into their new account.
-"""
 @consumer_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+    Called when a user is redirected to consumer/register, calls upon the ConsumerRegisterForm() in forms.py, when user
+    submits it creates a new consumer in the consumer table then redirects them to log into their new account.
+    """
     # create signup form object
     form = ConsumerRegisterForm()
 
@@ -53,13 +53,13 @@ def register():
     return render_template('users/ConsumerRegister.html', form=form)
 
 
-"""
-Called when user redirects to /feed, collects all producers and displays them as buttons which consumer can click on to
-proceed to /order
-"""
 @consumer_blueprint.route('/feed', methods=['GET', 'POST'])
 @login_required
 def feed():
+    """
+    Called when user redirects to /feed, collects all producers and displays them as buttons which consumer can click on to
+    proceed to /order
+    """
     suppliers = []  # Create an empty list to store supplier information
 
     # Retrieve all producers from the database
@@ -80,13 +80,13 @@ def feed():
     return render_template('consumer/feed.html', suppliers=suppliers)
 
 
-"""
-Called when the consumer selects a producer, displays information about the producer and all of the items they have 
-available in their inventory
-"""
 @app.route('/order', methods=['GET', 'POST'])
 @login_required
 def order_generate():
+    """
+    Called when the consumer selects a producer, displays information about the producer and all of the items they have
+    available in their inventory
+    """
     supplier_id = request.args.get('supplier_id')
 
     supplier = Producer.query.filter_by(id=supplier_id).first()
@@ -164,12 +164,12 @@ def search_results(query):
     return render_template('search_results.html', query=query, results=results)
 
 
-"""
-Allows the user to edit or make changes to the order before confirmation
-"""
 @app.route('/order/edit/<int:order_id>', methods=['GET', 'POST'])
 @login_required
 def edit_order(order_id):
+    """
+    Allows the user to edit or make changes to the order before confirmation
+    """
     order = OrderItems.query.get_or_404(order_id)
     if request.method == 'POST':
         order.item = request.form['item']
@@ -179,12 +179,13 @@ def edit_order(order_id):
     else:
         return render_template('', order=order)
 
-"""
-Displays the information about an order
-"""
+
 @app.route('/order/<int:order_id>')
 @login_required
 def order_details(order_id):
+    """
+    Displays the information about an order
+    """
     order_info = OrderItems.query.filter(OrderItems.order_id.ilike(order_id)).all()
     if order_info:
         order = {
@@ -196,12 +197,12 @@ def order_details(order_id):
         return render_template('order_details.html', order=order)
 
 
-"""
-Takes the items which the consumer selected and creates a new Order object both in flask and on the database
-"""
 @app.route('/place_order-order', methods=['GET', 'POST'])
 @login_required
 def place_order(consumer_id, producer_id, items):
+    """
+    Takes the items which the consumer selected and creates a new Order object both in flask and on the database
+    """
     order_time = datetime.now()
 
     # Creates an instance of the Orders model
@@ -223,12 +224,12 @@ def place_order(consumer_id, producer_id, items):
     return order_id
 
 
-"""
-If the cancellation deadline has not expired, enables the consumer to delete an Order object 
-"""
 @app.route('/cancel-order', methods=['POST'])
 @login_required
 def cancel_order(order_id):
+    """
+    If the cancellation deadline has not expired, enables the consumer to delete an Order object
+    """
     # Retrieve the order with the given order ID from the database
     order = Orders.query.get(order_id)
 
@@ -250,13 +251,13 @@ def cancel_order(order_id):
     return redirect(url_for('order'))
 
 
-"""
-Called before loading the feed, by default just displays them all to the consumer, but if they add a maximum distance
-filter, compares the producer's postcodes against that of the user, removes from the display the ones that are too far 
-away, and sorts the rest by distance from the consumer.
-"""
 @app.route('/')
 def find_producers(distance_range):
+    """
+    Called before loading the feed, by default just displays them all to the consumer, but if they add a maximum distance
+    filter, compares the producer's postcodes against that of the user, removes from the display the ones that are too far
+    away, and sorts the rest by distance from the consumer.
+    """
     # if user has not yet specified a distance
     if distance_range == 0:
         producers = Producer.query.all()
@@ -277,11 +278,11 @@ def find_producers(distance_range):
         return sorted_producers
 
 
-"""
-Enables the consumer to edit their personal details
-"""
 @consumer_blueprint.route('/account')
 def edit_consumer_account(id):
+    """
+    Enables the consumer to edit their personal details
+    """
     consumer = Consumer.query.get_or_404(id)
     if request.method == 'POST':
         consumer.email= request.form['email']
