@@ -62,27 +62,36 @@ def feed():
             'address3': producer.address_3,
             'postcode': producer.postcode
         }
+        #add information to array
         suppliers.append(producer_data)
 
+    #render relevant html template and pass array of supplier information to html file
     return render_template('consumer/feed.html', suppliers=suppliers)
 
 
 @app.route('/order', methods=['GET', 'POST'])
 @login_required
 def order_generate():
+    # Retrieve the supplier_id from the request arguments
     supplier_id = request.args.get('supplier_id')
+
+    # Query the database to retrieve the supplier based on the supplier_id
     supplier = Producer.query.filter_by(id=supplier_id).first()
 
+    # Retrieve the necessary information from the supplier
     name = supplier.producer_name
     address1 = supplier.address_1
     address2 = supplier.address_2
     address3 = supplier.address_3
     postcode = supplier.postcode
 
+    # Prepare a list to store the items
     items = []
 
+    # Query the database to retrieve the inventory items for the supplier
     item_list = InventoryItems.query.filter_by(producer=supplier_id).all()
 
+    # Iterate over each item and gather the required data
     for item in item_list:
         item_data = {
             'id': item.id,
@@ -93,7 +102,9 @@ def order_generate():
         }
         items.append(item_data)
 
-    return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address1=address1, supplier_address2=address2, supplier_address3=address3,
+    # Render the order.html template with the necessary data
+    return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address1=address1,
+                           supplier_address2=address2, supplier_address3=address3,
                            supplier_postcode=postcode, supplier_id=supplier_id)
 
 
@@ -124,6 +135,7 @@ def place_order():
         if inventory_item:
             inventory_item.quantity -= int(quantity)
 
+            #if the quantity of an item=0 then it is removed from the database table
             if inventory_item.quantity <= 0:
                 db.session.delete(inventory_item)
             else:
@@ -171,17 +183,25 @@ def edit_order(order_id):
         return render_template('', order=order)
 
 
-# Function to place an order
 @app.route('/place_order-order', methods=['GET', 'POST'])
 @login_required
 def order_details():
+    # Retrieve the consumer_id of the current user
     consumer_id = current_user.id
+
+    # Query the database to retrieve all orders associated with the consumer_id
     orders = Orders.query.filter_by(consumer_id=consumer_id).all()
+
+    # Create a list of order IDs from the retrieved orders
     order_ids = [order.id for order in orders]
+
+    # Prepare a list to store the order details
     order_list = []
 
+    # Query the database to retrieve the order items associated with the order IDs
     order_info = OrderItems.query.filter(OrderItems.order_id.in_(order_ids)).all()
 
+    # Iterate over each order item and gather the required data
     for order in order_info:
         order_dict = {
             'id': order.id,
@@ -191,14 +211,17 @@ def order_details():
         }
         order_list.append(order_dict)
 
+    # Commit the changes to the database
     db.session.commit()
-    #views.send_mail_notification_producer(order_id)
 
+    # Send mail notification to the producer(s) of the orders
+    #views.send_mail_notification_producer(order_ids)
 
+    # Render the consumer_orders.html template with the order list data
     return render_template('consumer/consumer_orders.html', orders_list=order_list)
 
 
-# Function to cancel an order made within a timeframe
+# Flask route function to cancel an order made within a timeframe
 @app.route('/cancel_order/<int:order_id>/<string:order_item>/<int:order_quantity>', methods=['POST'])
 @login_required
 def cancel_order(order_id, order_item, order_quantity):
@@ -214,13 +237,12 @@ def cancel_order(order_id, order_item, order_quantity):
 
             item_ordered = OrderItems.query.filter_by(order_id=order_id).first()
             if item_ordered and item_ordered.item == order_item:
-                db.session.delete(item_ordered)  # Delete the item_ordered object
+                # Delete the item_ordered object
+                db.session.delete(item_ordered)
 
-            db.session.delete(order)  # Delete the order object
+            # Delete the order object
+            db.session.delete(order)
             db.session.commit()
-            flash('Order is cancelled')
-        else:
-            flash('Inventory item not found')
 
     return redirect(url_for('consumer.order_cancelled'))
 
@@ -228,6 +250,7 @@ def cancel_order(order_id, order_item, order_quantity):
 @consumer_blueprint.route('/order_cancelled')
 @login_required
 def order_cancelled():
+    # Render the order_cancelled.html template
     return render_template('consumer/order_cancelled.html')
 
 
