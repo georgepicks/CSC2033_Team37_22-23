@@ -28,8 +28,6 @@ def login():
             # if condition checking if the encrypted password is similar to database, if the user exists and the
             # verification key entered is false
             if user and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')):
-
-
                 login_user(user)
                 # current login user is matched to the last login user
                 db.session.add(user)
@@ -53,7 +51,6 @@ def login():
             user = Consumer.query.filter_by(email=form.email.data).first()
             # if condition checking if the encrypted password is similar to database, if the user exists and the
             # verification key entered is false
-
 
             if user and bcrypt.checkpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')):
                 # user login is initiated
@@ -83,20 +80,27 @@ def login():
 @users_blueprint.route('/logout')
 @login_required
 def logout():
-    #Function for the user to log out
+    # Function for the user to log out
     logout_user()
-    #the user is redirected to index page after logout
+    # the user is redirected to index page after logout
     return redirect(url_for('index'))
 
 
-# Function to send mails to producers while an order is made
+"""
+send_email(subject, recipients, body) is a functions that records the message for a mail ans sends it 
+"""
 def send_email(subject, recipients, body):
     msg = Message(subject=subject, recipients=recipients)
     msg.body = body
     Mail.send(msg)
 
 
-# Message for the producer that is sent through email
+"""
+send_mail_notification_producer(order_id) is a function that is invoked when an order is placed, which further sends 
+a notification mail to the producer about the order. The function calls send_mail(subject, recipients, body) whcih does
+the operation of sending message via the server. The order_id constraint is used as a reference tp retrieve the producer mail 
+from the database through get_producer_mail(order_id).
+"""
 def send_mail_notification_producer(order_id):
     subject = 'New Order Notification'
     recipients = get_producer_email(order_id)
@@ -105,7 +109,10 @@ def send_mail_notification_producer(order_id):
     return 'Email sent successfully!'
 
 
-# Function to retrieve relevant producer mail for the message to be sent
+"""
+get_producer_email(order_id) is a function that retrieves the producer mail ID, to send the notification mails
+at relevant events.
+"""
 def get_producer_email(order_id):
     # order is retrieved in reference to the customer_id
     order = Orders.query.filter_by(id=order_id).first()
@@ -115,8 +122,13 @@ def get_producer_email(order_id):
     return []
 
 
-# Message for the consumer that is sent through email
-def send_mail_notification_consumer( order_id):
+"""
+send_mail_notification_consumer(order_id) is used to send notification mail about the confirmation of an order
+to the user, the function formats the structure of the mail with subject, body and recipient, which is retrieved 
+through another function invoked get_consumer_mail(order_id) gets the relevant mail through filtering in reference to
+the order_id from the database.
+"""
+def send_mail_notification_consumer(order_id):
     subject = 'New Order Notification'
     recipients = get_consumer_mail(order_id)
     body = f"Your order have been received, Order ID: {order_id}"
@@ -124,7 +136,10 @@ def send_mail_notification_consumer( order_id):
     return 'Email sent successfully!'
 
 
-#Function to retrieve relevant consumer mail for the message to be sent
+'''
+get_consumer_mail(order_id) is a function that retrieves the consumer mail ID, to send the notification mails
+at relevant events.
+'''
 def get_consumer_mail(order_id):
     order = Orders.query.filter_by(order_id=order_id).first()
     if order:
@@ -132,9 +147,12 @@ def get_consumer_mail(order_id):
         return [consumer.email]
     return []
 
-  
-def cancel_mail(order_id):
 
+'''
+cancel_mail(order_id) is a formatted  mail function that has the content for notification once an order is 
+cancelled by a consumer within a timeframe.
+'''
+def cancel_mail(order_id):
     subject = 'New Order Notification'
     recipients = get_producer_email(order_id)
     body = f"The order,  Order ID: {order_id} is cancelled"
@@ -148,20 +166,20 @@ def account():
     # if Producer.query.filter_by(email=current_user.email).first():
     if isinstance(current_user, Producer):
         return render_template('users/account.html',
-                           id=current_user.id,
-                           email=current_user.email,
-                           producer_name=current_user.producer_name,
-                           phone=current_user.phone,
-                           postcode=current_user.postcode,
-                           address_1=current_user.address_1,
-                           address_2=current_user.address_2,
-                           address_3=current_user.address_3)
+                               id=current_user.id,
+                               email=current_user.email,
+                               producer_name=current_user.producer_name,
+                               phone=current_user.phone,
+                               postcode=current_user.postcode,
+                               address_1=current_user.address_1,
+                               address_2=current_user.address_2,
+                               address_3=current_user.address_3)
     else:
         return render_template('users/account.html',
-                        id=current_user.id,
-                        email=current_user.email,
-                        firstname=current_user.firstname,
-                        lastname=current_user.lastname,
-                        postcode=current_user.postcode,
-                        phone=current_user.phone)
+                               id=current_user.id,
+                               email=current_user.email,
+                               firstname=current_user.firstname,
+                               lastname=current_user.lastname,
+                               postcode=current_user.postcode,
+                               phone=current_user.phone)
 
