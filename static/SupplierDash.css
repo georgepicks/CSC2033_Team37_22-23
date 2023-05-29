@@ -263,6 +263,10 @@ footer {
     background-color: #4CAF50;
     color:white;
 }
+.accept-button:hover {
+    background-color: #4CAF50;
+    color:white;
+}
 .add-item-button {
     background-color: #FFE7AA;
     color: black;
