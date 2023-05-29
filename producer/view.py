@@ -1,7 +1,7 @@
 """
 File: producer/view.py
 Authors: Sreejith Sudhir Kalathil, Samuel Robertson
-Description: Provides all the functionality specific to the producer. This includes their specific register form, as
+Description: Provides all the functionality specific to producer users. This includes their specific register form, as
 well as CREATE, UPDATE and DELETE functions for the producer's inventory, in addition to allowing the producer to
 accept newly created orders.
 """
@@ -16,7 +16,7 @@ producer_blueprint = Blueprint('producer', __name__, template_folder='templates'
 
 
 """
-called when a user is redirected to producer/register, calls upon the ProducerRegisterForm() in forms.py, when user 
+Called when a user is redirected to producer/register, calls upon the ProducerRegisterForm() in forms.py, when user 
 submits it creates a new producer in the producer table then redicts them to log into their new account.
 """
 @producer_blueprint.route('/producer/register', methods=['GET', 'POST'])
@@ -174,7 +174,7 @@ def remove_item_route(item_id):
 
 
 """
-Allows the user to change details about their account
+Allows the producer to change their personal details
 """
 @producer_blueprint.route('/producer_account')
 @login_required

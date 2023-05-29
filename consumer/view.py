@@ -1,6 +1,9 @@
 """
 File: consumer/view.py
-Authors: George Pickard
+Authors: Sreejith Sudhir Kalathil, George Pickard, Alexander MacMillan
+Description: Provides all the functionality specific to consumer users. This includes their specific register form, as
+well as displaying the feed, allowing them to filter or search for producers in the feed, and CREATE, UPDATE and
+DELETING orders.
 """
 import pgeocode
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify, flash
@@ -13,7 +16,10 @@ from user.forms import ConsumerRegisterForm
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
-
+"""
+Called when a user is redirected to consumer/register, calls upon the ConsumerRegisterForm() in forms.py, when user 
+submits it creates a new consumer in the consumer table then redirects them to log into their new account.
+"""
 @consumer_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     # create signup form object
@@ -47,6 +53,10 @@ def register():
     return render_template('users/ConsumerRegister.html', form=form)
 
 
+"""
+Called when user redirects to /feed, collects all producers and displays them as buttons which consumer can click on to
+proceed to /order
+"""
 @consumer_blueprint.route('/feed', methods=['GET', 'POST'])
 @login_required
 def feed():
@@ -70,6 +80,10 @@ def feed():
     return render_template('consumer/feed.html', suppliers=suppliers)
 
 
+"""
+Called when the consumer selects a producer, displays information about the producer and all of the items they have 
+available in their inventory
+"""
 @app.route('/order', methods=['GET', 'POST'])
 @login_required
 def order_generate():
@@ -99,10 +113,9 @@ def order_generate():
         items.append(item_data)
 
     return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address1=address1,
-                           supplier_address2=address2,supplier_address3=address3, supplier_postcode=postcode)
+                           supplier_address2=address2, supplier_address3=address3, supplier_postcode=postcode)
 
 
-# Function to search for an item in the inventory
 @app.route('/feed', methods=['GET', 'POST'])
 @login_required
 def search():
@@ -151,7 +164,9 @@ def search_results(query):
     return render_template('search_results.html', query=query, results=results)
 
 
-# Function that allows the user to edit or make changes to the order before confirmation
+"""
+Allows the user to edit or make changes to the order before confirmation
+"""
 @app.route('/order/edit/<int:order_id>', methods=['GET', 'POST'])
 @login_required
 def edit_order(order_id):
@@ -164,8 +179,9 @@ def edit_order(order_id):
     else:
         return render_template('', order=order)
 
-
-# Shows the information about the order
+"""
+Displays the information about an order
+"""
 @app.route('/order/<int:order_id>')
 @login_required
 def order_details(order_id):
@@ -180,7 +196,9 @@ def order_details(order_id):
         return render_template('order_details.html', order=order)
 
 
-# Function to place an order
+"""
+Takes the items which the consumer selected and creates a new Order object both in flask and on the database
+"""
 @app.route('/place_order-order', methods=['GET', 'POST'])
 @login_required
 def place_order(consumer_id, producer_id, items):
@@ -205,7 +223,9 @@ def place_order(consumer_id, producer_id, items):
     return order_id
 
 
-# Function to cancel an order made within a timeframe
+"""
+If the cancellation deadline has not expired, enables the consumer to delete an Order object 
+"""
 @app.route('/cancel-order', methods=['POST'])
 @login_required
 def cancel_order(order_id):
@@ -230,6 +250,11 @@ def cancel_order(order_id):
     return redirect(url_for('order'))
 
 
+"""
+Called before loading the feed, by default just displays them all to the consumer, but if they add a maximum distance
+filter, compares the producer's postcodes against that of the user, removes from the display the ones that are too far 
+away, and sorts the rest by distance from the consumer.
+"""
 @app.route('/')
 def find_producers(distance_range):
     # if user has not yet specified a distance
@@ -241,7 +266,6 @@ def find_producers(distance_range):
         nearby_producers = {}
         # query all producers
         producers = Producer.query.all()
-        # ------------ need to add distance functionality in later ----------------
         for i in producers:
             # calculate distance between all producers and current user
             distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
@@ -253,6 +277,9 @@ def find_producers(distance_range):
         return sorted_producers
 
 
+"""
+Enables the consumer to edit their personal details
+"""
 @consumer_blueprint.route('/account')
 def edit_consumer_account(id):
     consumer = Consumer.query.get_or_404(id)
@@ -266,5 +293,3 @@ def edit_consumer_account(id):
         return redirect(url_for('users.consumer_acc'))
     else:
         return render_template('', consumer=consumer)
-
-
