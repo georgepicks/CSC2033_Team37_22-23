@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Reserved Orders</title>
+    <link rel="stylesheet" href="../../static/SupplierDash.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Leftovers</div>
+        <nav>
+            <a href="{{ url_for('producer.supplier_dash') }}">Dashboard</a>
+            <a href="{{ url_for('users.account') }}">Account</a>
+            <a href="{{ url_for('users.logout')}}">Log out</a>
+        </nav>
+    </header>
+    <div class="inventory-buttons">
+        <h1>Your Reserved Orders</h1>
+    </div>
+    <div id="cards-container">
+    {% for order in orders %}
+        <div class="card">
+            {% for item in order.items %}
+                <img src="https://source.unsplash.com/600x600/? {{ item.item }}" alt="Food">
+                <p><strong>Item:</strong> {{ item.item }}</p>
+                <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                <p><strong>Dietary:</strong> {{ item.dietary }}</p>
+            {% endfor %}
+            <p><strong>Order ID:</strong> {{ order.id }}</p>
+            <p><strong>Consumer:</strong> {{ order.consumer_id }}</p>
+            <p><strong>Date:</strong> {{ order.order_time }}</p>
+        </div>
+    {% endfor %}
+    </div>
+    <footer>
+        <nav>
+            <a href="{{ url_for('about_us') }}">About Us</a>
+            <a href="{{ url_for('contact_us') }}">Contact Us</a>
+        </nav>
+    </footer>
+</body>
+</html>

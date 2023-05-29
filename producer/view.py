@@ -3,11 +3,9 @@ from flask_login import login_required, current_user
 from models import InventoryItems, Producer, OrderItems, Orders
 from app import app, db
 from user.forms import ProducerRegisterForm
-import logging
+from user.views import send_mail_notification_consumer
 
 producer_blueprint = Blueprint('producer', __name__, template_folder='templates')
-
-
 
 @producer_blueprint.route('/producer/register', methods=['GET', 'POST'])
 def register():
@@ -19,7 +17,6 @@ def register():
 
         user = Producer.query.filter_by(email=form.email.data).first()
         # if this returns a user, then the email already exists in the database
-
 
         # if email already exists redirect user back to signup page with error message so user can try again
         if user:
@@ -41,77 +38,99 @@ def register():
         db.session.commit()
 
         # sends user to login page
-        logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
-        return render_template('users/login.html', form=form)
+        return redirect(url_for('users.login'))
 
     # if request method is GET or form not valid re-render signup page
     return render_template('users/ProducerRegister.html', form=form)
 
 
 # Function that shows the inventory to the producer
-@app.route('/admin/inventory')
+@app.route('/supplier_inventory')
 @login_required
-def inventory(id):
-    items = InventoryItems.query.filter(InventoryItems.producer_id.ilike(id)).all()
-    return render_template('', items=items)
+def inventory():
+    id = current_user.id
+    items = InventoryItems.query.filter(InventoryItems.producer.ilike(id)).all()
+    return render_template('producer/supplier_inventory.html', items=items)
 
 
 # Function to edit inventory table, authentication for relevant producer only
-@app.route('/', methods=['GET', 'POST'])
+@producer_blueprint.route('/edit_item/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_inventory(id):
     item = InventoryItems.query.get_or_404(id)
     if request.method == 'POST':
-        item.name = request.form['name']
-        item.quantity = request.form['quantity']
+        item.item = request.form.get('name')
+        item.quantity = request.form.get('quantity')
+        item.dietary = request.form.get('dietary')
         db.session.commit()
         return redirect(url_for('inventory'))
     else:
-        return render_template('edit_item.html', item=item)
+        return render_template('producer/edit_item.html', item=item)
+
+
+
+# @app.route('/edit_item/<int:id>', methods=['GET', 'POST'])
+# @login_required
+# def edit_inventory(id):
+# item = InventoryItems.query.get_or_404(id)
+# if request.method == 'POST':
+# item.name = request.form['name']
+# item.quantity = request.form['quantity']
+# db.session.commit()
+# return redirect(url_for('edit_inventory', id=id))  # Include id in redirect
+# else:
+# return render_template('producer/supplier_inventory.html', item=item)
 
 
 # Function to add an item to the inventory
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/supplier_additem', methods=['GET', 'POST'])
 @login_required
 def add_item():
     if request.method == 'POST':
-        name = request.form['name']
-        quantity = request.form['quantity']
-        item = InventoryItems.item(name=name, quantity=quantity)
-        db.session.add(item)
-        db.session.commit()
+        # if not isinstance(current_user._get_current_object(), Producer):
+        # flash('You need to be a producer to add items')
+        # return redirect(url_for('home'))
+
+        try:
+            item = request.form['name']
+            quantity = int(request.form['quantity'])  # convert to integer
+            dietary = request.form['dietary']
+            producer = current_user.id  # Assuming the logged in user is the producer
+            inventory_item = InventoryItems(item=item, quantity=quantity, producer=producer, dietary=dietary)
+            db.session.add(inventory_item)
+            db.session.commit()
+        except ValueError:  # catch conversion errors
+            flash('Invalid quantity. Please enter a number')
+            return redirect(url_for('add_item'))
+
         return redirect(url_for('inventory'))
     else:
-        return render_template('')
+        return render_template('producer/supplier_additem.html')
 
 
-# Function that shows the proper order from the consumer to the produxer
-@app.route('/orders')
+# Function that shows the proper order from the consumer to the producer
+@app.route('/supplier_orders')
 @login_required
 def orders():
-    cursor = db.cursor()
-    # orders = Orders.query.filter(Orders.producer_id.ilike(id).all)
-    # Retrieve all orders from the database
-    select_query = "SELECT * FROM Orders where Orders.producer_id = InventoryItems.producer_id"
-    cursor.execute(select_query)
-    orders = cursor.fetchall()
+    id = current_user.id
+    orders = Orders.query.filter(Orders.producer_id.ilike(id)).all()
 
-    # Pass the orders to the template for rendering
-    return render_template('orders.html', orders=orders)
+    return render_template('producer/supplier_orders.html', orders=orders)
 
 
 # Function that allows the producer to accept an order by the consumer
-@app.route('/orders')
+@app.route('/')
 @login_required
-def accept_order(order_id, inventory):
+def accept_order(order_id):
     # If an item is accepted as an order, then reduce its quantity in the inventory
-    for item in inventory:
+    for item in current_user.inventory():
         if item['id'] == order_id:
             if item['quantity'] > 0:
                 item['quantity'] -= 1
                 flash('Order accepted')
             elif item['quantity'] == OrderItems.quantity:
                 inventory.remove(item)
+                send_mail_notification_consumer(order_id)
                 return True
             else:
                 flash('Insufficient quantity')
@@ -121,7 +140,7 @@ def accept_order(order_id, inventory):
 
 
 # Function to remove an item from the inventory by the producer
-@app.route('/orders')
+@app.route('/')
 @login_required
 def remove_item(item_id):
     item = InventoryItems.query.get(item_id)
@@ -146,16 +165,39 @@ def remove_item_route(item_id):
 
 
 # view user account
-@producer_blueprint.route('/account')
+#@producer_blueprint.route('/users/account')
+#@login_required
+#def producer_account():
+#    return render_template('users/producer_acc.html',
+#                           id=current_user.id,
+#                           email=current_user.email,
+#                           producer_name=current_user.producer_name,
+#                           phone=current_user.phone,
+#                           postcode=current_user.postcode,
+#                           address_1=current_user.address_1,
+#                           address_2=current_user.address_2,
+#                           address_3=current_user.address_3)
+
+
+@producer_blueprint.route('/producer_account/<int:id>', methods=['GET', 'POST'])
 @login_required
-def account():
-    # Shows the account details of the user
-    return render_template('users/account.html',
-                           id=current_user.id,
-                           email=current_user.email,
-                           producer_name=current_user.producer_name,
-                           phone=current_user.phone,
-                           postcode=current_user.postcode,
-                           address_1=current_user.address_1,
-                           address_2=current_user.address_2,
-                           address_3=current_user.address_3)
+def edit_producer_account(id):
+    producer = Producer.query.get_or_404(id)
+    if request.method == 'POST':
+        producer.email = request.form['email']
+        producer.producer_name = request.form['producer_name']
+        producer.phone = request.form['phone']
+        producer.postcode = request.form['postcode']
+        producer.address_1 = request.form['address_1']
+        producer.address_2 = request.form['address_2']
+        producer.address_3 = request.form['address_3']
+        db.session.commit()
+        return redirect(url_for('users.account'))
+    else:
+        return render_template('users/edit_account.html', producer=producer)
+
+
+@producer_blueprint.route('/supplier_dash')
+@login_required
+def supplier_dash():
+    return render_template('producer/supplier_dash.html')

@@ -6,9 +6,9 @@ from app import app, db
 from datetime import datetime
 from user import views
 from user.forms import ConsumerRegisterForm
-import logging
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
+
 
 
 @consumer_blueprint.route('/consumer/register', methods=['GET', 'POST'])
@@ -39,20 +39,9 @@ def register():
         db.session.commit()
 
         # sends user to login page
-        logging.warning('SECURITY - User registration [%s, %s]', form.email.data, request.remote_addr)
-        return render_template('users/login.html', form=form)
+        return redirect(url_for('users.login'))
     # if request method is GET or form not valid re-render signup page
     return render_template('users/ConsumerRegister.html', form=form)
-
-
-@app.route('/feed', methods=['GET', 'POST'])
-@login_required
-def dashboard():
-    # need to change to allow consumers to select a max distance
-    placeholder = 1000
-    # get list of producers within user-specified range alongside their distance from consumer
-    producers = find_producers(placeholder)
-    return render_template("consumer/feed.html", suppliers=producers)
 
 
 @consumer_blueprint.route('/feed', methods=['GET', 'POST'])
@@ -78,7 +67,7 @@ def feed():
     return render_template('consumer/feed.html', suppliers=suppliers)
 
 
-@consumer_blueprint.route('/order', methods=['GET', 'POST'])
+@app.route('/order', methods=['GET', 'POST'])
 @login_required
 def order_generate():
     supplier_id = request.args.get('supplier_id')
@@ -86,6 +75,8 @@ def order_generate():
 
     name = supplier.producer_name
     address1 = supplier.address_1
+    address2 = supplier.address_2
+    address3 = supplier.address_3
     postcode = supplier.postcode
 
     items = []
@@ -143,7 +134,7 @@ def place_order():
 
 
 # Function to search for an item in the inventory
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/feed', methods=['GET', 'POST'])
 @login_required
 def search():
     if request.method == 'POST':
@@ -195,40 +186,35 @@ def search_results(query):
 @app.route('/order/edit/<int:order_id>', methods=['GET', 'POST'])
 @login_required
 def edit_order(order_id):
-    cursor = db.cursor()
-
+    order = OrderItems.query.get_or_404(order_id)
     if request.method == 'POST':
-        # Get the updated order information from the form
-        new_order_info = {
-            'item': request.form['item'],
-            'quantity': request.form['quantity'],
-        }
-
-        # Update the order in the database
-        update_query = "UPDATE OrderItems SET item=%s, quantity=%s WHERE order_id=%s"
-        cursor.execute(update_query, (new_order_info['item'], new_order_info['quantity'], order_id))
-        db.commit()
-
-        # Redirect to the order details page
-        cursor.close()
-        return redirect(url_for('Order_detail.html', order_id=order_id))
+        order.item = request.form['item']
+        order.quantity = request.form['quantity']
+        db.session.commit()
+        return redirect(url_for(''))
     else:
-        # Retrieve the order from the database
-        select_query = "SELECT * FROM OrderItems WHERE order_id=%s"
-        cursor.execute(select_query, (order_id,))
-        order = cursor.fetchone()
+        return render_template('', order=order)
 
-        if order:
-            cursor.close()
-            return render_template('edit_order.html', order=order)
-        else:
-            cursor.close()
-            return 'Order not found'
 
 
 
 # Shows the information about the order
 @app.route('/order_details')
+@login_required
+def order_details(order_id):
+    order_info = OrderItems.query.filter(OrderItems.order_id.ilike(order_id)).all()
+    if order_info:
+        order = {
+            'id': OrderItems.id,
+            'item': OrderItems.item,
+            'quantity': OrderItems.quantity,
+            'order_id': OrderItems.order_id
+        }
+        return render_template('order_details.html', order=order)
+
+
+# Function to place an order
+@app.route('/place_order-order', methods=['GET', 'POST'])
 @login_required
 def order_details():
     consumer_id = current_user.id
@@ -245,8 +231,11 @@ def order_details():
             'quantity': order.quantity,
             'order_id': order.order_id
         }
-
         order_list.append(order_dict)
+
+    db.session.commit()
+    views.send_mail_notification_producer(order_id)
+
 
     return render_template('consumer/consumer_orders.html', orders_list=order_list)
 
@@ -254,48 +243,62 @@ def order_details():
 # Function to cancel an order made within a timeframe
 @app.route('/cancel-order', methods=['POST'])
 @login_required
-def cancel_order():
-    # calls for cancellation deadline time
-    cancellation_deadline = session.get('cancellation_deadline')
-    if cancellation_deadline and datetime.now() < cancellation_deadline:
-        # Perform cancellation logic
-        session.pop('selected_products', None)
-        session.pop('cancellation_deadline', None)
-        flash('Order is cancelled')
+def cancel_order(order_id):
+    # Retrieve the order with the given order ID from the database
+    order = Orders.query.get(order_id)
+
+    if order:
+        cancellation_deadline = session.get('cancellation_deadline')
+        if cancellation_deadline and datetime.now() < cancellation_deadline:
+            # Perform cancellation logic
+            db.session.delete(order)  # Delete the order from the database
+            db.session.commit()
+            session.pop('selected_products', None)
+            session.pop('cancellation_deadline', None)
+            flash('Order is cancelled')
+            views.cancel_mail(order_id)
+        else:
+            flash('Cancellation period has expired.')
     else:
-        flash('Cancellation period has expired.')
+        flash('Order not found.')
 
     return redirect(url_for('order'))
 
 
 @app.route('/')
 def find_producers(distance_range):
-    geodistance = pgeocode.GeoDistance('gb')
-    nearby_producers = {}
-    # query all producers
-    producers = Producer.query.all()
-    # ------------ need to add distance functionality in later ----------------
-    # for i in producers:
-    # calculate distance between all producers and current user
-    #    distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
-    #    if distance < distance_range:
-    #        # key = producer, value = distance
-    #        nearby_producers.update({i: distance})
-    # sorts producers by distance from low to high
-    # sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
-    # return sorted_producers
-    return producers
+    # if user has not yet specified a distance
+    if distance_range == 0:
+        producers = Producer.query.all()
+        return producers
+    else:
+        geodistance = pgeocode.GeoDistance('gb')
+        nearby_producers = {}
+        # query all producers
+        producers = Producer.query.all()
+        # ------------ need to add distance functionality in later ----------------
+        for i in producers:
+            # calculate distance between all producers and current user
+            distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
+            if distance < distance_range:
+                # key = producer, value = distance
+                nearby_producers.update({i: distance})
+        # sorts producers by distance from low to high
+        sorted_producers = dict(sorted(nearby_producers.items(), key=lambda x: x[1]))
+        return sorted_producers
 
 
-# view user account
-@consumer_blueprint.route('/account')
+@consumer_blueprint.route('/consumer_account/<int:id>', methods=['GET', 'POST'])
 @login_required
-def account():
-    # Shows the account details of the user
-    return render_template('users/account.html',
-                           id=current_user.id,
-                           email=current_user.email,
-                           firstname=current_user.firstname,
-                           lastname=current_user.lastname,
-                           phone=current_user.phone,
-                           postcode=current_user.postcode)
+def edit_consumer_account(id):
+    consumer = Consumer.query.get_or_404(id)
+    if request.method == 'POST':
+        consumer.email = request.form['email']
+        consumer.firstname = request.form['firstname']
+        consumer.lastname = request.form['lastname']
+        consumer.phone = request.form['phone']
+        consumer.postcode = request.form['postcode']
+        db.session.commit()
+        return redirect(url_for('users.account'))
+    else:
+        return render_template('users/edit_account.html', consumer=consumer)

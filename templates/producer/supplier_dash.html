@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Dashboard</title>
+    <link rel="stylesheet" href="../../static/SupplierDash.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Leftovers</div>
+        <nav>
+            <a href="{{ url_for('users.account') }}">Account</a>
+            <a href="{{ url_for('users.logout')}}">Log out</a>
+        </nav>
+    </header>
+    <section>
+        <div class="dash-buttons">
+            <h1>Dashboard</h1>
+            <div class="button-detail">
+                <a href="{{ url_for('add_item') }}"><button id="add-item-dash">Add an Item</button></a>
+                <span class="detail">Here you can add an item to your inventory</span>
+            </div>
+            <div class="button-detail">
+                <a href="{{ url_for('orders') }}"><button id="view-orders-dash">View Reserved Orders</button></a>
+                <span class="detail">Here you can view your items that have been reserved by a receiver</span>
+            </div>
+            <div class="button-detail">
+                <a href="{{ url_for('inventory') }}"><button id="inventory-dash">Your Inventory</button></a>
+                <span class="detail">Here you can view,delete,and update items in your inventory</span>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <nav>
+            <a href="{{ url_for('about_us') }}">About Us</a>
+            <a href="{{ url_for('contact_us') }}">Contact Us</a>
+        </nav>
+    </footer>
+</body>
+</html>
