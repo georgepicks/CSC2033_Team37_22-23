@@ -63,6 +63,7 @@ def feed():
             'postcode': producer.postcode
         }
         suppliers.append(producer_data)
+        print(suppliers)
 
     return render_template('consumer/feed.html', suppliers=suppliers)
 
@@ -93,7 +94,7 @@ def order_generate():
         }
         items.append(item_data)
 
-    return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address=address1,
+    return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address1=address1, supplier_address2=address2, supplier_address3=address3,
                            supplier_postcode=postcode, supplier_id=supplier_id)
 
 
@@ -133,24 +134,6 @@ def place_order():
     return render_template("consumer/order_confirm.html", order_id=order_id)
 
 
-# Function to search for an item in the inventory
-@app.route('/feed', methods=['GET', 'POST'])
-@login_required
-def search():
-    if request.method == 'POST':
-        query = request.form.get('query')  # Retrieve the search query from the form
-
-        # Searching using SQLALCHEMY
-        results = InventoryItems.item.query.filter(InventoryItems.item.name.ilike(f'%{query}%')).all()
-
-        if not results:
-            message = "No items found matching your search query."
-
-        return render_template('search_results.html', results=results, message=message)
-
-    return render_template('search.html')
-
-
 # Function that allows to show items by a dietary filter
 @app.route('/food/<food_type>')
 @login_required
@@ -174,13 +157,6 @@ def filter_by_dietary(food_type):
     })
 
 
-# The Function returning a list of all the relevant items from the search
-@app.route('/search_results/<query>')
-@login_required
-def search_results(query):
-    results = Consumer.query.whoosh_search(query).all()
-    return render_template('search_results.html', query=query, results=results)
-
 
 # Function that allows the user to edit or make changes to the order before confirmation
 @app.route('/order/edit/<int:order_id>', methods=['GET', 'POST'])
@@ -194,24 +170,6 @@ def edit_order(order_id):
         return redirect(url_for(''))
     else:
         return render_template('', order=order)
-
-
-
-
-# Shows the information about the order
-@app.route('/order_details')
-@login_required
-def order_details(order_id):
-    order_info = OrderItems.query.filter(OrderItems.order_id.ilike(order_id)).all()
-    if order_info:
-        order = {
-            'id': OrderItems.id,
-            'item': OrderItems.item,
-            'quantity': OrderItems.quantity,
-            'order_id': OrderItems.order_id
-        }
-        return render_template('order_details.html', order=order)
-
 
 # Function to place an order
 @app.route('/place_order-order', methods=['GET', 'POST'])
@@ -234,7 +192,7 @@ def order_details():
         order_list.append(order_dict)
 
     db.session.commit()
-    views.send_mail_notification_producer(order_id)
+    #views.send_mail_notification_producer(order_id)
 
 
     return render_template('consumer/consumer_orders.html', orders_list=order_list)
