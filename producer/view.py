@@ -1,3 +1,10 @@
+"""
+File: producer/view.py
+Authors: Sreejith Sudhir Kalathil, Samuel Robertson
+Description: Provides all the functionality specific to the producer. This includes their specific register form, as
+well as CREATE, UPDATE and DELETE functions for the producer's inventory, in addition to allowing the producer to
+accept newly created orders.
+"""
 from flask import render_template, redirect, url_for, request, Blueprint, flash
 from flask_login import login_required, current_user
 from models import InventoryItems, Producer, OrderItems, Orders
@@ -7,6 +14,11 @@ from user.views import send_mail_notification_consumer
 
 producer_blueprint = Blueprint('producer', __name__, template_folder='templates')
 
+
+"""
+called when a user is redirected to producer/register, calls upon the ProducerRegisterForm() in forms.py, when user 
+submits it creates a new producer in the producer table then redicts them to log into their new account.
+"""
 @producer_blueprint.route('/producer/register', methods=['GET', 'POST'])
 def register():
     # create signup form object
@@ -44,7 +56,9 @@ def register():
     return render_template('users/ProducerRegister.html', form=form)
 
 
-# Function that shows the inventory to the producer
+"""
+Shows a producer the items they have already in their inventory, and renders buttons to edit.
+"""
 @app.route('/supplier_inventory')
 @login_required
 def inventory():
@@ -53,7 +67,9 @@ def inventory():
     return render_template('producer/supplier_inventory.html', items=items)
 
 
-# Function to edit inventory table, authentication for relevant producer only
+"""
+Enables producer to edit the items in their inventory
+"""
 @producer_blueprint.route('/edit_item/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_inventory(id):
@@ -67,21 +83,10 @@ def edit_inventory(id):
         return render_template('producer/edit_item.html', item=item)
 
 
-
-# @app.route('/edit_item/<int:id>', methods=['GET', 'POST'])
-# @login_required
-# def edit_inventory(id):
-# item = InventoryItems.query.get_or_404(id)
-# if request.method == 'POST':
-# item.name = request.form['name']
-# item.quantity = request.form['quantity']
-# db.session.commit()
-# return redirect(url_for('edit_inventory', id=id))  # Include id in redirect
-# else:
-# return render_template('producer/supplier_inventory.html', item=item)
-
-
-# Function to add an item to the inventory
+"""
+Adds a new item to the producer's inventory, where item details are based on form input, then returns the producer to 
+their inventory page
+"""
 @app.route('/supplier_additem', methods=['GET', 'POST'])
 @login_required
 def add_item():
@@ -107,17 +112,20 @@ def add_item():
         return render_template('producer/supplier_additem.html')
 
 
-# Function that shows the proper order from the consumer to the produxer
+"""
+Loads all orders requested from the logged in producer from the database and displays them
+"""
 @app.route('/supplier_orders')
 @login_required
 def orders():
     id = current_user.id
     orders = Orders.query.filter(Orders.producer_id.ilike(id)).all()
+    return render_template('producer/supplier_orders.html', orders=orders)
 
-    return render_template('producer/supplier_orders.html', order=order)
 
-
-# Function that allows the producer to accept an order by the consumer
+"""
+Allows the producer to accept a pending order
+"""
 @app.route('/')
 @login_required
 def accept_order(order_id):
@@ -138,7 +146,9 @@ def accept_order(order_id):
     return redirect(url_for('dashboard'))
 
 
-# Function to remove an item from the inventory by the producer
+"""
+Enables the producer to manually remove an item from their inventory
+"""
 @app.route('/')
 @login_required
 def remove_item(item_id):
@@ -163,21 +173,9 @@ def remove_item_route(item_id):
         return "Item not found"
 
 
-# view user account
-#@producer_blueprint.route('/users/account')
-#@login_required
-#def producer_account():
-#    return render_template('users/producer_acc.html',
-#                           id=current_user.id,
-#                           email=current_user.email,
-#                           producer_name=current_user.producer_name,
-#                           phone=current_user.phone,
-#                           postcode=current_user.postcode,
-#                           address_1=current_user.address_1,
-#                           address_2=current_user.address_2,
-#                           address_3=current_user.address_3)
-
-
+"""
+Allows the user to change details about their account
+"""
 @producer_blueprint.route('/producer_account')
 @login_required
 def edit_producer_account(id):
@@ -196,6 +194,9 @@ def edit_producer_account(id):
         return render_template('', producer=producer)
 
 
+"""
+Renders the producer's dashboard
+"""
 @producer_blueprint.route('/supplier_dash')
 @login_required
 def supplier_dash():

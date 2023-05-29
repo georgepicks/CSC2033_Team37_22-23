@@ -1,3 +1,7 @@
+"""
+File: consumer/view.py
+Authors: George Pickard
+"""
 import pgeocode
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify, flash
 from flask_login import login_required, current_user
@@ -93,8 +97,6 @@ def order_generate():
         }
 
         items.append(item_data)
-
-        print(items)
 
     return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address1=address1,
                            supplier_address2=address2,supplier_address3=address3, supplier_postcode=postcode)
