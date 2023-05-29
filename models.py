@@ -1,9 +1,19 @@
+"""
+Models.py:
+Authors: Alexander MacMillan
+
+This file creates classes which initialise tables in the database, this enables interaction with the database through
+the classes.
+"""
+
 from app import db, app
 from flask_login import UserMixin
 import bcrypt
 
+
 class Consumer(db.Model, UserMixin):
     __tablename__ = 'consumers'
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     firstname = db.Column(db.String(100), nullable=False)
@@ -22,8 +32,9 @@ class Consumer(db.Model, UserMixin):
         self.phone = phone
 
 
-class Producer(db.Model,UserMixin):
+class Producer(db.Model, UserMixin):
     __tablename__ = 'producers'
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     producer_name = db.Column(db.String(100), nullable=False)
@@ -49,6 +60,7 @@ class Producer(db.Model,UserMixin):
 
 class InventoryItems(db.Model):
     __tablename__ = 'inventory_items'
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     item = db.Column(db.String(100), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
@@ -64,6 +76,7 @@ class InventoryItems(db.Model):
 
 class Orders(db.Model):
     __tablename__ = 'orders'
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     producer_id = db.Column(db.Integer, db.ForeignKey(Producer.id), nullable=False)
     consumer_id = db.Column(db.Integer, db.ForeignKey(Consumer.id), nullable=False)
@@ -78,6 +91,7 @@ class Orders(db.Model):
 
 class OrderItems(db.Model):
     __tablename__ = 'order_items'
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     item = db.Column(db.String(100), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
@@ -89,19 +103,16 @@ class OrderItems(db.Model):
         self.order_id = order_id
 
 #def init_db():
-#    to use this function, "from app import app"
-    #with app.app_context():
-    #    db.drop_all()
-    #    db.session.commit()
-    #    db.create_all()
-    #    new_producer = Producer("jd@jdwetherspoons.com", "The Keel Row", "secretPassword1", '07538152684', "NE1 4SH",
-    #                            'The Gate', 'Newgate St, Newcastle upon Tyne', 'Tyne and Wear')
-    #    new_consumer = Consumer("s@k.com", "Sree", 'Kalathil', 'secretPassword2', 'NE1 2YX', '012345678910')
-    #    #user3 = User('b@g.com', 'Broden', 'Gates', 'secretPassword3', 'NE3 4TT', '0987654321', 'consumer')
-    #    db.session.add(new_producer)
-    #    db.session.add(new_consumer)
-    #    db.session.add(user3)
-    #    db.session.commit()
+#    with app.app_context():
+#        db.drop_all()
+#        db.session.commit()
+#       db.create_all()
+#        new_producer = Producer("jd@jdwetherspoons.com", "The Keel Row", "secretPassword1", '07538152684', "NE1 4SH",
+#                                'The Gate', 'Newgate St, Newcastle upon Tyne', 'Tyne and Wear')
+#        new_consumer = Consumer("s@k.com", "Sree", 'Kalathil', 'secretPassword2', 'NE1 2YX', '012345678910')
+#        db.session.add(new_producer)
+#        db.session.add(new_consumer)
+#        db.session.commit()
 
 
-# init_db()
+#init_db()
