@@ -11,6 +11,9 @@
                     <div class="item-name">Item: {{ order.item }}</div>
                     <div class="item-quantity">Quantity: {{ order.quantity }}</div>
                 </div>
+                <form action="{{ url_for('cancel_order', order_id=order.order_id, order_item=order.item, order_quantity=order.quantity) }}" method="post">
+                    <button class="CancelButton" type="submit">Cancel Order</button>
+                </form>
             </div>
         {% endfor %}
     </div>

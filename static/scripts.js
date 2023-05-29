@@ -1,3 +1,4 @@
+// This function filters the suppliers based on the search input
 function filterSuppliers() {
     var input, filter, suppliers, supplier, name, address1, postcode;
     input = document.getElementById('SearchInput');
@@ -15,13 +16,14 @@ function filterSuppliers() {
             address1.innerHTML.toUpperCase().indexOf(filter) > -1 ||
             postcode.innerHTML.toUpperCase().indexOf(filter) > -1
         ) {
-            supplier[i].style.display = '';
+            supplier[i].style.display = ''; // Show the supplier
         } else {
-            supplier[i].style.display = 'none';
+            supplier[i].style.display = 'none'; // Hide the supplier
         }
     }
 }
 
+// This function filters the items based on the search input
 function filterItems() {
   var input, filter, inventory, name, dietary;
   input = document.getElementById('SearchInput');
@@ -36,17 +38,19 @@ function filterItems() {
       name.innerHTML.toUpperCase().indexOf(filter) > -1 ||
       dietary.innerHTML.toUpperCase().indexOf(filter) > -1
     ) {
-      inventory[i].style.display = '';
+      inventory[i].style.display = ''; // Show the item
     } else {
-      inventory[i].style.display = 'none';
+      inventory[i].style.display = 'none'; // Hide the item
     }
   }
 }
 
+// This function redirects to the supplier's order page
 function redirectToSupplier(supplierId) {
-    window.location.href = "http://127.0.0.1:5000/order?supplier_id=" + supplierId
+    window.location.href = "http://127.0.0.1:5000/order?supplier_id=" + supplierId;
 }
 
+// This function removes an item from the basket
 function removeFromBasket(itemId) {
   var basketItem = document.getElementById(itemId);
   basketItem.style.opacity = 0; // Apply fade-out effect
@@ -55,6 +59,7 @@ function removeFromBasket(itemId) {
   }, 500); // Adjust the duration (in milliseconds) of the fade-out effect
 }
 
+// This function adds an item to the order basket
 function addToOrder(itemId) {
   var card = document.getElementById(itemId);
   var itemName = card.querySelector(".item-name").textContent;

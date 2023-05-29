@@ -10,14 +10,16 @@
     <link rel="shortcut icon" type="image/x-icon" href="../static/images/TeamLogoNoBackground.png" />
 </head>
 
+<!-- Contains elements and styles that will be used on multiple webpages-->
 <body>
     <div class="RectangleTop"></div>
     <div class="RectangleBottom"></div>
     <div class="LeftoversText">Leftovers</div>
 
+    <!-- Users can only see these 4 links after they have logged in and have been authenticated-->
     {% if current_user.is_authenticated %}
         <div class="nav-links">
-            <a href="{{ url_for('consumer.feed') }}"><div class="DiscoverLink">Discover</div></a>
+            <a href="{{ url_for('consumer.feed') }}"><div class="DashboardLink">Dashboard</div></a>
 
             <a href="{{ url_for('order_details') }}"><div class="OrdersLink">Orders</div></a>
             <a href="{{ url_for('users.account') }}"><div class="AccountLink">Account</div></a>
@@ -25,6 +27,7 @@
             <a href="{{ url_for('users.logout') }}"><div class="LogoutLink">Log out</div></a>
         </div>
     {% else %}
+        <!--The user can only see these specific links when they are not logged in-->
         <div class="nav-links">
             <a href="{{ url_for('index') }}"><div class="HomeLink">Home</div></a>
             <a href="{{ url_for('users.login') }}"><div class="LoginLink">Log in</div></a>
@@ -32,6 +35,7 @@
     {% endif %}
 
 
+    <!-- Every user can see these links, whether they are logged in or not-->
     <a href="{{ url_for('about_us') }}"><div class="AboutUs">About Us</div></a>
     <a href="{{ url_for('contact_us') }}"><div class="contact">Contact Us</div></a>
 
