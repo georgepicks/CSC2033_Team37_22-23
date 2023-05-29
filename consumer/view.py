@@ -108,7 +108,6 @@ def order_generate():
                            supplier_postcode=postcode, supplier_id=supplier_id)
 
 
-# Function to place an order
 @app.route('/place_order', methods=['GET', 'POST'])
 @login_required
 def place_order():
@@ -116,14 +115,20 @@ def place_order():
     consumer_id = current_user.id
     order_time = datetime.now()
 
+    items = request.form.getlist('item[]')
+    quantities = request.form.getlist('quantity[]')
+
+    # Check if the basket is empty
+    if not items or not quantities:
+        return redirect(url_for('consumer.feed'))  # Redirect to the basket page or a specific route for adding items
+
     # Creates an instance of the Orders model
     order = Orders(producer_id=producer_id, consumer_id=consumer_id, order_time=order_time)
     db.session.add(order)
     db.session.commit()
+
     # Retrieves the order_id for the newly created order
     order_id = order.id
-    items = request.form.getlist('item[]')
-    quantities = request.form.getlist('quantity[]')
 
     # Creates instances of OrderItems for each item in the order
     for item, quantity in zip(items, quantities):
@@ -135,15 +140,15 @@ def place_order():
         if inventory_item:
             inventory_item.quantity -= int(quantity)
 
-            #if the quantity of an item=0 then it is removed from the database table
+            # If the quantity of an item is 0, then it is removed from the database table
             if inventory_item.quantity <= 0:
                 db.session.delete(inventory_item)
             else:
                 db.session.add(inventory_item)
-    db.session.commit()
-    #views.send_mail_notification(consumer_id, order_id)
-    return render_template("consumer/order_confirm.html", order_id=order_id)
 
+    db.session.commit()
+    # views.send_mail_notification(consumer_id, order_id)
+    return render_template("consumer/order_confirm.html", order_id=order_id)
 
 # Function that allows to show items by a dietary filter
 @app.route('/food/<food_type>')
