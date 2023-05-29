@@ -77,6 +77,7 @@ def edit_inventory(id):
     if request.method == 'POST':
         item.item = request.form.get('name')
         item.quantity = request.form.get('quantity')
+        item.dietary = request.form.get('dietary')
         db.session.commit()
         return redirect(url_for('inventory'))
     else:
@@ -112,6 +113,8 @@ def add_item():
         return render_template('producer/supplier_additem.html')
 
 
+
+# Function that shows the proper order from the consumer to the producer
 @app.route('/supplier_orders')
 @login_required
 def orders():
@@ -173,7 +176,6 @@ def remove_item_route(item_id):
         return "Item not found"
 
 
-@producer_blueprint.route('/producer_account')
 @login_required
 def edit_producer_account(id):
     """
@@ -181,7 +183,7 @@ def edit_producer_account(id):
     """
     producer = Producer.query.get_or_404(id)
     if request.method == 'POST':
-        producer.email= request.form['email']
+        producer.email = request.form['email']
         producer.producer_name = request.form['producer_name']
         producer.phone = request.form['phone']
         producer.postcode = request.form['postcode']
@@ -189,10 +191,11 @@ def edit_producer_account(id):
         producer.address_2 = request.form['address_2']
         producer.address_3 = request.form['address_3']
         db.session.commit()
-        return redirect(url_for('users.producer_acc'))
+        return redirect(url_for('users.account'))
     else:
-        return render_template('', producer=producer)
+        return render_template('users/edit_account.html', producer=producer)
 
+      
 # renders the producer's dashboard
 @producer_blueprint.route('/supplier_dash')
 @login_required

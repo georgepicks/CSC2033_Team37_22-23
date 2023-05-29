@@ -16,7 +16,8 @@ from user.forms import ConsumerRegisterForm
 
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
-@consumer_blueprint.route('/register', methods=['GET', 'POST'])
+
+@consumer_blueprint.route('/consumer/register', methods=['GET', 'POST'])
 def register():
     """
     Called when a user is redirected to consumer/register, calls upon the ConsumerRegisterForm() in forms.py, when user
@@ -88,7 +89,6 @@ def order_generate():
     available in their inventory
     """
     supplier_id = request.args.get('supplier_id')
-
     supplier = Producer.query.filter_by(id=supplier_id).first()
 
     name = supplier.producer_name
@@ -109,11 +109,48 @@ def order_generate():
             'producer': item.producer,
             'dietary': item.dietary
         }
-
         items.append(item_data)
+
 
     return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address1=address1,
                            supplier_address2=address2, supplier_address3=address3, supplier_postcode=postcode)
+
+
+# Function to place an order
+@app.route('/place_order', methods=['GET', 'POST'])
+@login_required
+def place_order():
+    producer_id = request.form.get('supplier_id')
+    consumer_id = current_user.id
+    order_time = datetime.now()
+
+    # Creates an instance of the Orders model
+    order = Orders(producer_id=producer_id, consumer_id=consumer_id, order_time=order_time)
+    db.session.add(order)
+    db.session.commit()
+    # Retrieves the order_id for the newly created order
+    order_id = order.id
+    items = request.form.getlist('item[]')
+    quantities = request.form.getlist('quantity[]')
+
+    # Creates instances of OrderItems for each item in the order
+    for item, quantity in zip(items, quantities):
+        order_item = OrderItems(item=item, quantity=quantity, order_id=order_id)
+        db.session.add(order_item)
+
+        # Subtract the quantity from the inventory
+        inventory_item = InventoryItems.query.filter_by(producer=producer_id, item=item).first()
+        if inventory_item:
+            inventory_item.quantity -= int(quantity)
+
+            if inventory_item.quantity <= 0:
+                db.session.delete(inventory_item)
+            else:
+                db.session.add(inventory_item)
+    db.session.commit()
+    #views.send_mail_notification(consumer_id, order_id)
+    return render_template("consumer/order_confirm.html", order_id=order_id)
+
 
 
 @app.route('/feed', methods=['GET', 'POST'])
@@ -180,48 +217,31 @@ def edit_order(order_id):
         return render_template('', order=order)
 
 
-@app.route('/order/<int:order_id>')
-@login_required
-def order_details(order_id):
-    """
-    Displays the information about an order
-    """
-    order_info = OrderItems.query.filter(OrderItems.order_id.ilike(order_id)).all()
-    if order_info:
-        order = {
-            'id': OrderItems.id,
-            'item': OrderItems.item,
-            'quantity': OrderItems.quantity,
-            'order_id': OrderItems.order_id
-        }
-        return render_template('order_details.html', order=order)
-
-
+# Shows the information about the order
 @app.route('/place_order-order', methods=['GET', 'POST'])
 @login_required
-def place_order(consumer_id, producer_id, items):
-    """
-    Takes the items which the consumer selected and creates a new Order object both in flask and on the database
-    """
-    order_time = datetime.now()
+def order_details():
+    consumer_id = current_user.id
+    orders = Orders.query.filter_by(consumer_id=consumer_id).all()
+    order_ids = [order.id for order in orders]
+    order_list = []
 
-    # Creates an instance of the Orders model
-    order = Orders(producer_id=producer_id, consumer_id=consumer_id, order_time=order_time)
-    db.session.add(order)
+    order_info = OrderItems.query.filter(OrderItems.order_id.in_(order_ids)).all()
+
+    for order in order_info:
+        order_dict = {
+            'id': order.id,
+            'item': order.item,
+            'quantity': order.quantity,
+            'order_id': order.order_id
+        }
+        order_list.append(order_dict)
+
+
     db.session.commit()
 
-    # Retrieves the order_id for the newly created order
-    order_id = order.order_id
 
-    # Creates instances of OrderItems for each item in the order
-    for item, quantity in items.items():
-        order_item = OrderItems(item=item, quantity=quantity, order_id=order_id)
-        db.session.add(order_item)
-
-    db.session.commit()
-    views.send_mail_notification_producer(order_id)
-
-    return order_id
+    return render_template('consumer/consumer_orders.html', orders_list=order_list)
 
 
 @app.route('/cancel-order', methods=['POST'])
@@ -278,19 +298,21 @@ def find_producers(distance_range):
         return sorted_producers
 
 
-@consumer_blueprint.route('/account')
+@consumer_blueprint.route('/consumer_account/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit_consumer_account(id):
     """
     Enables the consumer to edit their personal details
     """
     consumer = Consumer.query.get_or_404(id)
     if request.method == 'POST':
-        consumer.email= request.form['email']
+        consumer.email = request.form['email']
         consumer.firstname = request.form['firstname']
         consumer.lastname = request.form['lastname']
         consumer.phone = request.form['phone']
         consumer.postcode = request.form['postcode']
         db.session.commit()
-        return redirect(url_for('users.consumer_acc'))
+        return redirect(url_for('users.account'))
     else:
-        return render_template('', consumer=consumer)
+        return render_template('users/edit_account.html', consumer=consumer)
+
