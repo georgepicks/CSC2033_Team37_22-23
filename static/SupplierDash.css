@@ -64,17 +64,16 @@ body {
 }
 .item-quantity {
   display: inline-block;
-  margin-top: 5px;  /* Decrease this value to reduce space above the quantity */
+  margin-top: 5px;
 }
 .button-container {
     display: flex;
 }
 .item-title {
-  margin-bottom: 5px; /* adjust this value to suit your needs */
+    margin-bottom: 5px;
 }
-
 .item-dietary {
-  margin-top: 5px; /* adjust this value to suit your needs */
+  margin-top: 5px;
 }
 .edit-button,.delete-button {
   /*padding: 20px 20px;*/

@@ -62,7 +62,7 @@ header nav a {
     color: inherit;
     transition: background-color 0.3s ease;
     margin-bottom: 6rem;
-    margin-top: 1rem; /* Add this to reduce the space between buttons and p */
+    margin-top: 1rem;
 }
 
 
@@ -103,7 +103,7 @@ footer nav a:hover {
 }
 
 .hero-image {
-    max-width: 130px; /* Adjust the size as needed */
+    max-width: 130px;
     margin-bottom: 1.5rem;
     margin-top: 0.5rem;
 }
