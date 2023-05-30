@@ -1,3 +1,14 @@
+/**
+ * File: scripts.js.html
+ *
+ * Authors: George Pickard
+ *
+ * Description: This JavaScript file contains functions for filtering producers based on their name and location. Filtering items based on the item's name or any allergens the user should be aware of.
+ * Redirecting to A producer's order page based on the id of the producer. Adding and removing items from the order basket.
+ *
+ */
+
+
 // This function filters the suppliers based on the search input
 function filterSuppliers() {
     var input, filter, suppliers, supplier, name, address1, postcode;
