@@ -92,7 +92,7 @@ def login():
 @users_blueprint.route('/logout')
 @login_required
 def logout():
-    #Function for the user to log out
+    # Function for the user to log out
     session.clear()
     # Function for the user to log out
     logout_user()

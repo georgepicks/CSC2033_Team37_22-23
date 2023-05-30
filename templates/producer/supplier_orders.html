@@ -1,3 +1,14 @@
+<!--
+File: supplier_orders.html
+
+Authors: Samuel Robertson, Alex Macmillan
+
+Description: Displays the graphical user interface for the webpage that allows a producer to view any orders that consumers have placed with them, and it gives them information about each order; for example which items were ordered
+and how many of that item were ordered
+-->
+-->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Reserved Orders</title>
     <link rel="stylesheet" href="../../static/SupplierDash.css">
+    <link rel="shortcut icon" type="image/x-icon" href="../../static/images/TeamLogoNoBackground.png" />
 </head>
 <body>
     <header>
@@ -30,6 +42,9 @@
             <p><strong>Order ID:</strong> {{ order.id }}</p>
             <p><strong>Consumer:</strong> {{ order.consumer_id }}</p>
             <p><strong>Date:</strong> {{ order.order_time }}</p>
+            <form method="POST" action="{{ url_for('accept_order', order_id=order.id) }}">
+                <button type="submit" class="accept-button">Accept Order</button>
+            </form>
         </div>
     {% endfor %}
     </div>
