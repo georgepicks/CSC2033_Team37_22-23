@@ -16,8 +16,6 @@ from consumer.view import find_producers
 
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
-
-# defining a login function
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     """
@@ -125,19 +123,24 @@ def send_mail_notification_producer(order_id):
     return 'Email sent successfully!'
 
 
+"""
+get_producer_email(order_id) is a function that retrieves the producer mail ID, to send the notification mails
+at relevant events.
+"""
 def get_producer_email(order_id):
-    """
-    get_producer_email(order_id) is a function that retrieves the producer mail ID, to send the notification mails
-    at relevant events.
-    """
-    # order is retrieved in reference to the customer_id
-    order = Orders.query.filter_by(id=order_id).first()
-    if order:
-        producer = Producer.query.get(order.producer_id)
-        return [producer.email]
-    return []
+    order = Orders.query.filter_by(Orders.producer_id, id=order_id)
+    if order :
+        producer = Producer.query.get(Producer.email).filter_by(Orders.producer_id)
+        return  producer
+    return None
 
 
+"""
+send_mail_notification_consumer(order_id) is used to send notification mail about the confirmation of an order
+to the user, the function formats the structure of the mail with subject, body and recipient, which is retrieved 
+through another function invoked get_consumer_mail(order_id) gets the relevant mail through filtering in reference to
+the order_id from the database.
+"""
 def send_mail_notification_consumer(order_id):
     """
     send_mail_notification_consumer(order_id) is used to send notification mail about the confirmation of an order
@@ -159,11 +162,15 @@ def get_consumer_mail(order_id):
     """
     order = Orders.query.filter_by(order_id=order_id).first()
     if order:
-        consumer = Consumer.query.get(order.consumer_id)
-        return [consumer.email]
-    return []
+        consumer = Consumer.query.get(Consumer.email).filter_by(Orders.producer_id)
+        return consumer
+    return None
 
 
+'''
+cancel_mail(order_id) is a formatted  mail function that has the content for notification once an order is 
+cancelled by a consumer within a timeframe.
+'''
 def cancel_mail(order_id):
     '''
     cancel_mail(order_id) is a formatted  mail function that has the content for notification once an order is

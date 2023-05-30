@@ -14,6 +14,7 @@ from user.views import send_mail_notification_consumer
 
 producer_blueprint = Blueprint('producer', __name__, template_folder='templates')
 
+
 @producer_blueprint.route('/producer/register', methods=['GET', 'POST'])
 def register():
     """
@@ -55,7 +56,6 @@ def register():
     return render_template('users/ProducerRegister.html', form=form)
 
 
-# Function that shows the inventory to the producer
 @app.route('/supplier_inventory')
 @login_required
 def inventory():
@@ -67,7 +67,6 @@ def inventory():
     return render_template('producer/supplier_inventory.html', items=items)
 
 
-# Function to edit inventory table, authentication for relevant producer only
 @producer_blueprint.route('/edit_item/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_inventory(id):
@@ -85,7 +84,6 @@ def edit_inventory(id):
         return render_template('producer/edit_item.html', item=item)
 
 
-# Function to add an item to the inventory
 @app.route('/supplier_additem', methods=['GET', 'POST'])
 @login_required
 def add_item():
@@ -115,6 +113,7 @@ def add_item():
         return render_template('producer/supplier_additem.html')
 
 
+
 # Function that shows the proper order from the consumer to the producer
 @app.route('/supplier_orders')
 @login_required
@@ -124,32 +123,34 @@ def orders():
     """
     id = current_user.id
     orders = Orders.query.filter(Orders.producer_id.ilike(id)).all()
-
     return render_template('producer/supplier_orders.html', orders=orders)
 
 
-# Function that allows the producer to accept an order by the consumer
-@app.route('/')
+@app.route('/accept_order/<int:order_id>', methods=['POST'])
 @login_required
 def accept_order(order_id):
-    # If an item is accepted as an order, then reduce its quantity in the inventory
-    for item in current_user.inventory():
-        if item['id'] == order_id:
-            if item['quantity'] > 0:
-                item['quantity'] -= 1
-                flash('Order accepted')
-            elif item['quantity'] == OrderItems.quantity:
-                inventory.remove(item)
-                send_mail_notification_consumer(order_id)
-                return True
-            else:
-                flash('Insufficient quantity')
-            return redirect(url_for('dashboard'))
-    flash('Order not found')
-    return redirect(url_for('dashboard'))
+    # If an order is accepted, reduce the quantities of the corresponding inventory items
+    order = Orders.query.get(order_id)
+    if order:
+        for order_item in order.items:
+            inventory_item = InventoryItems.query.filter_by(item=order_item.item, producer=order.producer_id).first()
+            if inventory_item:
+                if inventory_item.quantity >= order_item.quantity:  # Check this instead of > 1
+                    inventory_item.quantity -= order_item.quantity
+                    if inventory_item.quantity == 0:
+                        db.session.delete(inventory_item)
+                    db.session.commit()
+                else:
+                    flash('Insufficient quantity for item {}'.format(order_item.item))
+                    return redirect(url_for('inventory'))
+        flash('Order accepted and removed from the list')
+        db.session.delete(order)
+        db.session.commit()
+    else:
+        flash('Order not found')
+    return redirect(url_for('inventory'))
 
 
-# Function to remove an item from the inventory by the producer
 @app.route('/')
 @login_required
 def remove_item(item_id):
@@ -197,7 +198,8 @@ def edit_producer_account(id):
     else:
         return render_template('users/edit_account.html', producer=producer)
 
-
+      
+# renders the producer's dashboard
 @producer_blueprint.route('/supplier_dash')
 @login_required
 def supplier_dash():
