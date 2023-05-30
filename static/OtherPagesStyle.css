@@ -50,7 +50,7 @@ footer nav a:hover {
     padding-top: 3rem;
 }
 .content-image {
-    max-width: 100px; /* Adjust the size as needed */
+    max-width: 100px;
     margin-bottom: 2rem;
     margin-top: 0.1rem;
 }
@@ -58,7 +58,7 @@ footer nav a:hover {
   margin-top: 1rem;
 }
 .content-image2 {
-    max-width: 100px; /* Adjust the size as needed */
+    max-width: 100px;
     margin-bottom: 10px;
     margin-top: 1rem;
 }
@@ -96,15 +96,15 @@ footer nav a:hover {
 }
 
 .contact-item p {
-    margin: 0; /* Remove the default paragraph margin */
+    margin: 0;
 }
 .contact-item {
     display: flex;
     margin-top: 1rem;
-    align-items: center; /* This will vertically center the text relative to the image */
+    align-items: center;
 }
 
 .contact-item img {
-    margin-right: 10px; /* This will create some space between the image and the text */
+    margin-right: 10px;
 }
 
