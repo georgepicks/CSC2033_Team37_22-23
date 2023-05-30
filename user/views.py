@@ -4,7 +4,7 @@ Authors: Sreejith Sudhir Kalathil, Alexander MacMillan
 Description: This file provides features which are shared among both Consumer and Producer users, including login/logout
 functionality, and automated e-mails.
 """
-from flask import Blueprint, render_template, flash, redirect, url_for, session
+from flask import Blueprint, render_template, flash, redirect, url_for, session, request
 from models import Orders, Producer, Consumer
 from app import db
 from user.forms import LoginForm
@@ -92,8 +92,6 @@ def login():
 @users_blueprint.route('/logout')
 @login_required
 def logout():
-    # Data is recorded in lottery.log each time a user logs out of the program
-    logging.warning('SECURITY - Log out [%s, %s, %s]', current_user.id, current_user.email, request.remote_addr)
     #Function for the user to log out
     session.clear()
     # Function for the user to log out
