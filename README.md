@@ -18,6 +18,8 @@ To install these dependencies enter this command in the PyCharm terminal (locate
 
 `pip install -r requirements.txt`
 
+If a dependency cannot be installed via this method, the IDE should alert you during this process, this same alert should contain an offer for PyCharm to install the dependency itself, accept this.
+
 ### Execution
 Once the environment is ready and dependencies are installed, navigate to the file named "app.py", at the bottom of the file is the code:
 
