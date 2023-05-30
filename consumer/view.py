@@ -182,9 +182,9 @@ def search():
         if not results:
             message = "No items found matching your search query."
 
-        return render_template('search_results.html', results=results, message=message)
+        return render_template('consumer/feed.html', results=results, message=message)
 
-    return render_template('search.html')
+    return render_template('consumer/feed.html')
 """
 
 
