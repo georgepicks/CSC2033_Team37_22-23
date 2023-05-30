@@ -168,7 +168,7 @@ def place_order():
     return render_template("consumer/order_confirm.html", order_id=order_id)
 
 
-
+"""
 @app.route('/feed', methods=['GET', 'POST'])
 @login_required
 def search():
@@ -184,6 +184,7 @@ def search():
         return render_template('search_results.html', results=results, message=message)
 
     return render_template('search.html')
+"""
 
 
 # Function that allows to show items by a dietary filter
