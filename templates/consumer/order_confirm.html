@@ -1,0 +1,24 @@
+<!--
+File: order_confirm.html
+
+Authors: George Pickard
+
+Description: Provides the graphical user interface for the web page that displays an order confirmation message to the user, after they have successfully order items from a
+producer; the page also displays the id of the order and uses the place_order() function in consumer/view.py to take this information from the database
+-->
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <title>Order Confirmation</title>
+
+    <img src="../../static/images/Food.png" alt="Food" class="hero-image"/>
+
+    <div class="OrderConfirm">
+        <h3>Thank you for your Order</h3>
+        <p>Your order number is {{ order_id }}</p>
+    </div>
+
+{% endblock %}
