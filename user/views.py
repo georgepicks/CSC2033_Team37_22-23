@@ -1,4 +1,3 @@
-
 """
 File: views.py
 Authors: Sreejith Sudhir Kalathil, Alexander MacMillan
@@ -42,12 +41,6 @@ def login():
                 session['user_id'] = current_user.id
                 db.session.add(user)
                 db.session.commit()
-                # Data is recorded in lottery.log each time login action takes place
-                logging.warning('SECURITY - Log in [%s, %s]', current_user.id, current_user.email)
-                return render_template('consumer/feed.html', form=form)
-                # current login user is matched to the last login user
-                db.session.add(user)
-                db.session.commit()
                 return render_template('producer/supplier_dash.html', id=current_user.id)
 
             session['authentication_attempts'] = session.get('authentication_attempts', 0) + 1
@@ -75,7 +68,7 @@ def login():
                 db.session.add(user)
                 db.session.commit()
                 feed = find_producers(0)
-                return render_template('consumer/feed.html', suppliers=feed)
+                return redirect(url_for('consumer.feed', suppliers=feed))
             session['authentication_attempts'] = session.get('authentication_attempts', 0) + 1
 
             # Check the number of authentication attempts
@@ -107,22 +100,22 @@ def logout():
     return redirect(url_for('index'))
 
 
-"""
-send_email(subject, recipients, body) is a functions that records the message for a mail ans sends it 
-"""
 def send_email(subject, recipients, body):
+    """
+    send_email(subject, recipients, body) is a functions that records the message for a mail ans sends it
+    """
     msg = Message(subject=subject, recipients=recipients)
     msg.body = body
     Mail.send(msg)
 
 
-"""
-send_mail_notification_producer(order_id) is a function that is invoked when an order is placed, which further sends 
-a notification mail to the producer about the order. The function calls send_mail(subject, recipients, body) whcih does
-the operation of sending message via the server. The order_id constraint is used as a reference tp retrieve the producer mail 
-from the database through get_producer_mail(order_id).
-"""
 def send_mail_notification_producer(order_id):
+    """
+    send_mail_notification_producer(order_id) is a function that is invoked when an order is placed, which further sends
+    a notification mail to the producer about the order. The function calls send_mail(subject, recipients, body) whcih does
+    the operation of sending message via the server. The order_id constraint is used as a reference tp retrieve the producer mail
+    from the database through get_producer_mail(order_id).
+    """
     subject = 'New Order Notification'
     recipients = get_producer_email(order_id)
     body = f"You have received a new order from a consumer. Order ID: {order_id}"
@@ -149,6 +142,12 @@ through another function invoked get_consumer_mail(order_id) gets the relevant m
 the order_id from the database.
 """
 def send_mail_notification_consumer(order_id):
+    """
+    send_mail_notification_consumer(order_id) is used to send notification mail about the confirmation of an order
+    to the user, the function formats the structure of the mail with subject, body and recipient, which is retrieved
+    through another function invoked get_consumer_mail(order_id) gets the relevant mail through filtering in reference to
+    the order_id from the database.
+    """
     subject = 'New Order Notification'
     recipients = get_consumer_mail(order_id)
     body = f"Your order have been received, Order ID: {order_id}"
@@ -156,12 +155,12 @@ def send_mail_notification_consumer(order_id):
     return 'Email sent successfully!'
 
 
-'''
-get_consumer_mail(order_id) is a function that retrieves the consumer mail ID, to send the notification mails
-at relevant events.
-'''
 def get_consumer_mail(order_id):
-    order = Orders.query.filter_by(Orders.consumer_id, id=order_id)
+    """
+    get_consumer_mail(order_id) is a function that retrieves the consumer mail ID, to send the notification mails
+    at relevant events.
+    """
+    order = Orders.query.filter_by(order_id=order_id).first()
     if order:
         consumer = Consumer.query.get(Consumer.email).filter_by(Orders.producer_id)
         return consumer
@@ -173,6 +172,10 @@ cancel_mail(order_id) is a formatted  mail function that has the content for not
 cancelled by a consumer within a timeframe.
 '''
 def cancel_mail(order_id):
+    '''
+    cancel_mail(order_id) is a formatted  mail function that has the content for notification once an order is
+    cancelled by a consumer within a timeframe.
+    '''
     subject = 'New Order Notification'
     recipients = get_producer_email(order_id)
     body = f"The order,  Order ID: {order_id} is cancelled"

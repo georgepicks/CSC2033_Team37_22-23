@@ -76,10 +76,10 @@ def feed():
             'address3': producer.address_3,
             'postcode': producer.postcode
         }
-        #add information to array
+        # add information to array
         suppliers.append(producer_data)
 
-    #render relevant html template and pass array of supplier information to html file
+    # render relevant html template and pass array of supplier information to html file
     return render_template('consumer/feed.html', suppliers=suppliers)
 
 
@@ -90,6 +90,7 @@ def order_generate():
     Called when the consumer selects a producer, displays information about the producer and all of the items they have
     available in their inventory
     """
+    # Retrieve the supplier_id from the request arguments
     supplier_id = request.args.get('supplier_id')
 
     # Query the database to retrieve the supplier based on the supplier_id
@@ -272,7 +273,6 @@ def cancel_order(order_id, order_item, order_quantity):
     """
     If the cancellation deadline has not expired, enables the consumer to delete an Order object
     """
-
     # Retrieve the order with the given order ID from the database
     order = Orders.query.get(order_id)
     inventory_item = InventoryItems.query.filter_by(item=order_item).first()

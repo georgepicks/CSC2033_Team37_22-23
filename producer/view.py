@@ -178,6 +178,7 @@ def remove_item_route(item_id):
         return "Item not found"
 
 
+@producer_blueprint.route('/producer_account/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_producer_account(id):
     """
