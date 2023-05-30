@@ -1,3 +1,9 @@
+"""
+File: forms.py
+Author: Sreejith Sudhir Kalathil, Samuel Robertson
+Description: Generates forms for the user to use to submit data to the server. Also includes input validation functions
+to prevent invalid or even malicious data into storage.
+"""
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, RadioField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError, Regexp

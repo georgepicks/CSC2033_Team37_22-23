@@ -10,9 +10,12 @@ from user.forms import ConsumerRegisterForm
 consumer_blueprint = Blueprint('consumer', __name__, template_folder='templates')
 
 
-
 @consumer_blueprint.route('/consumer/register', methods=['GET', 'POST'])
 def register():
+    """
+    Called when a user is redirected to consumer/register, calls upon the ConsumerRegisterForm() in forms.py, when user
+    submits it creates a new consumer in the consumer table then redirects them to log into their new account.
+    """
     # create signup form object
     form = ConsumerRegisterForm()
 
@@ -47,6 +50,10 @@ def register():
 @consumer_blueprint.route('/feed', methods=['GET', 'POST'])
 @login_required
 def feed():
+    """
+    Called when user redirects to /feed, collects all producers and displays them as buttons which consumer can click on to
+    proceed to /order
+    """
     suppliers = []  # Create an empty list to store supplier information
 
     # Retrieve all producers from the database
@@ -62,16 +69,20 @@ def feed():
             'address3': producer.address_3,
             'postcode': producer.postcode
         }
-        #add information to array
+        # add information to array
         suppliers.append(producer_data)
 
-    #render relevant html template and pass array of supplier information to html file
+    # render relevant html template and pass array of supplier information to html file
     return render_template('consumer/feed.html', suppliers=suppliers)
 
 
 @app.route('/order', methods=['GET', 'POST'])
 @login_required
 def order_generate():
+    """
+    Called when the consumer selects a producer, displays information about the producer and all of the items they have
+    available in their inventory
+    """
     # Retrieve the supplier_id from the request arguments
     supplier_id = request.args.get('supplier_id')
 
@@ -178,6 +189,9 @@ def filter_by_dietary(food_type):
 @app.route('/order/edit/<int:order_id>', methods=['GET', 'POST'])
 @login_required
 def edit_order(order_id):
+    """
+    Allows the user to edit or make changes to the order before confirmation
+    """
     order = OrderItems.query.get_or_404(order_id)
     if request.method == 'POST':
         order.item = request.form['item']
@@ -230,6 +244,9 @@ def order_details():
 @app.route('/cancel_order/<int:order_id>/<string:order_item>/<int:order_quantity>', methods=['POST'])
 @login_required
 def cancel_order(order_id, order_item, order_quantity):
+    """
+    If the cancellation deadline has not expired, enables the consumer to delete an Order object
+    """
     # Retrieve the order with the given order ID from the database
     order = Orders.query.get(order_id)
     inventory_item = InventoryItems.query.filter_by(item=order_item).first()
@@ -261,6 +278,11 @@ def order_cancelled():
 
 @app.route('/')
 def find_producers(distance_range):
+    """
+    Called before loading the feed, by default just displays them all to the consumer, but if they add a maximum distance
+    filter, compares the producer's postcodes against that of the user, removes from the display the ones that are too far
+    away, and sorts the rest by distance from the consumer.
+    """
     # if user has not yet specified a distance
     if distance_range == 0:
         producers = Producer.query.all()
@@ -285,6 +307,9 @@ def find_producers(distance_range):
 @consumer_blueprint.route('/consumer_account/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_consumer_account(id):
+    """
+    Enables the consumer to edit their personal details
+    """
     consumer = Consumer.query.get_or_404(id)
     if request.method == 'POST':
         consumer.email = request.form['email']

@@ -1,3 +1,9 @@
+"""
+Models.py:
+Authors: Alexander MacMillan
+Description: This file creates classes which initialise tables in the database, this enables interaction with the database through
+the classes.
+"""
 from app import db, app
 from flask_login import UserMixin
 import bcrypt
