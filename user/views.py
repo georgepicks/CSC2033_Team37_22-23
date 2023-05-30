@@ -43,9 +43,6 @@ def login():
                 session['user_id'] = current_user.id
                 db.session.add(user)
                 db.session.commit()
-                # current login user is matched to the last login user
-                db.session.add(user)
-                db.session.commit()
                 return render_template('producer/supplier_dash.html', id=current_user.id)
 
             session['authentication_attempts'] = session.get('authentication_attempts', 0) + 1
