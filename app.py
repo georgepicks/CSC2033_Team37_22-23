@@ -1,3 +1,9 @@
+"""
+File: app.py
+Authors: Alexander MacMillan, Sreejith Sudhir Kalathil, Broden Bates
+Description: Initialises several components of the app including: The connection to the database, the Flask login
+manager, the html blueprints, and returning in case of an error, returning error pages.
+"""
 from flask import Flask, render_template
 from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
@@ -24,7 +30,7 @@ engine = create_engine(db_uri)
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 db = SQLAlchemy(app)
 
-# imports LoginManageer
+# imports LoginManager
 from flask_login import LoginManager, current_user
 from models import Consumer, Producer
 

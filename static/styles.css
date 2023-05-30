@@ -77,17 +77,19 @@ body {
 
 .HomeLink,
 .LoginLink,
-.DiscoverLink,
+.DashboardLink,
+.OrdersLink,
 .AccountLink,
 .LogoutLink{
   color: #FFFFFF;
-  margin: 0;
+  margin: 5px;
   text-decoration: none;
 }
 
 .HomeLink:hover,
 .LoginLink:hover,
-.DiscoverLink:hover,
+.DashboardLink:hover,
+.OrdersLink,
 .AccountLink:hover,
 .LogoutLink:hover{
   cursor: pointer;
@@ -101,6 +103,7 @@ body {
   left: 3%;
   transform: translateX(-50%);
   font-weight: bold;
+  font-size: 1.5rem;
   font-size: 1.5rem;
 }
 
@@ -163,14 +166,6 @@ input[type="text"], input[type="password"], select, textarea {
   left: 6%;
 }
 
-.TestButton {
-  position: absolute;
-  top: 30px;
-  font-size: 30px;
-  left: 500px;
-}
-
-
 #UiContainer {
   width: 100%;
   max-width: 1200px;
@@ -214,40 +209,51 @@ input[type="text"], input[type="password"], select, textarea {
 }
 
 .supplier:hover {
-  cursor: pointer;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  transform: translateY(-10px);
-  transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
 }
 
 #SearchBar {
     margin-bottom: 10px;
 }
 
-.InventoryContainer {
-    width: 50%;
-    height: 400px;
+
+form.order {
+    max-height: 400px;
+    max-width: 60%;
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     text-align: center;
     color: #000000;
-    gap: 10px;
 }
 
 .InventoryCard {
-    width: 15%;
-    height: 150px;
     margin-bottom: 10px;
     border: 1px solid #000000;
-    padding: 10px;
+    padding: 5px; /* Adjust padding as desired */
+    width: 15%; /* Adjust the card width as desired */
+    height: 15%;
+    /* Other styles for the card */
+    background-size: cover;
+    background-position: center;
+    margin-right: 10px;
+}
+
+.InventoryCard img {
+    max-width: 100%; /* Scale down the image to fit within the card */
+    max-height: 100%; /* Scale down the image to fit within the card */
+    object-fit: contain; /* Preserve the aspect ratio of the image */
+    border-bottom: 1px solid #ddd;
 }
 
 .InventoryCard:hover {
     cursor: pointer;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    background-color: #FFE7AA;
+    transform: translateY(-10px);
     transition: all 0.3s ease;
 }
 
@@ -260,12 +266,8 @@ input[type="text"], input[type="password"], select, textarea {
     margin-bottom: 10px;
 }
 
-.InventoryCard .item_dietary{
-    margin-bottom: 5px;
-}
-
 .InventoryCard.selected {
-    background-color: #FFFFFF;
+    background-color: #e0e0e0;
 }
 
 .AddToOrderButton {
@@ -276,19 +278,23 @@ input[type="text"], input[type="password"], select, textarea {
 
 .SubmitButton {
     border: 3px solid #fff;
-  background-color: #59a956;
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
+    background-color: #59a956;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .SubmitButton:hover {
-  background-color: #478e47;
+    background-color: #478e47;
 }
 
-#basket {
+.basket {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -334,7 +340,7 @@ input[type="text"], input[type="password"], select, textarea {
   background-color: #478e47;
 }
 
-#basket h4 {
+.basket h4 {
   margin-bottom: 1px;
 }
 
@@ -343,3 +349,56 @@ input[type="text"], input[type="password"], select, textarea {
 }
 
 
+.OrderConfirm{
+    font-size: 60px;
+    text-align: center;
+}
+
+
+.order-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 900px; /* Adjust the maximum height as per your preference */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.order-card {
+    position: relative;
+    background-color: #FFE7AA;
+    padding: 10px;
+    border-radius: 5px;
+    width: 400px; /* Adjust the width as per your preference */
+}
+
+.order-id {
+    font-weight: bold;
+    font-size: 40px; /* Adjust the font size as per your preference */
+}
+
+.item-name,
+.item-quantity {
+    margin-top: 5px;
+    font-size: 30px; /* Adjust the font size as per your preference */
+}
+
+.OrderCancelled{
+    font-size: 60px;
+}
+
+.CancelButton {
+    position: absolute;
+    left: 65%;
+    bottom: 10px;
+    background-color: #ff0000;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.CancelButton:hover {
+    background-color: #ff5555;
+}

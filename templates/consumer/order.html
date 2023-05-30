@@ -1,36 +1,53 @@
 {% extends "base.html" %}
 
 {% block content %}
+
     <title>Order Page</title>
 
+    <!--This container shows supplier information on the order page-->
     <div id="info">
         <h3>{{ supplier_name }}</h3>
-        <p>{{ supplier_address }},
-        {{ supplier_postcode }}</p>
+        <p>
+            {{ supplier_address1 }},
+            {{ supplier_address2 }},
+            {{ supplier_address3 }},
+            {{ supplier_postcode }}
+        </p>
     </div>
 
+    <!--Allows users to search for items; when the user has typed the name of an item this links to a javascript function that performs the search and returns the relevant items-->
     <div id="UiContainer">
         <div id="SearchBar">
             <label for="SearchInput"></label><input type="text" id="SearchInput" placeholder="Search for items" onkeyup="filterItems()">
         </div>
     </div>
 
-      <div class="RectangleSide">
-        <div id="basket">
-            <h4><u>Your Basket:</u></h4>
-            <ul id="BasketList"></ul>
-            <input type="submit" value="Submit Order" class="SubmitButton" id="SubmitBtn">
-        </div>
-    </div>
 
-    <div class="InventoryContainer">
+    <!--This form allows users to add items from a supplier into a basket and submit that to the website; the form is used to collect the information about
+    what items the user is ordering and adds them to the relevant database tables-->
+    <form method="POST" class="order" action="{{ url_for('place_order') }}">
         {% for item in items %}
-        <div class="InventoryCard" id="item-{{ loop.index }}" onclick="addToOrder('item-{{ loop.index }}')">
-            <div class="item-name">{{ item.item }}</div>
-            <div class="item-quantity">Quantity: {{ item.quantity }}</div>
-            <div class="item_dietary">Allergens: {{ item.dietary }}</div>
-            <input type="hidden" name="item" value="{{ item.item }}">
-        </div>
+            <!--This displays information about the items a supplier has to offer; it also generates
+            an image background for each item using the name of the item-->
+            <div class="InventoryCard" id="item-{{ loop.index }}" onclick="addToOrder('item-{{ loop.index }}')">
+                <img src="https://source.unsplash.com/600x600/?{{ item.item }}" alt="Food">
+                <div class="item-name">{{ item.item }}</div>
+                <div class="item-quantity">Quantity: {{ item.quantity }}</div>
+                <div class="item_dietary">Allergens: {{ item.dietary }}</div>
+                <input type="hidden" name="supplier_id" value="{{ supplier_id }}">
+                <input type="hidden" name="consumer_id" value="{{ consumer_id }}">
+            </div>
         {% endfor %}
-    </div>
+
+    <!-- This is used to build the user basket and allows the user to submit an order when
+    they have selected all the products they wish to order-->
+        <div class="RectangleSide">
+            <div class="basket">
+                <h4><u>Your Basket:</u></h4>
+                <ul id="BasketList"></ul>
+                <input type="submit" value="Submit Order" class="SubmitButton" id="SubmitBtn">
+            </div>
+        </div>
+    </form>
 {% endblock %}
+
