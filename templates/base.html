@@ -1,3 +1,11 @@
+<!--
+File: base.html
+
+Authors: George Pickard
+
+Description: Provides the graphical user interface elements that are used on multiple web pages throughout the website; for example this file provides the navigation bar for some
+pages and the stylesheet and CSS styles that are displayed on multiple pages -->
+
 <!DOCTYPE html>
 <html>
 
@@ -43,6 +51,7 @@
     {% block content %}
     {% endblock %}
 </body>
+
 <div class="flash-messages">
         {% with messages = get_flashed_messages() %}
             {% if messages %}

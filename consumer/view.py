@@ -2,7 +2,7 @@
 File: consumer/view.py
 Authors: Sreejith Sudhir Kalathil, George Pickard, Alexander MacMillan
 Description: Provides all the functionality specific to consumer users. This includes their specific register form, as
-well as displaying the feed, allowing them to filter or search for producers in the feed, and CREATE, UPDATE and
+well as displaying the feed, allowing them to filter or search for producers in the feed, and CREATE and
 DELETING orders.
 """
 import pgeocode
@@ -34,7 +34,7 @@ def register():
         # if email already exists redirect user back to signup page with error message so user can try again
         if user:
             flash('Email address already exists')
-            return render_template('users/ConsumerRegister.html', form=form)
+            return render_template('users/consumer_register.html', form=form)
 
         # create a new user with the form data according to a consumer
         new_user = Consumer(email=form.email.data,
@@ -51,7 +51,7 @@ def register():
         # sends user to login page
         return redirect(url_for('users.login'))
     # if request method is GET or form not valid re-render signup page
-    return render_template('users/ConsumerRegister.html', form=form)
+    return render_template('users/consumer_register.html', form=form)
 
 
 @consumer_blueprint.route('/feed', methods=['GET', 'POST'])
