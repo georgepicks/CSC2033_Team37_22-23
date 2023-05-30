@@ -1,3 +1,10 @@
+"""
+File: consumer/view.py
+Authors: Sreejith Sudhir Kalathil, George Pickard, Alexander MacMillan
+Description: Provides all the functionality specific to consumer users. This includes their specific register form, as
+well as displaying the feed, allowing them to filter or search for producers in the feed, and CREATE, UPDATE and
+DELETING orders.
+"""
 import pgeocode
 from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify, flash
 from flask_login import login_required, current_user
@@ -112,7 +119,7 @@ def order_generate():
             'dietary': item.dietary
         }
         items.append(item_data)
-
+        
     # Render the order.html template with the necessary data
     return render_template('consumer/order.html', items=items, supplier_name=name, supplier_address1=address1,
                            supplier_address2=address2, supplier_address3=address3,
@@ -161,6 +168,25 @@ def place_order():
     # views.send_mail_notification(consumer_id, order_id)
     return render_template("consumer/order_confirm.html", order_id=order_id)
 
+
+
+@app.route('/feed', methods=['GET', 'POST'])
+@login_required
+def search():
+    if request.method == 'POST':
+        query = request.form.get('query')  # Retrieve the search query from the form
+
+        # Searching using SQLALCHEMY
+        results = InventoryItems.item.query.filter(InventoryItems.item.name.ilike(f'%{query}%')).all()
+
+        if not results:
+            message = "No items found matching your search query."
+
+        return render_template('search_results.html', results=results, message=message)
+
+    return render_template('search.html')
+
+
 # Function that allows to show items by a dietary filter
 @app.route('/food/<food_type>')
 @login_required
@@ -185,7 +211,6 @@ def filter_by_dietary(food_type):
 
 
 
-# Function that allows the user to edit or make changes to the order before confirmation
 @app.route('/order/edit/<int:order_id>', methods=['GET', 'POST'])
 @login_required
 def edit_order(order_id):
@@ -202,6 +227,7 @@ def edit_order(order_id):
         return render_template('', order=order)
 
 
+# Shows the information about the order
 @app.route('/place_order-order', methods=['GET', 'POST'])
 @login_required
 def order_details():
@@ -292,7 +318,6 @@ def find_producers(distance_range):
         nearby_producers = {}
         # query all producers
         producers = Producer.query.all()
-        # ------------ need to add distance functionality in later ----------------
         for i in producers:
             # calculate distance between all producers and current user
             distance = geodistance.query_postal_code(current_user.postcode, i.postcode)
@@ -321,3 +346,4 @@ def edit_consumer_account(id):
         return redirect(url_for('users.account'))
     else:
         return render_template('users/edit_account.html', consumer=consumer)
+

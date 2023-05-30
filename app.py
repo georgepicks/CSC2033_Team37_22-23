@@ -30,7 +30,7 @@ engine = create_engine(db_uri)
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 db = SQLAlchemy(app)
 
-# imports LoginManageer
+# imports LoginManager
 from flask_login import LoginManager, current_user
 from models import Consumer, Producer
 
